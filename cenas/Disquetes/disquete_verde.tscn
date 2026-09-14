@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://bmfaau7x2wwiv"]
+
+[ext_resource type="Script" uid="uid://dm7n2auetubfo" path="res://scripts/disquete_verde.gd" id="1_fifjn"]
+[ext_resource type="Texture2D" uid="uid://crpvs5yxp5lep" path="res://Creativos/disquetes/verde.png" id="2_xmoqn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1hcp"]
+atlas = ExtResource("2_xmoqn")
+region = Rect2(0, 0, 1017, 471)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1syws"]
+atlas = ExtResource("2_xmoqn")
+region = Rect2(0, 512, 1024, 512)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_syc0t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d1hcp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1syws")
+}],
+"loop": true,
+"name": &"Disquete_Verde",
+"speed": 2.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f8f6y"]
+
+[node name="Disquete_Verde" type="Area2D" unique_id=247010024]
+script = ExtResource("1_fifjn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=83304397]
+scale = Vector2(0.04, 0.04)
+sprite_frames = SubResource("SpriteFrames_syc0t")
+animation = &"Disquete_Verde"
+frame_progress = 0.6148339
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1435563782]
+shape = SubResource("CircleShape2D_f8f6y")
+
+[node name="Resposta" type="Label" parent="." unique_id=1589920292]
+offset_left = -21.0
+offset_top = -33.0
+offset_right = 19.0
+offset_bottom = -10.0

@@ -1,0 +1,246 @@
+# LISTA DE MODIFICAÇÕES DO JOGO
+
+1. SISTEMA DE FASES
+
+---
+
+[ ] Criar a segunda fase para testar a transição entre fases.
+
+[ ] Fazer o GameManager reconhecer quando o puzzle da fase foi concluído.
+
+[ ] Quando o puzzle for concluído, o GameManager deve liberar a próxima fase.
+
+[ ] Depois do teste, criar as outras fases até completar as 7 fases.
+
+[ ] Remover do GameManager responsabilidades que pertencem ao PC ou a outros sistemas.
+
+2. SISTEMA DO PC
+
+---
+
+[ ] Usar o mesmo PC em todas as fases.
+
+[ ] Fazer o PC identificar qual é a fase atual.
+
+[ ] Fazer o PC saber qual disquete pertence a cada fase.
+
+[ ] O PC deve verificar no InventoryManager se o jogador possui o disquete necessário.
+
+[ ] Se o jogador NÃO possuir o disquete necessário:
+- Informar que ele precisa encontrar o disquete primeiro.
+- Não liberar o puzzle.
+
+[ ] Se o jogador possuir o disquete necessário:
+- Liberar/abrir o puzzle correspondente.
+
+[ ] Quando o puzzle for concluído, o PC/puzzle deve informar o GameManager.
+
+[ ] O GameManager deve receber essa informação e avançar para a próxima fase.
+
+3. DISQUETES
+
+---
+
+[ ] Manter 7 disquetes no jogo.
+
+Disquetes:
+
+* disquete_azul
+* disquete_vermelho
+* disquete_verde
+* disquete_roxo
+* disquete_laranja
+* disquete_amarelo
+* disquete_branco
+
+[ ] Cada disquete deve estar associado a uma fase.
+
+[ ] O InventoryManager continua sendo responsável pelos dados permanentes do inventário.
+
+[ ] O InventoryManager deve manter os disquetes entre as fases.
+
+[ ] O ItemDatabase continua sendo responsável pelas informações dos disquetes.
+
+4. INVENTÁRIO
+
+---
+
+[ ] Manter o Inventario.gd separado do InventoryManager.
+
+[ ] O InventoryManager controla os dados.
+
+[ ] O Inventario.gd controla apenas a representação visual.
+
+[ ] Os ícones dos disquetes devem aparecer corretamente nos 7 slots.
+
+[ ] Corrigir qualquer problema de tamanho ou posicionamento dos ícones dentro dos slots.
+
+[ ] Ao clicar em um slot ocupado:
+- Identificar qual disquete está naquele slot.
+- Consultar o ItemDatabase.
+- Obter as informações daquele disquete.
+- Enviar essas informações para a HUD.
+
+[ ] Ao clicar em um slot vazio, não fazer nada.
+
+5. JANELA DOS DISQUETES
+
+---
+
+[ ] Fazer a JanelaDisquete abrir quando o jogador clicar em um disquete do inventário.
+
+[ ] Mostrar as informações específicas do disquete clicado.
+
+[ ] O título deve vir do ItemDatabase.
+
+[ ] O conteúdo deve vir do ItemDatabase.
+
+[ ] O ícone deve vir do ItemDatabase, se necessário.
+
+[ ] Não duplicar as informações dos disquetes dentro da HUD.
+
+[ ] Não criar um segundo sistema de armazenamento de informações.
+
+6. PUZZLES
+
+---
+
+[ ] Manter o puzzle de Variáveis funcionando.
+
+[ ] Fazer o puzzle emitir uma informação quando for concluído.
+
+[ ] O GameManager deve reconhecer a conclusão do puzzle.
+
+[ ] Depois de concluir o puzzle, avançar para a próxima fase.
+
+[ ] Criar posteriormente os outros puzzles das fases.
+
+7. INIMIGOS
+
+---
+
+[ ] Adicionar efeitos sonoros aos inimigos.
+
+[ ] Adicionar som quando o inimigo detectar/perseguir o jogador, se necessário.
+
+[ ] Adicionar som ao ataque.
+
+[ ] Adicionar som ao receber dano.
+
+[ ] Adicionar som ao morrer.
+
+[ ] Evitar que os sons sejam reproduzidos várias vezes ao mesmo tempo.
+
+8. SISTEMA DE PONTUAÇÃO
+
+---
+
+[ ] Criar um sistema de pontuação.
+
+[ ] Adicionar a pontuação na HUD.
+
+Exemplo:
+
+PONTOS: 0
+
+[ ] Ao derrotar um inimigo, o jogador deve receber pontos.
+
+[ ] A HUD deve atualizar a pontuação imediatamente.
+
+[ ] Criar uma forma organizada de controlar a pontuação.
+
+[ ] Os inimigos não devem precisar controlar diretamente elementos visuais da HUD.
+
+9. EFEITOS SONOROS DO PC
+
+---
+
+[ ] Adicionar efeito sonoro ao interagir com o PC.
+
+[ ] Adicionar efeito sonoro quando o PC liberar/abrir o puzzle.
+
+[ ] Adicionar um som diferente caso o jogador não possua o disquete necessário, se desejado.
+
+10. HUD
+
+---
+
+[ ] Manter a barra de vida funcionando.
+
+[ ] Manter o inventário visível diretamente na tela.
+
+[ ] Não criar um botão separado para "abrir inventário".
+
+[ ] Adicionar sistema de pontuação.
+
+[ ] Atualizar a pontuação quando um inimigo for derrotado.
+
+[ ] Manter a HUD apenas como interface, evitando colocar nela regras de gameplay.
+
+11. ORGANIZAÇÃO DAS CENAS
+
+---
+
+[ ] Colocar os elementos específicos de cada fase dentro da própria cena da fase.
+
+Exemplos:
+
+* Player
+* PC
+* Inimigos
+* Disquetes
+* Objetos da fase
+* Elementos específicos do cenário
+
+[ ] Instanciar a cena da fase na cena principal.
+
+[ ] Evitar colocar diretamente na cena principal objetos que pertencem somente a uma fase.
+
+[ ] Manter na cena principal apenas os elementos que realmente precisam existir globalmente.
+
+12. GAME MANAGER
+
+---
+
+[ ] Controlar a progressão das fases.
+
+[ ] Saber qual fase está atualmente ativa.
+
+[ ] Receber a confirmação de que o puzzle foi concluído.
+
+[ ] Avançar para a próxima fase quando o puzzle for concluído.
+
+[ ] Evitar controlar diretamente:
+- Player
+- PC
+- Inventário
+- Inimigos
+- Janela dos disquetes
+
+[ ] Manter o GameManager focado no gerenciamento geral e na progressão do jogo.
+
+13. ORDEM DE IMPLEMENTAÇÃO
+
+---
+
+[ ] 1. Fazer a transição da Fase 1 para a Fase 2 funcionar.feito
+
+[ ] 2. Finalizar o sistema PC -> verificar disquete -> liberar puzzle.feito
+
+[ ] 3. Finalizar o sistema Puzzle -> GameManager -> próxima fase.feito
+
+[ ] 4. Testar o inventário -> JanelaDisquete.feito
+
+[ ] 5. Organizar as cenas das fases.feito
+
+[ ] 6. Criar o sistema de pontuação.
+
+[ ] 7. Adicionar efeitos sonoros aos inimigos.
+
+[ ] 8. Adicionar efeitos sonoros ao PC.
+
+[ ] 9. Criar os outros puzzles.
+
+[ ] 10. Criar as outras fases.
+
+[ ] 11. Fazer o polimento final da HUD e dos sistemas.

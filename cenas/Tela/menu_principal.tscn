@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://c2mexibk6o745"]
+
+[ext_resource type="Script" uid="uid://bhsdeigpl426a" path="res://scripts/menu_principal.gd" id="1_6ro21"]
+[ext_resource type="Texture2D" uid="uid://8a3fpmomqr4t" path="res://Creativos/MenuPrincipal/Fundo.png" id="1_bllnq"]
+[ext_resource type="Texture2D" uid="uid://bvtnj4p7ae5lv" path="res://Creativos/MenuPrincipal/Logo.png" id="2_405qn"]
+[ext_resource type="AudioStream" uid="uid://cy5gtbj61f1s" path="res://Creativos/MenuPrincipal/Medieval-Music-–-Cobblestone-Village.mp3" id="3_eyjon"]
+[ext_resource type="Texture2D" uid="uid://bao42s3pnakcj" path="res://Creativos/MenuPrincipal/ChatGPT Image 26 de ago. de 2026, 17_13_19 (1).png" id="3_roq6h"]
+[ext_resource type="Texture2D" uid="uid://xhvc3j8uajxb" path="res://Creativos/MenuPrincipal/ChatGPT Image 26 de ago. de 2026, 17_07_55.png" id="4_eyjon"]
+
+[node name="MenuPrincipal" type="Control" unique_id=1970265648]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6ro21")
+
+[node name="Fundo" type="TextureRect" parent="." unique_id=3753786]
+layout_mode = 0
+offset_left = 1.0
+offset_right = 1278.0
+offset_bottom = 720.0
+texture = ExtResource("1_bllnq")
+expand_mode = 1
+
+[node name="Logo" type="TextureRect" parent="." unique_id=614489253]
+layout_mode = 0
+offset_left = 355.0
+offset_top = 33.0
+offset_right = 976.0
+offset_bottom = 430.0
+texture = ExtResource("2_405qn")
+expand_mode = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1341694812]
+stream = ExtResource("3_eyjon")
+
+[node name="Play" type="TextureButton" parent="." unique_id=1230836891]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 452.0
+offset_right = 778.0
+offset_bottom = 561.0
+texture_normal = ExtResource("3_roq6h")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Sair" type="TextureButton" parent="." unique_id=1079095411]
+layout_mode = 0
+offset_left = 529.0
+offset_top = 550.0
+offset_right = 778.0
+offset_bottom = 664.0
+texture_normal = ExtResource("4_eyjon")
+ignore_texture_size = true
+stretch_mode = 0

@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://bguuasqgfr53c"]
+
+[ext_resource type="Texture2D" uid="uid://buyds7ppl3gnj" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Idle.png" id="1_ncg1c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0fs6s"]
+atlas = ExtResource("1_ncg1c")
+region = Rect2(0, 0, 250, 250)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7bckr"]
+atlas = ExtResource("1_ncg1c")
+region = Rect2(250, 0, 250, 250)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0rppe"]
+atlas = ExtResource("1_ncg1c")
+region = Rect2(500, 0, 250, 250)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ou6r"]
+atlas = ExtResource("1_ncg1c")
+region = Rect2(750, 0, 250, 250)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_harb2"]
+atlas = ExtResource("1_ncg1c")
+region = Rect2(1000, 0, 250, 250)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jub8i"]
+atlas = ExtResource("1_ncg1c")
+region = Rect2(1250, 0, 250, 250)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_axerq"]
+atlas = ExtResource("1_ncg1c")
+region = Rect2(1500, 0, 250, 250)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ca67y"]
+atlas = ExtResource("1_ncg1c")
+region = Rect2(1750, 0, 250, 250)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bdv2i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0fs6s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7bckr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0rppe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ou6r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_harb2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jub8i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_axerq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ca67y")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[node name="Final_wizard" type="CharacterBody2D" unique_id=1527311156]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=233806066]
+sprite_frames = SubResource("SpriteFrames_bdv2i")
+animation = &"Idle"

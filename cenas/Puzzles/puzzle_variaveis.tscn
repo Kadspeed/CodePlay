@@ -1,0 +1,392 @@
+[gd_scene format=3 uid="uid://d27ge3dxci2u"]
+
+[ext_resource type="Script" uid="uid://bfu8iha0wd5x4" path="res://scripts/Puzzle_1/puzzle_variaveis.gd" id="1_7kvg5"]
+[ext_resource type="Script" uid="uid://c1enc2crskusw" path="res://scripts/Puzzle_1/Slot_codigo.gd" id="1_8cyl5"]
+[ext_resource type="Texture2D" uid="uid://prwdqfl3vvpu" path="res://Creativos/puzzles/Elemento puzzle/moldura_laranja.png" id="1_88qav"]
+[ext_resource type="Texture2D" uid="uid://b8h75bgb000ti" path="res://Creativos/puzzles/Elemento puzzle/moudura_cinza.png" id="3_8cyl5"]
+[ext_resource type="Script" uid="uid://206saguxu03c" path="res://scripts/Puzzle_1/Bloco_Codigo.gd" id="3_he6mm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u43wt"]
+bg_color = Color(0.004019165, 0.004019165, 0.004019165, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qiap"]
+bg_color = Color(0.00055181305, 0.00021206182, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_u43wt"]
+font_size = 34
+
+[node name="Puzzle_Variaveis" type="Control" unique_id=640555564]
+z_index = 50
+layout_mode = 3
+anchors_preset = 0
+offset_left = 2.0
+offset_right = 942.0
+offset_bottom = 613.0
+script = ExtResource("1_7kvg5")
+
+[node name="Fundo" type="Panel" parent="." unique_id=42661104]
+layout_mode = 0
+offset_left = -5.0
+offset_top = 2.0
+offset_right = 1291.0
+offset_bottom = 613.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_u43wt")
+
+[node name="TituloDesafio" type="Label" parent="." unique_id=770439084]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 20.0
+offset_right = 1216.0
+offset_bottom = 43.0
+text = "Variaveis
+"
+horizontal_alignment = 1
+
+[node name="DescriçaoDesafio" type="RichTextLabel" parent="." unique_id=80304676]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 64.0
+offset_right = 1228.0
+offset_bottom = 104.0
+text = "Como é a estrutura de uma variavel no JavaScript?"
+horizontal_alignment = 1
+
+[node name="AreaMontagem" type="Panel" parent="." unique_id=435704509]
+layout_mode = 0
+offset_left = 348.0
+offset_top = 159.0
+offset_right = 892.0
+offset_bottom = 243.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4qiap")
+
+[node name="Slot3" type="Control" parent="AreaMontagem" unique_id=119197987]
+anchors_preset = 0
+offset_left = 26.0
+offset_top = 23.0
+offset_right = 26.0
+offset_bottom = 63.0
+script = ExtResource("1_8cyl5")
+
+[node name="TextureRect" type="TextureRect" parent="AreaMontagem/Slot3" unique_id=326043343]
+layout_mode = 0
+offset_right = 155.0
+offset_bottom = 40.0
+texture = ExtResource("1_88qav")
+
+[node name="Label" type="Label" parent="AreaMontagem/Slot3" unique_id=1371198145]
+layout_mode = 0
+offset_right = 154.0
+offset_bottom = 39.0
+
+[node name="Slot2" type="Control" parent="AreaMontagem" unique_id=1014240468]
+anchors_preset = 0
+offset_left = 194.0
+offset_top = 22.0
+offset_right = 194.0
+offset_bottom = 62.0
+script = ExtResource("1_8cyl5")
+
+[node name="TextureRect" type="TextureRect" parent="AreaMontagem/Slot2" unique_id=1962465366]
+layout_mode = 0
+offset_right = 155.0
+offset_bottom = 40.0
+texture = ExtResource("1_88qav")
+
+[node name="Label" type="Label" parent="AreaMontagem/Slot2" unique_id=50293746]
+layout_mode = 0
+offset_right = 155.0
+offset_bottom = 40.0
+
+[node name="Slot1" type="Control" parent="AreaMontagem" unique_id=1085354597]
+anchors_preset = 0
+offset_left = 362.0
+offset_top = 22.0
+offset_right = 362.0
+offset_bottom = 62.0
+script = ExtResource("1_8cyl5")
+
+[node name="TextureRect" type="TextureRect" parent="AreaMontagem/Slot1" unique_id=1236070544]
+texture_filter = 1
+layout_mode = 0
+offset_right = 155.0
+offset_bottom = 40.0
+texture = ExtResource("1_88qav")
+
+[node name="Label" type="Label" parent="AreaMontagem/Slot1" unique_id=763708514]
+layout_mode = 0
+offset_right = 155.0
+offset_bottom = 40.0
+
+[node name="BotaoLimpar" type="Button" parent="." unique_id=443224684]
+layout_mode = 0
+offset_left = 354.0
+offset_top = 516.0
+offset_right = 610.0
+offset_bottom = 557.0
+text = "limpar"
+
+[node name="Feedback" type="Label" parent="." unique_id=640393628]
+layout_mode = 0
+offset_left = 368.0
+offset_top = 255.0
+offset_right = 999.0
+offset_bottom = 279.0
+text = "Feedback"
+
+[node name="BotaoExecutar" type="Button" parent="." unique_id=1370560696]
+layout_mode = 0
+offset_left = 636.0
+offset_top = 514.0
+offset_right = 892.0
+offset_bottom = 555.0
+text = "Executar"
+
+[node name="AreaBlocos" type="Panel" parent="." unique_id=1728366346]
+layout_mode = 0
+offset_left = 359.0
+offset_top = 287.0
+offset_right = 879.0
+offset_bottom = 466.0
+
+[node name="Bloco1" type="Control" parent="AreaBlocos" unique_id=398099192]
+anchors_preset = 0
+offset_left = 7.0
+offset_top = 127.0
+offset_right = 7.0
+offset_bottom = 127.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco1" unique_id=243914357]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco1" unique_id=1279498007]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = "LET"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bloco2" type="Control" parent="AreaBlocos" unique_id=283186118]
+anchors_preset = 0
+offset_left = 181.0
+offset_top = 127.0
+offset_right = 181.0
+offset_bottom = 127.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco2" unique_id=837831860]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco2" unique_id=869194839]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = "VAR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bloco3" type="Control" parent="AreaBlocos" unique_id=146318799]
+anchors_preset = 0
+offset_left = 355.0
+offset_top = 127.0
+offset_right = 355.0
+offset_bottom = 127.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco3" unique_id=1853633399]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco3" unique_id=1752951618]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = "CONST"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bloco4" type="Control" parent="AreaBlocos" unique_id=321920207]
+anchors_preset = 0
+offset_left = 7.0
+offset_top = 77.0
+offset_right = 7.0
+offset_bottom = 77.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco4" unique_id=1560901776]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco4" unique_id=124703403]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = "="
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bloco5" type="Control" parent="AreaBlocos" unique_id=1314662295]
+anchors_preset = 0
+offset_left = 181.0
+offset_top = 77.0
+offset_right = 181.0
+offset_bottom = 77.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco5" unique_id=1352683911]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco5" unique_id=1949500722]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bloco6" type="Control" parent="AreaBlocos" unique_id=2120532955]
+anchors_preset = 0
+offset_left = 355.0
+offset_top = 77.0
+offset_right = 355.0
+offset_bottom = 77.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco6" unique_id=299671003]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco6" unique_id=1160189534]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = ":"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bloco7" type="Control" parent="AreaBlocos" unique_id=1451154772]
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 26.0
+offset_right = 8.0
+offset_bottom = 26.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco7" unique_id=1156913824]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco7" unique_id=710422875]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = "Test"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bloco8" type="Control" parent="AreaBlocos" unique_id=457288918]
+anchors_preset = 0
+offset_left = 181.0
+offset_top = 26.0
+offset_right = 181.0
+offset_bottom = 26.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco8" unique_id=117096073]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco8" unique_id=1443918714]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = "1Test"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bloco9" type="Control" parent="AreaBlocos" unique_id=1997698819]
+anchors_preset = 0
+offset_left = 355.0
+offset_top = 26.0
+offset_right = 355.0
+offset_bottom = 26.0
+script = ExtResource("3_he6mm")
+
+[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco9" unique_id=460268944]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+texture = ExtResource("3_8cyl5")
+
+[node name="Label" type="Label" parent="AreaBlocos/Bloco9" unique_id=230926751]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 156.0
+offset_bottom = 41.0
+text = "test"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="." unique_id=1932205728]
+layout_mode = 0
+offset_left = 882.0
+offset_top = 171.0
+offset_right = 922.0
+offset_bottom = 225.0
+text = ";"
+label_settings = SubResource("LabelSettings_u43wt")

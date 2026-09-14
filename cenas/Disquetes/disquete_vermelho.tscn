@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://b7itp0om8gvoj"]
+
+[ext_resource type="Script" uid="uid://ow64bbkchqiw" path="res://scripts/Disquetes/disquete_vermelho.gd" id="1_44c3j"]
+[ext_resource type="Texture2D" uid="uid://df36o0kgl0bs2" path="res://Creativos/disquetes/vermelho.png" id="2_d2oor"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uv0gk"]
+atlas = ExtResource("2_d2oor")
+region = Rect2(0, 0, 1024, 519)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u10ni"]
+atlas = ExtResource("2_d2oor")
+region = Rect2(0, 512, 1024, 512)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mtvi8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uv0gk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u10ni")
+}],
+"loop": true,
+"name": &"Vermelho",
+"speed": 2.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dolt6"]
+radius = 171.17241
+
+[node name="disquete_vermelho" type="Area2D" unique_id=1396580419]
+script = ExtResource("1_44c3j")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=797354187]
+position = Vector2(0, 2.3841858e-07)
+scale = Vector2(0.04, 0.044)
+sprite_frames = SubResource("SpriteFrames_mtvi8")
+animation = &"Vermelho"
+frame_progress = 0.82923
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1517532162]
+scale = Vector2(0.1, 0.1)
+shape = SubResource("CircleShape2D_dolt6")
+
+[node name="Resposta" type="Label" parent="." unique_id=250066893]
+offset_left = -18.0
+offset_top = -34.0
+offset_right = 22.0
+offset_bottom = -11.0

@@ -1,0 +1,195 @@
+📚 Documentação do Projeto - Jogo Educativo Godot
+🎮 1. PERSONAGEM PRINCIPAL (Player)
+Arquivo: player.gd
+Funcionalidades Implementadas:
+Funcionalidade	Descrição	Status
+Movimento	Movimentação para esquerda/direita com velocidade constante	✅
+Gravidade	Aplicação de gravidade com fator de multiplicação	✅
+Pulo	Pulo com velocidade vertical definida	✅
+Animações	Run, idle, jump, fall, attack	✅
+Direção	Flip horizontal baseado na direção do movimento	✅
+Ataque	Animação de ataque com tecla "atack1"	✅
+Interação com PC	Detecta PC próximo e abre terminal com tecla E	✅
+Travamento	Player fica imóvel quando terminal está aberto	✅
+Grupos	Adicionado ao grupo "player" para detecção	✅
+Colisão	Configurado na layer 1, colide com chão layer 2	✅
+Get Direção	Função get_direcao() retorna lado que está olhando	✅
+Estrutura do Nó:
+text
+player (CharacterBody2D)
+├── CollisionShape2D
+│   └── AnimatedSprite2D
+└── InteractionArea (Area2D)
+    └── CollisionShape2D
+Teclas:
+Tecla	Ação
+← / →	Movimento
+↑	Pulo
+E	Interagir com PC
+Atack1	Ataque
+🖥️ 2. PC (Computador Interativo)
+Arquivo: PC.gd
+Funcionalidades Implementadas:
+Funcionalidade	Descrição	Status
+Tipo de nó	Area2D (não colide com player)	✅
+Grupo	Adicionado ao grupo "interactive_pc"	✅
+Animação	Animação "PC" tocada ao iniciar	✅
+Prompt	Label "Pressione E" aparece ao chegar perto	✅
+Abrir Terminal	Instancia a cena terminal.tscn	✅
+Fechar Terminal	Remove terminal e destrava player	✅
+Fechar automático	Fecha se player sair da área	✅
+Z Index	Configurado para ficar atrás do player	✅
+Estrutura do Nó:
+text
+PC (Area2D)
+├── AnimatedSprite2D
+├── CollisionShape2D
+└── Label (prompt "Pressione E")
+💻 3. TERMINAL
+Arquivos: terminal.tscn, terminal_ui.gd, TerminalLogic.gd
+3.1 Interface Visual (terminal.tscn)
+Estrutura do Nó:
+text
+terminal (Control)
+└── Panel
+    ├── LinhaComando (LineEdit)
+    ├── Historico (RichTextLabel)
+    └── btnfechar (Button)
+Funcionalidades:
+Funcionalidade	Descrição	Status
+Entrada de texto	LineEdit para digitar código	✅
+Histórico	RichTextLabel mostra conversa	✅
+Botão Fechar	Fecha o terminal	✅
+Enter	Submete resposta com Enter	✅
+Foco automático	Campo de texto ganha foco ao abrir	✅
+3.2 Interface Controller (terminal_ui.gd)
+Funcionalidade	Descrição	Status
+Carregar lógica	Instancia TerminalLogic.gd	✅
+Mostrar pergunta	Exibe tópico e pergunta atual	✅
+Processar resposta	Envia resposta para validação	✅
+Feedback visual	Mostra resultado (certo/errado)	✅
+Avançar fase	Muda para próxima fase quando acerta	✅
+Scroll automático	Rola histórico para última mensagem	✅
+3.3 Lógica de Validação (TerminalLogic.gd)
+Funcionalidade	Descrição	Status
+Fases	Dicionário com 5 fases pré-definidas	✅
+Validação	Verifica palavras obrigatórias	✅
+Validação	Verifica palavras proibidas	✅
+Dicas	Cada fase tem dica personalizada	✅
+Exemplos	Cada fase tem exemplo de código	✅
+Histórico	Registra acertos e erros	✅
+Estatísticas	Calcula taxa de acerto	✅
+Sinais	fase_completada, resposta_verificada, erro_ocorreu	✅
+Fases Implementadas:
+Fase	Tópico	Palavras Obrigatórias	Proibidas
+1	Variáveis	let, nome, =	var, const
+2	Funções	function, somar, (, )	const, let
+3	Arrays	let, frutas, [, ]	new Array
+4	Objetos	let, pessoa, {, }, nome, idade	class, new
+5	Loops	for, (, ), {, }, let, i	while, foreach
+🦕 4. DINO TEACHER (NPC Educador)
+Arquivo: DinoTeacher.gd
+Funcionalidades Implementadas:
+Funcionalidade	Descrição	Status
+Tipo de nó	CharacterBody2D	✅
+Seguir player	Segue o jogador com delay suave	✅
+Posição	Fica sempre atrás do player (lado oposto)	✅
+Gravidade	Aplica gravidade e colide com chão	✅
+Não colide	Configurado para não colidir com player	✅
+Distância máxima	Teleporta para perto se muito longe	✅
+Distância mínima	Parâmetro ajustável (DISTANCIA_MINIMA)	✅
+Animações	Run e idle	✅
+Ressurgir	Aparece perto do player se distanciar	✅
+Balão de fala	Control visual para feedback	✅
+Feedback visual	Balão muda de cor (verde/vermelho)	✅
+Animações emocionais	Pula de felicidade ou tristeza	✅
+Temporizador	Feedback some após 4 segundos	✅
+Estrutura do Nó:
+text
+DinoTeacher (CharacterBody2D)
+├── AnimatedSprite2D
+├── CollisionShape2D
+└── BalaoFala (Control)
+    └── Label
+Feedback Educacional:
+Situação	Comportamento
+Acerto	Balão verde com elogio + pula feliz
+Erro	Balão vermelho com dicas + pula triste
+Elogios Disponíveis:
+"🎉 Excelente! Você acertou!"
+
+"🌟 Muito bem! Código correto!"
+
+"💪 Parabéns! Continue assim!"
+
+"🎯 Perfeito! Você está aprendendo!"
+
+"🏆 Sensacional! Acertou de primeira!"
+
+"📚 Bom trabalho! Evoluindo rápido!"
+
+🔧 5. SISTEMAS DE CONFIGURAÇÃO
+5.1 Camadas de Colisão (Layers)
+Objeto	Layer	Mask (Colide com)
+Player	1	2 (chão)
+DinoTeacher	3	2 (chão)
+Chão (TileMapLayer)	2	-
+PC	Area2D (sem colisão física)	-
+5.2 Grupos
+Grupo	Objetos
+"player"	Player
+"interactive_pc"	PC
+"dino_teacher"	DinoTeacher
+5.3 Input Map
+Ação	Tecla
+left	←
+rigth	→
+up	↑
+interact	E
+atack1	(definir)
+📁 6. ESTRUTURA DE ARQUIVOS
+text
+res://
+├── player.gd
+├── PC.gd
+├── terminal.tscn
+├── terminal_ui.gd
+├── TerminalLogic.gd
+├── DinoTeacher.gd
+└── cenas/
+    ├── terreno.tscn
+    └── (outras cenas)
+🎯 7. FLUXO DO JOGO
+text
+1. Player se move pelo cenário
+         ↓
+2. Aproxima do PC → Aparece "Pressione E"
+         ↓
+3. Aperta E → Terminal abre
+         ↓
+4. Player fica travado
+         ↓
+5. Player digita código e aperta Enter
+         ↓
+6. Terminal valida resposta
+         ↓
+7. DinoTeacher dá feedback (balão + animação)
+         ↓
+8. Se correto → Avança fase
+         ↓
+9. Player aperta E ou clica Fechar → Terminal fecha
+         ↓
+10. Player destravado e pode continuar
+✅ 8. STATUS GERAL
+Sistema	Status
+Movimento do Player	✅ Completo
+Interação com PC	✅ Completo
+Terminal (UI)	✅ Completo
+Terminal (Lógica)	✅ Completo
+DinoTeacher (Movimento)	✅ Completo
+DinoTeacher (Feedback)	✅ Completo
+Colisões	✅ Completo
+Fases	⚠️ 5 implementadas (expansível)
+Persistência	⏳ Pendente
+Sons	⏳ Pendente
+Sistema de Pontos	⏳ Pendente

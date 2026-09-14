@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://b3xxgj84kbvnx"]
+
+[ext_resource type="Script" uid="uid://7uy02vqjvuje" path="res://scripts/Disquetes/disquete_azul.gd" id="1_1u3tj"]
+[ext_resource type="Texture2D" uid="uid://utf3ncyrajix" path="res://Creativos/disquetes/azul.png" id="1_sqsej"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1u3tj"]
+atlas = ExtResource("1_sqsej")
+region = Rect2(31, 0, 993, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6x2bq"]
+atlas = ExtResource("1_sqsej")
+region = Rect2(31, 0, 993, 532)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_aptao"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1u3tj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6x2bq")
+}],
+"loop": true,
+"name": &"Azul",
+"speed": 2.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vuqe7"]
+radius = 18.35756
+
+[node name="Disquete_azul" type="Area2D" unique_id=1834738538]
+script = ExtResource("1_1u3tj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=390670702]
+position = Vector2(-4.7683716e-07, 0)
+scale = Vector2(0.04, 0.044)
+sprite_frames = SubResource("SpriteFrames_aptao")
+animation = &"Azul"
+
+[node name="IndicadorInteracao" type="CollisionShape2D" parent="." unique_id=695607141]
+shape = SubResource("CircleShape2D_vuqe7")
+
+[node name="Resposta" type="Label" parent="." unique_id=1454459731]
+offset_right = 40.0
+offset_bottom = 23.0

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b5ckug53vin4w"]
+
+[ext_resource type="Script" uid="uid://clk2efw58vycq" path="res://scripts/Game_Manager/game_manager.gd" id="1_8ocyq"]
+[ext_resource type="PackedScene" uid="uid://c6y8keywpgdd3" path="res://cenas/Tela/HUD.tscn" id="2_h2a7c"]
+[ext_resource type="PackedScene" uid="uid://bmrqqw56ab6xj" path="res://cenas/player.tscn" id="3_h2a7c"]
+
+[node name="Mundo" type="Node2D" unique_id=2054302126]
+scale = Vector2(2, 2)
+script = ExtResource("1_8ocyq")
+metadata/_edit_horizontal_guides_ = [1474.0, 3074.0, 1244.0, 3091.0]
+metadata/_edit_vertical_guides_ = [10043.0]
+
+[node name="HUD" parent="." unique_id=1004183843 instance=ExtResource("2_h2a7c")]
+
+[node name="FaseAtual" type="Node2D" parent="." unique_id=1101922926]
+
+[node name="player" parent="." unique_id=1016961734 instance=ExtResource("3_h2a7c")]

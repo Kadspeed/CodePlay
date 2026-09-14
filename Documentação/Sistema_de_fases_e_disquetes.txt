@@ -1,0 +1,517 @@
+# SISTEMA DE FASES E DISQUETES
+
+## PROJETO DO JOGO
+
+============================================================
+OBJETIVO
+========
+
+O jogo terá 7 fases.
+
+Cada fase possui um disquete específico que o jogador precisa encontrar.
+
+O mesmo script `pc.gd` será utilizado em todas as fases.
+
+O PC não terá um script diferente para cada fase.
+
+A relação entre:
+
+FASE → DISQUETE NECESSÁRIO
+
+será controlada pelo GameManager.
+
+O InventoryManager será responsável por armazenar permanentemente
+os disquetes coletados pelo jogador.
+
+============================================================
+FASES
+=====
+
+FASE 1
+Nome:
+Floresta_biotech
+
+Disquete necessário:
+disquete_azul
+
+Conteúdo:
+Variáveis
+
+============================================================
+
+FASE 2
+Nome:
+Caverna_de_Cristal
+
+Disquete necessário:
+disquete_vermelho
+
+Conteúdo:
+If / Else
+
+============================================================
+
+FASE 3
+Nome:
+Fortaleza_arcana
+
+Disquete necessário:
+disquete_verde
+
+Conteúdo:
+Loops
+
+============================================================
+
+FASE 4
+Nome:
+Cidade_Celestial
+
+Disquete necessário:
+disquete_roxo
+
+Conteúdo:
+Funções
+
+============================================================
+
+FASE 5
+Nome:
+Jardins_Mecanicos
+
+Disquete necessário:
+disquete_amarelo
+
+Conteúdo:
+Arrays
+
+============================================================
+
+FASE 6
+Nome:
+Ruinas_Subterraneas
+
+Disquete necessário:
+disquete_laranja
+
+Conteúdo:
+Objetos
+
+============================================================
+
+FASE 7
+Nome:
+Nucleo_do_Sistema
+
+Disquete necessário:
+disquete_branco
+
+Conteúdo:
+Classes
+
+============================================================
+RELAÇÃO COMPLETA
+================
+
+Fase 1 → Floresta_biotech → disquete_azul → Variáveis
+
+Fase 2 → Caverna_de_Cristal → disquete_vermelho → If / Else
+
+Fase 3 → Fortaleza_arcana → disquete_verde → Loops
+
+Fase 4 → Cidade_Celestial → disquete_roxo → Funções
+
+Fase 5 → Jardins_Mecanicos → disquete_amarelo → Arrays
+
+Fase 6 → Ruinas_Subterraneas → disquete_laranja → Objetos
+
+Fase 7 → Nucleo_do_Sistema → disquete_branco → Classes
+
+============================================================
+CORES DOS DISQUETES
+===================
+
+disquete_azul
+→ Azul
+→ Variáveis
+
+disquete_vermelho
+→ Vermelho
+→ If / Else
+
+disquete_verde
+→ Verde
+→ Loops
+
+disquete_roxo
+→ Roxo
+→ Funções
+
+disquete_amarelo
+→ Amarelo
+→ Arrays
+
+disquete_laranja
+→ Laranja
+→ Objetos
+
+disquete_branco
+→ Branco
+→ Classes
+
+============================================================
+RESPONSABILIDADE DE CADA SISTEMA
+================================
+
+## GAME MANAGER
+
+Responsável por:
+
+* Saber qual é a fase atual.
+* Saber qual disquete pertence à fase atual.
+* Controlar a progressão das fases.
+* Saber qual puzzle pertence à fase.
+* Abrir o puzzle quando o PC permitir a interação.
+* Detectar quando o puzzle foi concluído.
+* Passar para a próxima fase.
+
+O GameManager NÃO deve controlar o inventário visual.
+
+O GameManager NÃO deve armazenar os dados completos dos disquetes.
+
+============================================================
+
+## INVENTORY MANAGER
+
+É um AutoLoad/Global.
+
+Responsável por:
+
+* Guardar os disquetes coletados.
+* Manter os itens entre as fases.
+* Saber quais slots estão ocupados.
+* Saber qual item está em cada slot.
+* Informar se o jogador possui determinado disquete.
+* Adicionar e remover itens do inventário.
+
+Exemplo:
+
+InventoryManager possui:
+
+disquete_azul
+disquete_vermelho
+
+Então:
+
+InventoryManager.verificar_item("disquete_azul")
+→ TRUE
+
+InventoryManager.verificar_item("disquete_verde")
+→ FALSE
+
+============================================================
+INVENTARIO.GD
+=============
+
+É o inventário VISUAL dentro do HUD.
+
+Responsável por:
+
+* Mostrar os 7 slots.
+* Mostrar o ícone de cada disquete.
+* Atualizar os slots quando o InventoryManager mudar.
+* Detectar quando o jogador clica em um slot.
+* Informar qual item está naquele slot.
+
+O Inventario.gd NÃO deve guardar permanentemente os itens.
+
+Os dados pertencem ao InventoryManager.
+
+============================================================
+ITEM DATABASE
+=============
+
+É o banco de dados dos disquetes.
+
+Responsável por guardar:
+
+* Nome do disquete.
+* Título.
+* Conteúdo.
+* Ícone.
+
+Ordem atual:
+
+disquete_azul
+→ título: Variáveis
+
+disquete_vermelho
+→ título: If / Else
+
+disquete_verde
+→ título: Loops
+
+disquete_roxo
+→ título: Funções
+
+disquete_amarelo
+→ título: Arrays
+
+disquete_laranja
+→ título: Objetos
+
+disquete_branco
+→ título: Classes
+
+O ItemDatabase não controla:
+
+* Player.
+* Inventário.
+* HUD.
+* PC.
+* GameManager.
+* Puzzle.
+
+============================================================
+PC.GD
+=====
+
+Existe apenas UM script `pc.gd`.
+
+Esse mesmo script será usado pelos PCs de todas as fases.
+
+O PC deve:
+
+1. Detectar o jogador.
+2. Mostrar "Pressione Q".
+3. Detectar a tecla Q.
+4. Consultar o GameManager para saber qual disquete é necessário
+   na fase atual.
+5. Consultar o InventoryManager para verificar se o jogador possui
+   esse disquete.
+6. Se possuir o disquete:
+   → emitir `interagir`.
+7. Se não possuir:
+   → não emitir `interagir`.
+   → mostrar uma mensagem informando qual disquete é necessário.
+
+O PC NÃO deve possuir uma lógica diferente para cada fase.
+
+O PC NÃO deve ter:
+
+if fase == 1
+if fase == 2
+if fase == 3
+
+A informação deve vir do GameManager.
+
+============================================================
+EXEMPLO DE FUNCIONAMENTO DO PC
+==============================
+
+FASE 1:
+
+GameManager:
+
+fase_atual = 1
+
+Disquete necessário:
+
+disquete_azul
+
+Jogador chega perto do PC.
+
+PC mostra:
+
+"Pressione Q"
+
+Jogador pressiona Q.
+
+PC pergunta ao InventoryManager:
+
+"O jogador possui disquete_azul?"
+
+Se NÃO:
+
+"⚠️ Você precisa do disquete azul primeiro!"
+
+O puzzle NÃO abre.
+
+Se SIM:
+
+PC emite:
+
+interagir.emit()
+
+GameManager recebe o sinal.
+
+GameManager abre o puzzle da fase.
+
+============================================================
+FASE 2
+======
+
+GameManager:
+
+fase_atual = 2
+
+Disquete necessário:
+
+disquete_vermelho
+
+O mesmo `pc.gd` continua sendo usado.
+
+O PC consulta o GameManager.
+
+GameManager informa:
+
+disquete_vermelho
+
+PC consulta o InventoryManager.
+
+Se não tiver:
+
+"⚠️ Você precisa do disquete vermelho primeiro!"
+
+Se tiver:
+
+PC emite `interagir`.
+
+============================================================
+FASE 3
+======
+
+GameManager:
+
+fase_atual = 3
+
+Disquete necessário:
+
+disquete_verde
+
+O mesmo `pc.gd` continua sendo usado.
+
+O PC consulta o GameManager.
+
+GameManager informa:
+
+disquete_verde
+
+PC consulta o InventoryManager.
+
+Se não tiver:
+
+"⚠️ Você precisa do disquete verde primeiro!"
+
+Se tiver:
+
+PC emite `interagir`.
+
+============================================================
+FLUXO GERAL
+===========
+
+                GAME MANAGER
+                     |
+                     |
+              Fase atual
+                     |
+                     ↓
+           Disquete necessário
+                     |
+                     ↓
+                    PC
+                     |
+              Jogador aperta Q
+                     |
+                     ↓
+            INVENTORY MANAGER
+                     |
+            Possui o disquete?
+                /          \
+              SIM          NÃO
+               |             |
+               ↓             ↓
+      interagir.emit()    Mensagem
+               |             |
+               ↓             ↓
+         GAME MANAGER      PC não
+               |           abre puzzle
+               ↓
+         Abre o Puzzle
+               |
+               ↓
+        Puzzle concluído
+               |
+               ↓
+        Próxima fase
+
+============================================================
+IMPORTANTE
+==========
+
+O jogador pode continuar carregando os disquetes das fases anteriores.
+
+Exemplo:
+
+Na fase 3, o InventoryManager pode conter:
+
+disquete_azul
+disquete_vermelho
+disquete_verde
+
+Isso é permitido.
+
+O requisito da fase atual serve apenas para determinar qual disquete
+é necessário para liberar o puzzle daquela fase.
+
+============================================================
+ARQUITETURA FINAL
+=================
+
+GameManager
+↓
+Controla fases
+↓
+Define qual disquete pertence à fase
+↓
+PC consulta o requisito
+↓
+InventoryManager verifica se o jogador possui
+↓
+PC libera ou bloqueia a interação
+↓
+GameManager abre o Puzzle
+↓
+Puzzle concluído
+↓
+GameManager avança a fase
+
+============================================================
+SISTEMAS
+========
+
+GameManager
+→ Fases + progressão + puzzles + requisito da fase
+
+InventoryManager
+→ Dados permanentes dos itens coletados
+
+Inventario.gd
+→ Interface visual dos 7 slots
+
+ItemDatabase.gd
+→ Informações dos disquetes
+
+PC.gd
+→ Interação com o PC + verificação do requisito
+
+JanelaDisquete.gd
+→ Exibição do conteúdo do disquete selecionado
+
+Disquete.gd
+→ Representação e coleta do disquete no mundo
+
+============================================================
+FIM DO DOCUMENTO
+================

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://84dea6cocrsm"
+path="res://.godot/imported/Floresta biotechnologica.mp3-02b3fcc826916329fa71753ebd51c5c2.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Floresta_Biotech/Floresta biotechnologica.mp3"
+dest_files=["res://.godot/imported/Floresta biotechnologica.mp3-02b3fcc826916329fa71753ebd51c5c2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

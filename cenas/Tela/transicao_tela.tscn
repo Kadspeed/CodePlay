@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bfiqo5m83tnpm"]
+
+[ext_resource type="Script" uid="uid://c6jhdc32qbym7" path="res://scripts/Transicao_tela.gd" id="1_02x6j"]
+
+[node name="Transicao_tela" type="CanvasLayer" unique_id=1331396222]
+script = ExtResource("1_02x6j")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=723645105]
+offset_left = -114.0
+offset_top = -56.0
+offset_right = 1412.0
+offset_bottom = 824.0
+color = Color(0.012617188, 0.012617188, 0.012617188, 1)

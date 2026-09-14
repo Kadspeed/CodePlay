@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://bhygclduqj7s4"]
+
+[ext_resource type="Script" uid="uid://b0li4d3eyj57w" path="res://scripts/Player_e_pc/pc.gd" id="1_1y28m"]
+[ext_resource type="Texture2D" uid="uid://bo40g4ftigwei" path="res://assets/sprites e terreno/sprite/ChatGPT_Image_12_de_jul._de_2026__18_55_22-removebg-preview.png" id="2_1y28m"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j7it1"]
+radius = 20.22375
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pi8ib"]
+atlas = ExtResource("2_1y28m")
+region = Rect2(0, 54, 167, 248)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb4aw"]
+atlas = ExtResource("2_1y28m")
+region = Rect2(167, 54, 167, 248)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_eyill"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pi8ib")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bb4aw")
+}],
+"loop": true,
+"name": &"PC",
+"speed": 2.0
+}]
+
+[sub_resource type="SystemFont" id="SystemFont_1y28m"]
+subpixel_positioning = 0
+
+[sub_resource type="LabelSettings" id="LabelSettings_pi8ib"]
+font = SubResource("SystemFont_1y28m")
+font_size = 6
+
+[node name="PC" type="Area2D" unique_id=797175659]
+z_index = -1
+script = ExtResource("1_1y28m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1578352832]
+shape = SubResource("CircleShape2D_j7it1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=60620020]
+texture_filter = 1
+position = Vector2(-1.9073486e-06, 0)
+scale = Vector2(0.17814378, 0.15120971)
+sprite_frames = SubResource("SpriteFrames_eyill")
+animation = &"PC"
+frame_progress = 0.31727666
+flip_h = true
+
+[node name="Label" type="Label" parent="." unique_id=562712825]
+texture_filter = 1
+offset_left = -17.0
+offset_top = -30.0
+offset_right = 39.0
+offset_bottom = -7.0
+text = "Pressione E"
+label_settings = SubResource("LabelSettings_pi8ib")

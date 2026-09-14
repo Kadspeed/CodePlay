@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://chu82x2at2tq7"
+path="res://.godot/imported/Floresta-biotechnologica.ogg-d02df5bccb1d717201f43ce1ead25f86.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Floresta_Biotech/Floresta-biotechnologica.ogg"
+dest_files=["res://.godot/imported/Floresta-biotechnologica.ogg-d02df5bccb1d717201f43ce1ead25f86.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

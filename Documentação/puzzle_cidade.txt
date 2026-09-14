@@ -1,0 +1,274 @@
+🧩 Puzzle da Caverna — LOOP
+📖 Situação
+
+O jogador encontra um PC dentro da Caverna de Cristal.
+
+O PC informa:
+
+O sistema precisa ativar todos os cristais da sequência.
+Use um loop para repetir a ação.
+
+Na tela existem 5 cristais, numerados:
+
+1 → 2 → 3 → 4 → 5
+
+O objetivo é ativar todos nessa ordem.
+
+🧱 Solução que o puzzle espera
+
+A solução principal é:
+
+INÍCIO
+
+PARA cada cristal
+    ativar cristal
+FIM PARA
+
+FIM
+
+Ou seja, o jogador precisa perceber que não precisa colocar:
+
+ativar cristal
+ativar cristal
+ativar cristal
+ativar cristal
+ativar cristal
+
+Ele precisa utilizar o conceito de loop.
+
+🖱️ Como o jogador monta
+
+Na parte BLOCOS DISPONÍVEIS, aparecem:
+
+PARA
+cada cristal
+FIM PARA
+ativar cristal
+esperar 1s
+SE
+
+O jogador deve selecionar/arrastar os blocos para a ÁREA DE PROGRAMAÇÃO.
+
+A área começa com:
+
+INÍCIO
+
+O jogador coloca:
+
+PARA
+
+Depois configura:
+
+cada cristal
+
+Dentro do loop:
+
+ativar cristal
+
+E encerra:
+
+FIM PARA
+
+Ficando visualmente como na sua imagem.
+
+▶️ Quando clicar em EXECUTAR
+
+O puzzle começa a interpretar a sequência montada.
+
+Primeiro verifica se existe uma estrutura válida:
+
+INÍCIO
+   ↓
+PARA
+   ↓
+cada cristal
+   ↓
+ativar cristal
+   ↓
+FIM PARA
+   ↓
+FIM
+
+Se estiver correta, começa a execução.
+
+💎 Execução dos cristais
+
+O jogo pega a lista:
+
+[cristal1, cristal2, cristal3, cristal4, cristal5]
+
+O PARA cada cristal percorre essa lista.
+
+Então:
+
+Iteração 1
+cristal = cristal1
+↓
+ativar cristal
+
+💎 Cristal 1 acende.
+
+Iteração 2
+cristal = cristal2
+↓
+ativar cristal
+
+💎 Cristal 2 acende.
+
+Iteração 3
+
+💎 Cristal 3 acende.
+
+Iteração 4
+
+💎 Cristal 4 acende.
+
+Iteração 5
+
+💎 Cristal 5 acende.
+
+E então o loop termina.
+
+⏱️ O esperar 1s
+
+Esse bloco existe para poder ser utilizado na programação.
+
+Por exemplo, o jogador poderia montar:
+
+INÍCIO
+
+PARA cada cristal
+    ativar cristal
+    esperar 1s
+FIM PARA
+
+FIM
+
+Nesse caso:
+
+Cristal 1 → acende
+     ↓
+espera 1 segundo
+     ↓
+Cristal 2 → acende
+     ↓
+espera 1 segundo
+     ↓
+...
+
+Isso também pode deixar a execução visualmente mais interessante, porque o jogador vê o loop acontecendo.
+
+❌ E se ele usar SE?
+
+O bloco SE está disponível, mas não é necessário para resolver esse puzzle.
+
+Isso é proposital.
+
+O jogador precisa identificar:
+
+"Meu problema é repetir uma ação várias vezes."
+
+Logo, a ferramenta adequada é:
+
+LOOP
+
+e não SE.
+
+❌ Se ele montar errado
+
+Por exemplo:
+
+INÍCIO
+
+ativar cristal
+ativar cristal
+ativar cristal
+
+FIM
+
+O sistema pode executar a sequência e perceber que o objetivo não foi cumprido.
+
+A saída poderia mostrar:
+
+❌ PROGRAMA INCORRETO
+Nem todos os cristais foram ativados.
+
+Outro exemplo:
+
+INÍCIO
+
+PARA cada cristal
+    esperar 1s
+FIM PARA
+
+FIM
+
+O loop está correto, mas não existe ativar cristal.
+
+Resultado:
+
+❌ PROGRAMA INCORRETO
+O loop foi executado, mas nenhum cristal foi ativado.
+
+🟢 Solução correta
+
+Quando o jogador fizer:
+
+INÍCIO
+
+PARA cada cristal
+    ativar cristal
+FIM PARA
+
+FIM
+
+o jogo executa:
+
+💎 1 ✓
+💎 2 ✓
+💎 3 ✓
+💎 4 ✓
+💎 5 ✓
+
+E no SAÍDA DO SISTEMA:
+
+PROGRAMA EXECUTADO COM SUCESSO!
+Todos os cristais foram ativados.
+
+🏆 O que acontece depois
+
+Depois de completar o puzzle, o sistema registra:
+
+Puzzle_Caverna = concluído
+
+E a Caverna de Cristal recebe o progresso correspondente.
+
+O jogador fecha o PC e volta para a exploração.
+
+📌 Resumo para você guardar
+
+PUZZLE: Caverna de Cristal
+CONCEITO: Loop
+OBJETIVO: Ativar os cristais 1 → 5
+SOLUÇÃO:
+
+INÍCIO
+    PARA cada cristal
+        ativar cristal
+    FIM PARA
+FIM
+
+BLOCOS DISPONÍVEIS:
+
+PARA
+cada cristal
+FIM PARA
+ativar cristal
+esperar 1s
+SE
+
+RESULTADO CORRETO:
+
+1 → 2 → 3 → 4 → 5
+
+IDEIA CENTRAL: o jogador deve descobrir que uma ação repetitiva pode ser resolvida com um loop, em vez de repetir manualmente o mesmo comando.

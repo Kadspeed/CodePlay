@@ -1,0 +1,249 @@
+[gd_scene format=3 uid="uid://cx6crxtfia418"]
+
+[ext_resource type="Texture2D" uid="uid://2jvyomktyvph" path="res://assets/sprites e terreno/HUD/minimizador.png" id="1_uybkv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y354r"]
+bg_color = Color(0.5804352, 0.5804352, 0.5804352, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_uybkv"]
+font_size = 22
+
+[sub_resource type="LabelSettings" id="LabelSettings_f8rga"]
+font_size = 12
+
+[sub_resource type="LabelSettings" id="LabelSettings_4n8oo"]
+font_size = 15
+
+[sub_resource type="LabelSettings" id="LabelSettings_7d7au"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_d27tu"]
+font_size = 14
+
+[node name="Puzzle_Cidade" type="Node2D" unique_id=639933977]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=365693790]
+
+[node name="PuzzleUI" type="Control" parent="CanvasLayer" unique_id=1603751330]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 5.0
+offset_top = 13.0
+offset_right = 1240.0
+offset_bottom = 532.0
+
+[node name="Fundo" type="ColorRect" parent="CanvasLayer/PuzzleUI" unique_id=71544431]
+layout_mode = 0
+offset_left = 550.0
+offset_top = 55.0
+offset_right = 1232.0
+offset_bottom = 517.0
+color = Color(0.112874605, 0.14264673, 0.29567564, 1)
+
+[node name="JanelaPuzzle" type="Panel" parent="CanvasLayer/PuzzleUI" unique_id=499764863]
+layout_mode = 0
+offset_left = 834.0
+offset_top = 281.0
+offset_right = 901.0
+offset_bottom = 321.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_y354r")
+
+[node name="BarraTitulo" type="Panel" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=1443403459]
+layout_mode = 0
+offset_left = -277.0
+offset_top = -222.0
+offset_right = 391.0
+offset_bottom = -181.0
+
+[node name="Titulo" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/BarraTitulo" unique_id=2059489437]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 3.0
+offset_right = 666.0
+offset_bottom = 35.0
+text = "lllllllll"
+label_settings = SubResource("LabelSettings_uybkv")
+horizontal_alignment = 1
+
+[node name="BotaoFechar" type="TextureButton" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/BarraTitulo" unique_id=1763407479]
+layout_mode = 0
+offset_left = 635.0
+offset_top = 3.0
+offset_right = 667.0
+offset_bottom = 35.0
+texture_normal = ExtResource("1_uybkv")
+
+[node name="PainelPC" type="PanelContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=1262926105]
+layout_mode = 0
+offset_left = -490.0
+offset_top = -187.0
+offset_right = -290.0
+offset_bottom = -19.0
+
+[node name="TextoInstrucao" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelPC" unique_id=937435565]
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = SubResource("LabelSettings_f8rga")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+justification_flags = 162
+
+[node name="TituloPC" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelPC" unique_id=208126363]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Instrutor"
+label_settings = SubResource("LabelSettings_4n8oo")
+horizontal_alignment = 1
+
+[node name="PainelCristais" type="PanelContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=750363963]
+layout_mode = 0
+offset_left = -261.0
+offset_top = -161.0
+offset_bottom = 5.0
+
+[node name="Cristal1" type="TextureRect" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelCristais" unique_id=278991898]
+layout_mode = 2
+
+[node name="Cristal2" type="TextureRect" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelCristais" unique_id=2121284440]
+layout_mode = 2
+
+[node name="Cristal3" type="TextureRect" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelCristais" unique_id=2020715656]
+layout_mode = 2
+
+[node name="Cristal4" type="TextureRect" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelCristais" unique_id=1636916451]
+layout_mode = 2
+
+[node name="Cristal5" type="TextureRect" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelCristais" unique_id=996199488]
+layout_mode = 2
+
+[node name="TituloCristais" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelCristais" unique_id=120383607]
+layout_mode = 2
+
+[node name="PainelProgramacao" type="PanelContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=2053843436]
+layout_mode = 0
+offset_left = 21.0
+offset_top = -159.0
+offset_right = 372.0
+offset_bottom = 108.0
+
+[node name="AreaProgramacao" type="Panel" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelProgramacao" unique_id=745256501]
+layout_mode = 2
+
+[node name="Inicio" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelProgramacao/AreaProgramacao" unique_id=595528796]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Loop" type="PanelContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelProgramacao/AreaProgramacao" unique_id=1514189707]
+layout_mode = 0
+offset_right = 352.0
+offset_bottom = 265.0
+
+[node name="CorpoLoop" type="VBoxContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelProgramacao/AreaProgramacao/Loop" unique_id=83837967]
+layout_mode = 2
+
+[node name="AçaoAtivarCristal" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelProgramacao/AreaProgramacao/Loop/CorpoLoop" unique_id=1069365692]
+layout_mode = 2
+
+[node name="Fim" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelProgramacao/AreaProgramacao/Loop" unique_id=1893228390]
+layout_mode = 2
+
+[node name="TituloProgramacao" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelProgramacao" unique_id=880361718]
+layout_mode = 2
+
+[node name="PainelSaida" type="PanelContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=1361174171]
+layout_mode = 0
+offset_left = -261.0
+offset_top = 14.0
+offset_right = -1.0
+offset_bottom = 110.0
+
+[node name="TituloSaida" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelSaida" unique_id=1639610251]
+layout_mode = 2
+size_flags_vertical = 0
+text = "SAÍDA"
+label_settings = SubResource("LabelSettings_7d7au")
+horizontal_alignment = 1
+
+[node name="TextoSaida" type="RichTextLabel" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelSaida" unique_id=365440498]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PainelBlocos" type="PanelContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=474086827]
+layout_mode = 0
+offset_left = -146.0
+offset_top = 115.0
+offset_right = 374.0
+offset_bottom = 216.0
+
+[node name="TituloBlocos" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelBlocos" unique_id=765094921]
+z_index = 1
+layout_mode = 2
+size_flags_vertical = 0
+text = "BLOCOS"
+label_settings = SubResource("LabelSettings_d27tu")
+horizontal_alignment = 1
+autowrap_trim_flags = 128
+
+[node name="BlocosDisponiveis" type="HBoxContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelBlocos" unique_id=83692780]
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="BlocoPara" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelBlocos/BlocosDisponiveis" unique_id=1295400718]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="BlocoCadaCristal" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelBlocos/BlocosDisponiveis" unique_id=1912391614]
+layout_mode = 2
+
+[node name="BlocoFimPara" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelBlocos/BlocosDisponiveis" unique_id=316096831]
+layout_mode = 2
+
+[node name="BlocoAtivarCristal" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelBlocos/BlocosDisponiveis" unique_id=1815221312]
+layout_mode = 2
+
+[node name="BlocoEsperar" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelBlocos/BlocosDisponiveis" unique_id=1190383215]
+layout_mode = 2
+
+[node name="BlocoSe" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/PainelBlocos/BlocosDisponiveis" unique_id=497008057]
+layout_mode = 2
+
+[node name="BotaoExecutar" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=116452090]
+layout_mode = 0
+offset_left = -259.0
+offset_top = 168.0
+offset_right = -159.0
+offset_bottom = 201.0
+text = "EXECUTAR"
+
+[node name="BotaoLimpar" type="Button" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=407788380]
+layout_mode = 0
+offset_left = -259.0
+offset_top = 124.0
+offset_right = -157.0
+offset_bottom = 157.0
+text = "LIMPAR"
+
+[node name="Objetivo" type="PanelContainer" parent="CanvasLayer/PuzzleUI/JanelaPuzzle" unique_id=908738278]
+layout_mode = 0
+offset_left = -491.0
+offset_top = -12.0
+offset_right = -291.0
+offset_bottom = 167.0
+
+[node name="TituloObjetivo" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/Objetivo" unique_id=1890023895]
+layout_mode = 2
+size_flags_vertical = 0
+text = "OBJETIVO"
+horizontal_alignment = 1
+
+[node name="TextoObjetivo" type="Label" parent="CanvasLayer/PuzzleUI/JanelaPuzzle/Objetivo" unique_id=2115409069]
+layout_mode = 2
+size_flags_vertical = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="PuzzleCaverna" type="Node" parent="." unique_id=692766401]

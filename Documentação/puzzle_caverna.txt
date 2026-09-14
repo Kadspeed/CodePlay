@@ -1,0 +1,480 @@
+💎 Documentação — Puzzle de If / Else / Elif
+Caverna de Cristal — Fase 2
+1. Visão geral
+
+O puzzle da Caverna de Cristal é um desafio educativo destinado a ensinar e testar o conhecimento de estruturas condicionais em JavaScript, principalmente:
+
+if
+else if (elif, na representação simplificada do puzzle)
+else
+operadores de comparação, como ==, !=, >, <, >= e <=
+
+O jogador encontra o disquete vermelho, cujo conteúdo apresenta informações sobre If/Else. Esse conhecimento serve como material de consulta para resolver o puzzle.
+
+O puzzle não entrega diretamente a resposta. O jogador precisa interpretar a pergunta, selecionar os elementos corretos e montar a estrutura lógica.
+
+2. Relação com a progressão do jogo
+
+A fase possui a seguinte relação:
+
+💎 Caverna de Cristal
+        ↓
+🔴 Disquete Vermelho
+        ↓
+📖 Tema: IF / ELSE
+        ↓
+🖥️ PC
+        ↓
+🧩 Puzzle de IF / ELSE
+        ↓
+✅ Puzzle concluído
+        ↓
+➡️ GameManager avança a fase
+
+O disquete possui duas funções:
+
+Liberar o acesso ao puzzle, pois o PC verifica se o jogador possui o disquete necessário.
+Ensinar o conteúdo, permitindo que o jogador consulte as informações necessárias para resolver o desafio.
+3. Estrutura da cena na Godot
+
+A raiz obrigatoriamente será um Control.
+
+Puzzle_IfElse (Control)
+│
+├── Fundo (ColorRect)
+│
+├── JanelaPuzzle (Panel)
+│   │
+│   ├── BarraTitulo (Panel)
+│   │   ├── Titulo (Label)
+│   │   └── BotaoFechar (TextureButton)
+│   │
+│   ├── Pergunta (Label)
+│   │
+│   ├── PainelEstrutura (Panel)
+│   │   ├── LabelTitulo (Label)
+│   │   ├── Slot1 (Panel)
+│   │   ├── Seta1 (Label)
+│   │   ├── Slot2 (Panel)
+│   │   ├── Seta2 (Label)
+│   │   └── Slot3 (Panel)
+│   │
+│   ├── PainelCondicao (Panel)
+│   │   ├── LabelCondicao (Label)
+│   │   ├── TextoAntes (Label)
+│   │   └── CampoCondicao (LineEdit)
+│   │
+│   ├── PainelAcoes (Panel)
+│   │   ├── LabelAcoes (Label)
+│   │   ├── AcaoIF (LineEdit)
+│   │   └── AcaoElse (LineEdit)
+│   │
+│   ├── PainelBlocos (Panel)
+│   │   ├── LabelBlocos (Label)
+│   │   └── GridBlocos (GridContainer)
+│   │       ├── BlocoIF (Button)
+│   │       ├── BlocoELIF (Button)
+│   │       ├── BlocoELSE (Button)
+│   │       ├── BlocoFOR (Button)
+│   │       ├── BlocoWHILE (Button)
+│   │       ├── BlocoIgual (Button)
+│   │       ├── BlocoIgualIgual (Button)
+│   │       ├── BlocoDiferente (Button)
+│   │       ├── BlocoMaior (Button)
+│   │       └── BlocoMenor (Button)
+│   │
+│   ├── BotaoExecutar (Button)
+│   │
+│   └── MensagemResultado (Label)
+│
+└── BotaoDisquete (TextureButton)
+4. Funcionamento da interface
+4.1 Fundo
+Fundo (ColorRect)
+
+Ocupa toda a tela e serve para escurecer o jogo enquanto o puzzle está aberto.
+
+4.2 Janela principal
+JanelaPuzzle (Panel)
+
+É a interface principal do computador.
+
+Dentro dela ficam todas as partes do desafio.
+
+5. Pergunta
+Pergunta (Label)
+
+Apresenta ao jogador o problema que precisa ser resolvido.
+
+Exemplo:
+
+"Verifique se o cristal possui exatamente 10 de energia. Se possuir, exiba 'É igual a 10'. Caso contrário, exiba 'Não é igual a 10'."
+
+A pergunta é importante porque determina a solução.
+
+6. Área de montagem da estrutura
+PainelEstrutura
+├── Slot1
+├── Seta1
+├── Slot2
+├── Seta2
+└── Slot3
+
+Os slots começam vazios.
+
+[ VAZIO ] → [ VAZIO ] → [ VAZIO ]
+
+O jogador precisa escolher os elementos corretos disponíveis na parte inferior.
+
+Por exemplo:
+
+[ IF ] → [ ELSE ] → [ VAZIO ]
+
+ou, quando necessário:
+
+[ IF ] → [ ELIF ] → [ ELSE ]
+Importante
+
+Os três slots não começam preenchidos.
+
+O jogador é responsável por montar a estrutura.
+
+7. Blocos disponíveis
+GridBlocos
+
+Contém os elementos que podem ser utilizados pelo jogador.
+
+Exemplo:
+
+IF
+ELIF
+ELSE
+FOR
+WHILE
+
+Também podem existir operadores:
+
+==
+=
+!=
+>
+<
+>=
+<=
+
+A intenção é que existam elementos corretos e elementos que não pertencem à solução daquele desafio, obrigando o jogador a analisar o problema.
+
+8. Campo da condição
+PainelCondicao
+├── LabelCondicao
+├── TextoAntes
+└── CampoCondicao
+
+Depois de montar a estrutura, o jogador precisa escrever a condição.
+
+Exemplo:
+
+IF [ cristal == 10 ]
+
+O CampoCondicao será um LineEdit.
+
+O jogador poderia escrever:
+
+cristal == 10
+
+A ideia é que ele compreenda que:
+
+cristal == 10
+
+é uma condição que pode resultar em verdadeiro ou falso.
+
+9. Área de ações
+PainelAcoes
+├── AcaoIF
+└── AcaoElse
+
+Essa área representa o que acontecerá dependendo do resultado da condição.
+
+Exemplo:
+
+IF:
+[ É igual a 10 ]
+
+ELSE:
+[ Não é igual a 10 ]
+
+O resultado conceitual será:
+
+IF cristal == 10:
+    exibir("É igual a 10")
+
+ELSE:
+    exibir("Não é igual a 10")
+10. Exemplo completo de resolução
+
+O desafio apresenta:
+
+Verifique se o cristal é igual a 10.
+
+Os slots começam:
+
+[ VAZIO ] → [ VAZIO ] → [ VAZIO ]
+
+O jogador encontra vários blocos:
+
+IF
+ELIF
+ELSE
+FOR
+WHILE
+
+Ele identifica que precisa de:
+
+[ IF ] → [ ELSE ] → [ VAZIO ]
+
+Depois escreve:
+
+cristal == 10
+
+E define as ações:
+
+IF:
+É igual a 10
+
+ELSE:
+Não é igual a 10
+
+O resultado lógico montado é:
+
+IF cristal == 10:
+    exibir("É igual a 10")
+
+ELSE:
+    exibir("Não é igual a 10")
+11. Uso do ELIF
+
+O ELIF será utilizado quando a pergunta exigir mais de uma condição.
+
+Exemplo:
+
+Se o cristal for 10, informe que está carregado.
+Se for 5, informe que está parcialmente carregado.
+Caso contrário, informe que está com pouca energia.
+
+O jogador deverá montar:
+
+[ IF ] → [ ELIF ] → [ ELSE ]
+
+E produzir uma estrutura equivalente a:
+
+IF cristal == 10:
+    ...
+
+ELIF cristal == 5:
+    ...
+
+ELSE:
+    ...
+
+Assim, o ELIF não é apenas uma peça decorativa: ele aparece quando existe uma segunda condição a ser analisada.
+
+12. Consulta ao disquete
+
+Durante o puzzle, o jogador poderá utilizar:
+
+BotaoDisquete
+
+para consultar o disquete vermelho.
+
+O disquete contém as explicações sobre:
+
+IF
+ELIF
+ELSE
+condições
+operadores
+
+Por exemplo, o jogador pode consultar para lembrar:
+
+IF
+→ verifica uma condição
+
+ELIF
+→ verifica outra condição
+
+ELSE
+→ executa quando as condições anteriores são falsas
+
+Isso cria a relação:
+
+📖 Aprendizado
+      ↓
+🧠 Raciocínio
+      ↓
+🧩 Montagem
+      ↓
+💻 Código
+13. Botão Executar
+BotaoExecutar
+
+Ao pressionar, o puzzle verifica a solução.
+
+A validação deve verificar:
+
+1. Estrutura dos slots
+        ↓
+2. Condição
+        ↓
+3. Ações
+        ↓
+4. Resultado esperado
+
+Se estiver errado:
+
+❌ Código incorreto.
+Revise sua estrutura.
+
+O jogador pode tentar novamente.
+
+Se estiver correto:
+
+✅ Estrutura correta!
+💎 O cristal foi ativado.
+14. Resultado dentro do mundo
+
+A resolução deve produzir uma consequência visual na Caverna de Cristal.
+
+Exemplo:
+
+Puzzle resolvido
+       ↓
+Cristal responde
+       ↓
+💎 CRISTAL ATIVADO
+       ↓
+Porta/passagem desbloqueada
+
+Isso faz o jogador perceber que a lógica que ele montou realmente produziu um resultado no mundo do jogo.
+
+15. Comunicação com o PC
+
+Quando o puzzle estiver correto, ele deverá emitir:
+
+desafio_concluido.emit()
+
+O fluxo será:
+
+Puzzle_IfElse
+      ↓
+desafio_concluido.emit()
+      ↓
+PC recebe o sinal
+      ↓
+PC fecha o puzzle
+      ↓
+PC emite puzzle_concluido(fase_id)
+      ↓
+GameManager recebe
+      ↓
+GameManager verifica a fase
+      ↓
+Avança para a próxima fase
+
+O puzzle não deve controlar a troca de fases diretamente.
+
+16. Responsabilidade de cada sistema
+ItemDatabase
+
+Responsável pelos dados dos disquetes.
+
+🔴 disquete_vermelho
+        ↓
+IF / ELSE
+GameManager
+
+Responsável pela relação:
+
+FASE 2
+↓
+Caverna de Cristal
+↓
+disquete_vermelho
+↓
+Puzzle de IF/ELSE
+PC
+
+Responsável por:
+
+verificar disquete
+↓
+abrir puzzle correto
+↓
+receber conclusão
+↓
+avisar GameManager
+Puzzle_IfElse
+
+Responsável exclusivamente pelo desafio:
+
+pergunta
+↓
+montagem dos blocos
+↓
+condição
+↓
+ações
+↓
+validação
+↓
+conclusão
+17. Fluxo completo do jogador
+             💎 CAVERNA DE CRISTAL
+                      │
+                      ↓
+             🔴 ENCONTRA DISQUETE
+                      │
+                      ↓
+             📖 LÊ IF / ELSE
+                      │
+                      ↓
+                🖥️ ENCONTRA PC
+                      │
+                      ↓
+             PC verifica disquete
+                      │
+                    possui?
+                 ↙          ↘
+               NÃO          SIM
+                ↓             ↓
+           aviso          abre puzzle
+                              │
+                              ↓
+                         📋 LÊ PERGUNTA
+                              │
+                              ↓
+                       🧩 MONTA ESTRUTURA
+                              │
+                              ↓
+                       ✏️ ESCREVE CONDIÇÃO
+                              │
+                              ↓
+                       ⚙️ DEFINE AÇÕES
+                              │
+                              ↓
+                          EXECUTAR
+                         ↙         ↘
+                       ERRO       CERTO
+                        ↓           ↓
+                    tenta       💎 cristal
+                    novamente     ativado
+                                    │
+                                    ↓
+                            🏆 puzzle concluído
+                                    │
+                                    ↓
+                              próxima fase
+🎯 Conceito central
+
+O ponto principal desse puzzle é:
+
+O jogador aprende o conteúdo no disquete e utiliza esse conhecimento para construir uma solução dentro do jogo.

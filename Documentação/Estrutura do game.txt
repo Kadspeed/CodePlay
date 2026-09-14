@@ -1,0 +1,162 @@
+PC (Node2D) [Script]
+│
+├── CollisionShape2D
+├── AnimatedSprite2D
+└── Label
+
+──────────────────────────────────────────────
+
+DinoTeacher (CharacterBody2D) [Script]
+│
+├── CollisionShape2D
+├── AnimatedSprite2D
+└── BalaoFala (Control)
+    └── Label
+
+──────────────────────────────────────────────
+
+Player (CharacterBody2D) [Script]
+│
+├── CollisionShape2D
+├── AnimatedSprite2D
+├── InteractionArea (Area2D)
+│   └── CollisionShape2D
+├── Camera2D
+├── HitboxArea (Area2D)
+│   └── CollisionShape2D
+└── AttackArea (Area2D)
+    └── CollisionShape2D
+
+──────────────────────────────────────────────
+
+Monster_Sky (CharacterBody2D) [Script]
+│
+├── CollisionShape2D
+├── AnimatedSprite2D
+├── DetectionArea (Area2D)
+│   └── CollisionShape2D
+├── AttackArea (Area2D)
+│   └── CollisionShape2D
+└── AttackCooldownTimer (Timer)
+
+──────────────────────────────────────────────
+
+Nivel_4 (Node2D) [Script]
+│
+├── YSort (Node2D)
+│   ├── Chao (TileMapLayer2D)
+│   ├── Player [Cena + Script]
+│   └── DinoTeacher [Cena + Script]
+│
+├── ParallaxBackground
+│   └── ParallaxLayer
+│       └── Sprite2D
+│
+├── PC [Cena + Script]
+├── Decoracao (TileMapLayer2D)
+├── Monster_Sky [Cena + Script]
+├── Monster_Sky2 [Cena + Script]
+├── Monster_Sky3 [Cena + Script]
+├── Monster_Sky4 [Cena + Script]
+└── Monster_Sky5 [Cena + Script]
+
+──────────────────────────────────────────────
+
+Puzzle_Variaveis (Control) [Script]
+│
+├── Fundo (Panel)
+├── TituloDesafio (Label)
+├── DescricaoDesafio (RichTextLabel)
+│
+├── AreaMontagem (Panel)
+│   ├── Slot1 (Control)
+│   │   └── TextureRect
+│   ├── Slot2 (Control)
+│   │   └── TextureRect
+│   └── Slot3 (Control)
+│       └── TextureRect
+│
+├── AreaBlocos (Panel)
+│   ├── Bloco1 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── Bloco2 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── Bloco3 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── Bloco4 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── Bloco5 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── Bloco6 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── Bloco7 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── Bloco8 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── Bloco9 (Control)
+│   │   ├── TextureRect
+│   │   └── Label
+│   ├── BotaoLimpar (Button)
+│   ├── FeedBack (Label)
+│   └── BotaoExecutar (Button)
+│
+├── BotaoFechar (TextureButton)
+└── CamadaArrasto (Control)
+
+──────────────────────────────────────────────
+
+Floresta_Biotech (Node2D)
+│
+├── ParallaxLayer
+│   └── Sprite2D
+├── ParallaxLayer2
+│   └── Sprite2D
+├── ParallaxLayer3
+│   └── AnimatedSprite2D
+├── ParallaxLayer4
+│   └── AnimatedSprite2D
+├── TileMapLayer
+└── AudioStreamPlayer
+
+──────────────────────────────────────────────
+
+Cogumelo (CharacterBody2D) [Script]
+│
+├── AnimatedSprite2D
+├── AreaDeteccao (Area2D)
+│   └── CollisionShape2D
+├── AreaAttack (Area2D)
+│   └── CollisionShape2D
+├── Colisao (CollisionShape2D)
+├── RayCast2D
+├── Marker2D
+└── AttackCooldownTimer (Timer)
+
+──────────────────────────────────────────────
+
+HUD (CanvasLayer) (Script)
+│
+├── Vida(AnimatedSprite2d(vida0,vida1,vida2,vida3,vida4))
+│
+├── Janela (Panel)(Script)
+│   ├── Botao (Button)
+│   ├── Titulo (Label)
+│   └── Conteudo (RichTextLabel)
+│
+└── Inventario (Control)(Script)
+    ├── Fundo(textureRect)
+    ├── Slot1(TextureButton)
+    ├── Slot2(TextureButton)
+    ├── Slot3(TextureButton)
+    ├── Slot4(TextureButton)
+    └── Slot5(TextureButton)
+    └── Slot6(TextureButton)
+    └── Slot7(TextureButton)
