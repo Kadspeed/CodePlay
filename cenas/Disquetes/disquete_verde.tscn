@@ -20,18 +20,20 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1syws")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Disquete_Verde",
 "speed": 2.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f8f6y"]
+radius = 18.027756
 
 [node name="Disquete_Verde" type="Area2D" unique_id=247010024]
 script = ExtResource("1_fifjn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=83304397]
-scale = Vector2(0.04, 0.04)
+position = Vector2(-0.5000007, -0.21)
+scale = Vector2(0.03834808, 0.03910828)
 sprite_frames = SubResource("SpriteFrames_syc0t")
 animation = &"Disquete_Verde"
 frame_progress = 0.6148339

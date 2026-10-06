@@ -61,17 +61,15 @@ offset_bottom = 254.0
 
 [node name="TituloInformacoes" type="Label" parent="JanelaPuzzle/PainelInformacoes" unique_id=244196361]
 layout_mode = 0
-offset_left = 7.0
-offset_top = 5.0
-offset_right = 252.0
-offset_bottom = 29.0
+offset_right = 261.0
+offset_bottom = 24.0
 text = "Informações Úteis"
 horizontal_alignment = 1
 
 [node name="TextoFeedback" type="Label" parent="JanelaPuzzle" unique_id=2065943264]
 layout_mode = 0
 offset_left = 1033.0
-offset_top = 326.0
+offset_top = 233.0
 offset_right = 1274.0
 offset_bottom = 590.0
 
@@ -288,7 +286,7 @@ offset_left = 324.0
 offset_top = 65.0
 offset_right = 406.0
 offset_bottom = 96.0
-text = "runa < 0
+text = "runa > 0
 "
 
 [node name="(console_log(runa)" type="Button" parent="JanelaPuzzle/PainelOpcoes" unique_id=969544793]
@@ -335,30 +333,33 @@ text = "SIXSEVEN
 
 [node name="PainelBotoes" type="Panel" parent="." unique_id=2065919893]
 layout_mode = 0
-offset_left = 1043.0
+offset_left = 1035.0
 offset_top = 56.0
-offset_right = 1264.0
-offset_bottom = 215.0
+offset_right = 1270.0
+offset_bottom = 214.0
 
 [node name="Executar" type="Button" parent="PainelBotoes" unique_id=380514144]
 layout_mode = 0
-offset_top = 4.0
-offset_right = 221.0
-offset_bottom = 50.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 227.0
+offset_bottom = 52.0
 text = "Executar
 "
 
 [node name="Limpar" type="Button" parent="PainelBotoes" unique_id=1058923454]
 layout_mode = 0
+offset_left = 6.0
 offset_top = 56.0
-offset_right = 221.0
+offset_right = 227.0
 offset_bottom = 102.0
 text = "Limpar
 "
 
 [node name="Testar" type="Button" parent="PainelBotoes" unique_id=283550429]
 layout_mode = 0
-offset_top = 110.0
-offset_right = 221.0
-offset_bottom = 156.0
+offset_left = 6.0
+offset_top = 107.0
+offset_right = 227.0
+offset_bottom = 153.0
 text = "Testar"

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b6g6fewu1se4"
+path="res://.godot/imported/morcego mordendo_.mp3-b8359fb2732500b69ca73b432a854902.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Morcego/morcego mordendo_.mp3"
+dest_files=["res://.godot/imported/morcego mordendo_.mp3-b8359fb2732500b69ca73b432a854902.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

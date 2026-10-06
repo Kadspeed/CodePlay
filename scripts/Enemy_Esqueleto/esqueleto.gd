@@ -47,7 +47,7 @@ enum Estado {
 @export var tempo_parado: float = 2.0         # tempo parado em patrulha
 
 @export_group("Vida")
-@export var vida_maxima: int = 30
+@export var vida_maxima: int = 15
 @export var dano_ataque: int = 10             # dano que o Esqueleto causa no Player
 
 @export_group("Detecção e Ataque")

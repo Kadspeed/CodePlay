@@ -75,10 +75,11 @@ bg_color = Color(0.06798274, 0.06798274, 0.06798273, 1)
 [sub_resource type="Theme" id="Theme_y6nh8"]
 
 [node name="HUD" type="CanvasLayer" unique_id=1004183843]
-layer = 1000
+layer = 0
 script = ExtResource("1_y6nh8")
 
 [node name="Vida" type="AnimatedSprite2D" parent="." unique_id=1147558821]
+z_index = 50
 texture_filter = 1
 position = Vector2(82.00001, 19)
 scale = Vector2(3.316406, 2.113281)
@@ -86,6 +87,7 @@ sprite_frames = SubResource("SpriteFrames_xendy")
 animation = &"vida4"
 
 [node name="JanelaDisquete" type="Panel" parent="." unique_id=2071572150]
+z_index = 1000
 offset_left = 2.0
 offset_top = 1.0
 offset_right = 1282.0
@@ -124,6 +126,7 @@ offset_bottom = 577.0
 theme = SubResource("Theme_y6nh8")
 
 [node name="PainelInventario" type="Panel" parent="." unique_id=1732322351]
+z_index = 1000
 offset_left = 245.0
 offset_top = 632.0
 offset_right = 1039.0

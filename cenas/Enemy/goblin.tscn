@@ -1,10 +1,16 @@
 [gd_scene format=3 uid="uid://uyy4ky5esmro"]
 
 [ext_resource type="Texture2D" uid="uid://bfw0fnxi2qv0u" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Goblin/Attack.png" id="1_5jscv"]
+[ext_resource type="Script" uid="uid://cicyt8p6wrtue" path="res://scripts/goblin.gd" id="1_gi4op"]
 [ext_resource type="Texture2D" uid="uid://nxuqv7nx8w7h" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Goblin/Death.png" id="2_iig2t"]
 [ext_resource type="Texture2D" uid="uid://c48fs3qipwjf3" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Goblin/Idle.png" id="3_2xymw"]
 [ext_resource type="Texture2D" uid="uid://d2jggfwwa2hj" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Goblin/Run.png" id="4_qta0f"]
 [ext_resource type="Texture2D" uid="uid://bfxxflhsrl5dx" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Goblin/Take Hit.png" id="5_xx500"]
+[ext_resource type="AudioStream" uid="uid://cjb58v1ch2jxc" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-ataque de espada.mp3" id="7_l71tp"]
+[ext_resource type="AudioStream" uid="uid://c8x7obsi4urn0" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Goblin/goblin morrendo_.mp3" id="8_c8yvw"]
+[ext_resource type="AudioStream" uid="uid://b6vbf23030hfv" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Goblin/goblin parado_.mp3" id="9_1sfsf"]
+[ext_resource type="AudioStream" uid="uid://b5rsqlyuk513n" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Goblin/goblin tomando dano_.mp3" id="10_fj2rw"]
+[ext_resource type="AudioStream" uid="uid://cs2hk8b110md1" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Goblin/goblin correndo_.mp3" id="11_wfs2g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5c4t0"]
 atlas = ExtResource("1_5jscv")
@@ -145,7 +151,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_a03qc")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Attack",
 "speed": 11.0
 }, {
@@ -162,7 +168,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5prd7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Death",
 "speed": 7.0
 }, {
@@ -179,7 +185,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wbr8h")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Idle",
 "speed": 7.0
 }, {
@@ -208,7 +214,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_t5rwd")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Run",
 "speed": 10.0
 }, {
@@ -225,17 +231,63 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vrphm")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Take_hit",
 "speed": 7.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gqn0q"]
+radius = 12.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7quve"]
+radius = 29.15476
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j4gmg"]
+size = Vector2(264, 42)
+
 [node name="Goblin" type="CharacterBody2D" unique_id=1153682507]
+z_index = 10
+script = ExtResource("1_gi4op")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1501989056]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_jf4kr")
-animation = &"Take_hit"
-frame_progress = 0.006527273
+animation = &"Attack"
+frame_progress = 0.897708
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=902870589]
+position = Vector2(0, 11)
+shape = SubResource("CapsuleShape2D_gqn0q")
+
+[node name="AreaAttack" type="Area2D" parent="." unique_id=456785931]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaAttack" unique_id=1021144219]
+position = Vector2(0, 9)
+shape = SubResource("CircleShape2D_7quve")
+
+[node name="AreaDeteccao" type="Area2D" parent="." unique_id=1232689137]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDeteccao" unique_id=1174800863]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_j4gmg")
+
+[node name="FloorRayCast" type="RayCast2D" parent="." unique_id=515915099]
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1879198473]
+
+[node name="AttackCooldownTimer" type="Timer" parent="." unique_id=2020910146]
+
+[node name="Attack" type="AudioStreamPlayer2D" parent="." unique_id=809604086]
+stream = ExtResource("7_l71tp")
+
+[node name="Death" type="AudioStreamPlayer2D" parent="." unique_id=524117246]
+stream = ExtResource("8_c8yvw")
+
+[node name="Idle" type="AudioStreamPlayer2D" parent="." unique_id=84684606]
+stream = ExtResource("9_1sfsf")
+
+[node name="Take_hit" type="AudioStreamPlayer2D" parent="." unique_id=2058467271]
+stream = ExtResource("10_fj2rw")
+
+[node name="Run" type="AudioStreamPlayer2D" parent="." unique_id=1533082444]
+stream = ExtResource("11_wfs2g")

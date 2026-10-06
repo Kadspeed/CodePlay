@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://b3k8df17h2k7p"]
+
+[ext_resource type="Script" uid="uid://c5rf8v0nca7kf" path="res://scripts/tela_final.gd" id="1_85tbp"]
+
+[node name="TelaFinal" type="Node2D" unique_id=2048866818]
+script = ExtResource("1_85tbp")
+
+[node name="PainelCreditos" type="Panel" parent="." unique_id=936457060]
+offset_right = 1279.0
+offset_bottom = 721.0
+
+[node name="Creditos" type="RichTextLabel" parent="PainelCreditos" unique_id=43585246]
+layout_mode = 0
+offset_right = 1279.0
+offset_bottom = 717.0

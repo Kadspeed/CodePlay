@@ -41,9 +41,9 @@ var knockback_forca: float = 150.0
 # ============ PULO DUPLO ============
 var pulos_restantes: int = 0
 const PULOS_MAXIMOS: int = 1  # 🔥 2 pulos: 1 normal + 1 duplo
-const JUMP_VELOCITY = -700.0
+const JUMP_VELOCITY = -500.0
 
-const SPEED = 300.0
+const SPEED = 200.0
 
 # ============ ESTADO DE MORTE ============
 var esta_morto: bool = false

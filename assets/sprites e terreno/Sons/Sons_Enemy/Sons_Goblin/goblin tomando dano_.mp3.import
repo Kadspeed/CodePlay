@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b5rsqlyuk513n"
+path="res://.godot/imported/goblin tomando dano_.mp3-977d0724d85fc7c22d98cacaf1090628.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Goblin/goblin tomando dano_.mp3"
+dest_files=["res://.godot/imported/goblin tomando dano_.mp3-977d0724d85fc7c22d98cacaf1090628.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

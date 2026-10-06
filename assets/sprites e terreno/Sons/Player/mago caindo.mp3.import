@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bdmge0bmqvpvi"
+path="res://.godot/imported/mago caindo.mp3-c944b5505bbe270b661cdb5b1c0ee438.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Player/mago caindo.mp3"
+dest_files=["res://.godot/imported/mago caindo.mp3-c944b5505bbe270b661cdb5b1c0ee438.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cmg2vo4fxglld"
+path="res://.godot/imported/boss atacando (invocando).mp3-c9f16c03fe02435c44b876b9beb1aed3.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Boss_Final/boss atacando (invocando).mp3"
+dest_files=["res://.godot/imported/boss atacando (invocando).mp3-c9f16c03fe02435c44b876b9beb1aed3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://b1up163r1hak4"]
+
+[ext_resource type="Texture2D" uid="uid://btllbrtknaawq" path="res://Creativos/disquetes/laranja.png" id="1_gqogi"]
+[ext_resource type="Script" uid="uid://c50sk87ycx7wk" path="res://scripts/disquete_laranja.gd" id="1_n2bct"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n2bct"]
+atlas = ExtResource("1_gqogi")
+region = Rect2(0, 0, 1024, 487)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xbk7j"]
+atlas = ExtResource("1_gqogi")
+region = Rect2(0, 487, 1024, 487)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7quve"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n2bct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xbk7j")
+}],
+"loop": 1,
+"name": &"Laranja",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1o6c0"]
+radius = 18.027756
+
+[node name="Disquete_Laranja" type="Area2D" unique_id=1788722085]
+script = ExtResource("1_n2bct")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=31516613]
+position = Vector2(-4.7683716e-07, 0)
+scale = Vector2(0.03930662, 0.043891173)
+sprite_frames = SubResource("SpriteFrames_7quve")
+animation = &"Laranja"
+frame_progress = 0.99906325
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1138393778]
+shape = SubResource("CircleShape2D_1o6c0")
+
+[node name="Resposta" type="Label" parent="." unique_id=160284907]
+offset_right = 40.0
+offset_bottom = 23.0

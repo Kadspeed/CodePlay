@@ -1,6 +1,16 @@
 # scripts/game_manager.gd
 extends Node2D
 
+# --- DESENVOLVEDOR: só define em qual fase o jogo COMEÇA. Não altera a progressão. ---
+# O Menu Principal também lê `modo_desenvolvedor` para pular o menu.
+@export_category("Desenvolvedor")
+@export var modo_desenvolvedor: bool = false
+@export_range(1, 7, 1) var fase_inicial_desenvolvedor: int = 1
+
+# Sobrevive ao reload_current_scene() (variável estática). Usada só por reiniciar_jogo()
+# para garantir que o reinício volte à Fase 1 mesmo com o modo desenvolvedor ligado.
+static var _reinicio_normal_solicitado: bool = false
+
 @onready var fase_atual_container: Node = $FaseAtual
 
 var player: Node = null
@@ -9,6 +19,9 @@ var spawn_point_atual: Marker2D = null
 var _trocando_fase: bool = false
 
 var fase_atual: int = 1
+
+# --- ALTERAÇÃO: referência para a cena final (créditos), usada em _vitoria() ---
+const CENA_FINAL: PackedScene = preload("res://cenas/Tela_Final.tscn")
 
 var fases := {
 	1: {"titulo": "Floresta_Biotech", "cena": preload("res://cenas/Niveis/Floresta_Biotech.tscn"), "disquete": "disquete_azul", "puzzle": preload("res://cenas/Puzzles/puzzle_variaveis.tscn")},
@@ -28,6 +41,19 @@ func _ready() -> void:
 	if fase_atual_container == null:
 		push_error("GameManager: nó 'FaseAtual' não encontrado na Cena_Principal.")
 		return
+
+	# O modo desenvolvedor vale só para o primeiro carregamento. Um reinício pedido
+	# por reiniciar_jogo() ignora o modo uma única vez e volta à Fase 1.
+	var usar_fase_desenvolvedor: bool = modo_desenvolvedor and not _reinicio_normal_solicitado
+	_reinicio_normal_solicitado = false
+
+	if usar_fase_desenvolvedor:
+		fase_atual = clampi(fase_inicial_desenvolvedor, 1, fases.size())
+		print("🛠️ MODO DESENVOLVEDOR ATIVO")
+		print("🛠️ Fase inicial selecionada: ", fase_inicial_desenvolvedor)
+		print("🛠️ Carregando diretamente a fase: ", fases[fase_atual]["titulo"])
+	else:
+		fase_atual = 1
 
 	print("🚀 Carregando fase inicial: ", fases[fase_atual]["titulo"])
 	_carregar_fase(fase_atual)
@@ -185,8 +211,20 @@ func _carregar_fase(id: int) -> void:
 	await TransicaoTela.revelar()
 
 
+# --- ALTERAÇÃO PRINCIPAL: _vitoria() agora carrega a cena final (TelaFinal.tscn) ---
+# O fluxo de espera de 1.5s já ocorre em _on_puzzle_concluido() antes desta função
+# ser chamada, então aqui não há nenhuma outra espera redundante: apenas o fade
+# escurecer -> troca de cena -> um frame de garantia -> fade revelar.
 func _vitoria() -> void:
 	print("🏆 JOGO COMPLETO!")
+
+	await TransicaoTela.escurecer()
+
+	get_tree().change_scene_to_packed(CENA_FINAL)
+	await get_tree().process_frame
+
+	await TransicaoTela.revelar()
+# --- FIM DA ALTERAÇÃO ---
 
 
 func get_fase_atual_info() -> Dictionary:
@@ -233,6 +271,7 @@ func obter_posicao_spawn_atual() -> Vector2:
 
 func reiniciar_jogo() -> void:
 	print("🔄 Reiniciando jogo...")
+	_reinicio_normal_solicitado = true
 	fase_atual = 1
 	player = null
 	pc = null

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://db1hgt3fkxpf"
+path="res://.godot/imported/morcego tomando dano.mp3-87125de344396cca5c78e9f9320adb32.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Morcego/morcego tomando dano.mp3"
+dest_files=["res://.godot/imported/morcego tomando dano.mp3-87125de344396cca5c78e9f9320adb32.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

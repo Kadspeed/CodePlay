@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bl6jr7nsjsbur"
+path="res://.godot/imported/voice-esqueleto andando .mp3-10af46e8171d550a1aa8357c0a2c6d48.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-esqueleto andando .mp3"
+dest_files=["res://.godot/imported/voice-esqueleto andando .mp3-10af46e8171d550a1aa8357c0a2c6d48.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

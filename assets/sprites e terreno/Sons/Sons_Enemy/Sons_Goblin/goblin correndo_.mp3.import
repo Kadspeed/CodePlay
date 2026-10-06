@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cs2hk8b110md1"
+path="res://.godot/imported/goblin correndo_.mp3-d29b0933222bd4738069243767518655.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Goblin/goblin correndo_.mp3"
+dest_files=["res://.godot/imported/goblin correndo_.mp3-d29b0933222bd4738069243767518655.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

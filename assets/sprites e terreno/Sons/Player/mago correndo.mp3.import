@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bxfgx7r7ta2nc"
+path="res://.godot/imported/mago correndo.mp3-2730434283b1f39d15b5d18d7c082937.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Player/mago correndo.mp3"
+dest_files=["res://.godot/imported/mago correndo.mp3-2730434283b1f39d15b5d18d7c082937.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,7 +1,290 @@
 [gd_scene format=3 uid="uid://ccjfobrbapw5j"]
 
+[ext_resource type="Script" uid="uid://hinew84f0n0e" path="res://scripts/puzzle_ruinas.gd" id="1_2qck1"]
+
 [node name="Puzzle_Ruinas" type="Control" unique_id=1868838147]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1281.0
+offset_bottom = 611.0
+script = ExtResource("1_2qck1")
+
+[node name="Fundo" type="ColorRect" parent="." unique_id=2103463711]
+layout_mode = 0
+offset_right = 1281.0
+offset_bottom = 611.0
+color = Color(0, 0, 0, 1)
+
+[node name="Titulo" type="Label" parent="." unique_id=812570583]
+layout_mode = 0
+offset_top = 2.0
+offset_right = 1281.0
+offset_bottom = 25.0
+text = "OBJETOS"
+horizontal_alignment = 1
+
+[node name="PainelCodigo" type="Panel" parent="." unique_id=1409140921]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 113.0
+offset_right = 419.0
+offset_bottom = 484.0
+
+[node name="TituloCodigo" type="Label" parent="PainelCodigo" unique_id=1004601219]
+layout_mode = 0
+offset_right = 381.0
+offset_bottom = 23.0
+text = "Input"
+horizontal_alignment = 1
+
+[node name="Lacuna1" type="Button" parent="PainelCodigo" unique_id=1081121419]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 132.0
+offset_right = 168.0
+offset_bottom = 172.0
+
+[node name="Lacuna2" type="Button" parent="PainelCodigo" unique_id=17911107]
+layout_mode = 0
+offset_left = 189.0
+offset_top = 135.0
+offset_right = 329.0
+offset_bottom = 175.0
+
+[node name="Lacuna3" type="Button" parent="PainelCodigo" unique_id=1042437416]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 194.0
+offset_right = 330.0
+offset_bottom = 234.0
+
+[node name="Lacuna4" type="Button" parent="PainelCodigo" unique_id=571492696]
+layout_mode = 0
+offset_left = 189.0
+offset_top = 257.0
+offset_right = 329.0
+offset_bottom = 297.0
+
+[node name="Igual" type="Label" parent="PainelCodigo" unique_id=1305497711]
+layout_mode = 0
+offset_left = 174.0
+offset_top = 73.0
+offset_right = 214.0
+offset_bottom = 96.0
+text = "="
+
+[node name="ChaveAbertura" type="Label" parent="PainelCodigo" unique_id=698035329]
+layout_mode = 0
+offset_left = 191.0
+offset_top = 72.0
+offset_right = 231.0
+offset_bottom = 95.0
+text = "{"
+
+[node name="DoisPontos1" type="Label" parent="PainelCodigo" unique_id=2035937846]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 141.0
+offset_right = 215.0
+offset_bottom = 164.0
+text = ": "
+
+[node name="DoisPontos2" type="Label" parent="PainelCodigo" unique_id=1965397341]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 199.0
+offset_right = 217.0
+offset_bottom = 222.0
+text = ":"
+
+[node name="DoisPontos3" type="Label" parent="PainelCodigo" unique_id=87071740]
+layout_mode = 0
+offset_left = 173.0
+offset_top = 261.0
+offset_right = 216.0
+offset_bottom = 284.0
+text = ":"
+
+[node name="Nivel" type="Label" parent="PainelCodigo" unique_id=734998734]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 201.0
+offset_right = 171.0
+offset_bottom = 224.0
+text = "nivel"
+
+[node name="Ativo" type="Label" parent="PainelCodigo" unique_id=1019765316]
+layout_mode = 0
+offset_left = 127.0
+offset_top = 264.0
+offset_right = 170.0
+offset_bottom = 287.0
+text = "Ativo"
+
+[node name="Virgula1" type="Label" parent="PainelCodigo" unique_id=341518752]
+layout_mode = 0
+offset_left = 339.0
+offset_top = 148.0
+offset_right = 379.0
+offset_bottom = 171.0
+text = ","
+
+[node name="Virgula2" type="Label" parent="PainelCodigo" unique_id=10452631]
+layout_mode = 0
+offset_left = 338.0
+offset_top = 207.0
+offset_right = 378.0
+offset_bottom = 230.0
+text = ","
+
+[node name="Virgula3" type="Label" parent="PainelCodigo" unique_id=1309595569]
+layout_mode = 0
+offset_left = 339.0
+offset_top = 270.0
+offset_right = 379.0
+offset_bottom = 293.0
+text = ","
+
+[node name="ChaveFechamento" type="Label" parent="PainelCodigo" unique_id=2131219474]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 304.0
+offset_right = 57.0
+offset_bottom = 327.0
+text = "}"
+
+[node name="PontoVirgula" type="Label" parent="PainelCodigo" unique_id=2094596896]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 304.0
+offset_right = 65.0
+offset_bottom = 327.0
+text = ";"
+
+[node name="EntradaCodigo" type="LineEdit" parent="PainelCodigo" unique_id=382826455]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 67.0
+offset_right = 167.0
+offset_bottom = 107.0
+
+[node name="PainelObjetivo" type="Panel" parent="." unique_id=1558518931]
+layout_mode = 0
+offset_left = 888.0
+offset_top = 115.0
+offset_right = 1250.0
+offset_bottom = 364.0
+
+[node name="TituloObjetivo" type="Label" parent="PainelObjetivo" unique_id=1667608301]
+layout_mode = 0
+offset_right = 361.0
+offset_bottom = 27.0
+text = "Objetivo"
+horizontal_alignment = 1
+
+[node name="TextoObjetivo" type="RichTextLabel" parent="PainelObjetivo" unique_id=442931916]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 42.0
+offset_right = 350.0
+offset_bottom = 232.0
+
+[node name="PainelOpcoes" type="Panel" parent="." unique_id=1443722196]
+layout_mode = 0
+offset_left = 457.0
+offset_top = 114.0
+offset_right = 862.0
+offset_bottom = 484.0
+
+[node name="TituloOpcoes" type="Label" parent="PainelOpcoes" unique_id=53026746]
+layout_mode = 0
+offset_right = 405.0
+offset_bottom = 23.0
+text = "Opções"
+horizontal_alignment = 1
+
+[node name="Opcao1" type="Button" parent="PainelOpcoes" unique_id=1278689174]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 52.0
+offset_right = 168.0
+offset_bottom = 92.0
+
+[node name="Opcao2" type="Button" parent="PainelOpcoes" unique_id=1458839694]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 164.0
+offset_right = 167.0
+offset_bottom = 204.0
+
+[node name="Opcao3" type="Button" parent="PainelOpcoes" unique_id=1958916227]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 277.0
+offset_right = 164.0
+offset_bottom = 317.0
+
+[node name="Opcao4" type="Button" parent="PainelOpcoes" unique_id=2007876631]
+layout_mode = 0
+offset_left = 239.0
+offset_top = 50.0
+offset_right = 379.0
+offset_bottom = 90.0
+
+[node name="Opcao5" type="Button" parent="PainelOpcoes" unique_id=1846651011]
+layout_mode = 0
+offset_left = 238.0
+offset_top = 163.0
+offset_right = 378.0
+offset_bottom = 203.0
+
+[node name="Opcao6" type="Button" parent="PainelOpcoes" unique_id=1116345445]
+layout_mode = 0
+offset_left = 241.0
+offset_top = 275.0
+offset_right = 381.0
+offset_bottom = 315.0
+
+[node name="PainelDica" type="Panel" parent="." unique_id=1728685853]
+layout_mode = 0
+offset_left = 891.0
+offset_top = 376.0
+offset_right = 1250.0
+offset_bottom = 585.0
+
+[node name="TituloDica" type="Label" parent="PainelDica" unique_id=263288486]
+layout_mode = 0
+offset_right = 358.0
+offset_bottom = 23.0
+text = "DICA"
+horizontal_alignment = 1
+
+[node name="TextoDica" type="RichTextLabel" parent="PainelDica" unique_id=1430326276]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 34.0
+offset_right = 350.0
+offset_bottom = 196.0
+
+[node name="BotaoExecutar" type="Button" parent="." unique_id=2077327926]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 504.0
+offset_right = 420.0
+offset_bottom = 589.0
+text = "EXECUTAR"
+
+[node name="BotaoLimpar" type="Button" parent="." unique_id=1697470355]
+layout_mode = 0
+offset_left = 456.0
+offset_top = 504.0
+offset_right = 859.0
+offset_bottom = 591.0
+text = "LIMPAR"
+
+[node name="Feedback" type="Label" parent="." unique_id=59187203]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 42.0
+offset_right = 1251.0
+offset_bottom = 93.0

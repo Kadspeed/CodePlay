@@ -1,3 +1,48 @@
 [gd_scene format=3 uid="uid://bc8ue1o0nnlsc"]
 
+[ext_resource type="Script" uid="uid://ci4ls7fxlqg2b" path="res://scripts/Disquetes/disquete_roxo.gd" id="1_ele3h"]
+[ext_resource type="Texture2D" uid="uid://dbijqri82gfh1" path="res://Creativos/disquetes/roxo.png" id="1_n7hi2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ele3h"]
+atlas = ExtResource("1_n7hi2")
+region = Rect2(0, 0, 1024, 491)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0qva"]
+atlas = ExtResource("1_n7hi2")
+region = Rect2(0, 491, 1024, 491)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7quve"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ele3h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0qva")
+}],
+"loop": 1,
+"name": &"Roxo",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7quve"]
+radius = 18.027756
+
 [node name="Disquete_Roxo" type="Area2D" unique_id=645163889]
+script = ExtResource("1_ele3h")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1730010885]
+position = Vector2(0, 2.524355e-29)
+scale = Vector2(0.036743164, 0.038696535)
+sprite_frames = SubResource("SpriteFrames_7quve")
+animation = &"Roxo"
+frame_progress = 0.09495742
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1243847369]
+shape = SubResource("CircleShape2D_7quve")
+
+[node name="Resposta" type="Label" parent="." unique_id=891917852]
+offset_left = -77.0
+offset_top = -297.0
+offset_right = 593.0
+offset_bottom = -139.0

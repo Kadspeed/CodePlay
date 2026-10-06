@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://cwd8rceqk12f0"]
+
+[ext_resource type="Texture2D" uid="uid://baiahb8ackv5e" path="res://Creativos/disquetes/amarelo.png" id="1_gf172"]
+[ext_resource type="Script" uid="uid://qiq0pm8ju2hs" path="res://scripts/disquete_amarelo.gd" id="1_moprs"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c0nl8"]
+radius = 18.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dl81w"]
+atlas = ExtResource("1_gf172")
+region = Rect2(0, 0, 1024, 490)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5rgpn"]
+atlas = ExtResource("1_gf172")
+region = Rect2(0, 490, 1024, 490)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7quve"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dl81w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5rgpn")
+}],
+"loop": 1,
+"name": &"Amarelo",
+"speed": 5.0
+}]
+
+[node name="Disquete_Amarelo" type="Area2D" unique_id=517271321]
+script = ExtResource("1_moprs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2125293618]
+shape = SubResource("CircleShape2D_c0nl8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=3655340]
+position = Vector2(-0.50000066, -3.7252903e-07)
+scale = Vector2(0.034179688, 0.036734693)
+sprite_frames = SubResource("SpriteFrames_7quve")
+animation = &"Amarelo"
+
+[node name="Resposta" type="Label" parent="." unique_id=1050693689]
+offset_right = 40.0
+offset_bottom = 23.0

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://n30ayxmeljew"
+path="res://.godot/imported/mago atacando.mp3-b8d02ee37b20794a9654bbe5aac1b26c.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Player/mago atacando.mp3"
+dest_files=["res://.godot/imported/mago atacando.mp3-b8d02ee37b20794a9654bbe5aac1b26c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

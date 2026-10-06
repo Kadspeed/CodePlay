@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://cevgbskncxn3l"]
+
+[ext_resource type="Script" uid="uid://dd0pyye0u5fwl" path="res://scripts/disquete_branco.gd" id="1_5yxen"]
+[ext_resource type="Texture2D" uid="uid://viyir1hq8ta8" path="res://Creativos/disquetes/branco.png" id="1_xxa3f"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f2ycp"]
+radius = 18.110771
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5yxen"]
+atlas = ExtResource("1_xxa3f")
+region = Rect2(0, 0, 1024, 494)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_frmdb"]
+atlas = ExtResource("1_xxa3f")
+region = Rect2(0, 494, 1024, 494)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7quve"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5yxen")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_frmdb")
+}],
+"loop": 1,
+"name": &"Branco",
+"speed": 5.0
+}]
+
+[node name="Disquete_Branco" type="Area2D" unique_id=1143304082]
+script = ExtResource("1_5yxen")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1381013314]
+shape = SubResource("CircleShape2D_f2ycp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1788921023]
+position = Vector2(-0.49999925, 0)
+scale = Vector2(0.036132813, 0.036437243)
+sprite_frames = SubResource("SpriteFrames_7quve")
+animation = &"Branco"
+frame_progress = 0.4879332
+
+[node name="Resposta" type="Label" parent="." unique_id=330690363]
+offset_right = 40.0
+offset_bottom = 23.0

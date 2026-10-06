@@ -1,7 +1,726 @@
-[gd_scene format=3 uid="uid://m3ya24lcrrlb"]
+[gd_scene format=3 uid="uid://cbg46t80uggam"]
 
-[node name="Puzzle_Nucleo" type="Control" unique_id=1361592784]
+[ext_resource type="Script" uid="uid://dtik2fnfd2afl" path="res://scripts/puzzle_nucleo.gd" id="1_tt3qi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exec_normal"]
+bg_color = Color(0.0706, 0.2118, 0.2275, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.3098, 0.8471, 0.8784, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.3098, 0.8471, 0.8784, 0.35)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exec_focus"]
+bg_color = Color(0, 0, 0, 0)
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6275, 0.9412, 0.9608, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exec_hover"]
+bg_color = Color(0.0941, 0.2824, 0.3137, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6275, 0.9412, 0.9608, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.3098, 0.8471, 0.8784, 0.45)
+shadow_size = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exec_pressed"]
+bg_color = Color(0.051, 0.1647, 0.1765, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.3098, 0.8471, 0.8784, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_limpar_normal"]
+bg_color = Color(0.102, 0.1333, 0.149, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5608, 0.6392, 0.6745, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_limpar_focus"]
+bg_color = Color(0, 0, 0, 0)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3098, 0.8471, 0.8784, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_limpar_hover"]
+bg_color = Color(0.1373, 0.1804, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3098, 0.8471, 0.8784, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_limpar_pressed"]
+bg_color = Color(0.0784, 0.1059, 0.1176, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5608, 0.6392, 0.6745, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opcao_disabled"]
+bg_color = Color(0.0392, 0.0706, 0.0784, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1725, 0.2118, 0.2275, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opcao_focus"]
+bg_color = Color(0, 0, 0, 0)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3098, 0.8471, 0.8784, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opcao_hover"]
+bg_color = Color(0.0902, 0.149, 0.1647, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3098, 0.8471, 0.8784, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0.3098, 0.8471, 0.8784, 0.3)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opcao_pressed"]
+bg_color = Color(0.1176, 0.1961, 0.2196, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6275, 0.9412, 0.9608, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opcao_normal"]
+bg_color = Color(0.0627, 0.0941, 0.1059, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5608, 0.6392, 0.6745, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_painel"]
+bg_color = Color(0.0549, 0.0863, 0.102, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5608, 0.6392, 0.6745, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0.3098, 0.8471, 0.8784, 0.25)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_disabled"]
+bg_color = Color(0.0392, 0.0784, 0.0941, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1725, 0.251, 0.2745, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_focus"]
+bg_color = Color(0, 0, 0, 0)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6275, 0.9412, 0.9608, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_hover"]
+bg_color = Color(0.0745, 0.1373, 0.1608, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6275, 0.9412, 0.9608, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0.3098, 0.8471, 0.8784, 0.35)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_pressed"]
+bg_color = Color(0.1098, 0.2118, 0.2353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3098, 0.8471, 0.8784, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_normal"]
+bg_color = Color(0.0392, 0.0784, 0.0941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3098, 0.8471, 0.8784, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0.3098, 0.8471, 0.8784, 0.25)
+shadow_size = 4
+
+[sub_resource type="Theme" id="Theme_main"]
+default_font_size = 16
+ExecutarButton/base_type = &"Button"
+ExecutarButton/colors/font_color = Color(0.9098, 0.9412, 0.949, 1)
+ExecutarButton/colors/font_focus_color = Color(0.9098, 0.9412, 0.949, 1)
+ExecutarButton/colors/font_hover_color = Color(0.9098, 0.9412, 0.949, 1)
+ExecutarButton/colors/font_hover_pressed_color = Color(0.9098, 0.9412, 0.949, 1)
+ExecutarButton/colors/font_pressed_color = Color(0.9098, 0.9412, 0.949, 1)
+ExecutarButton/font_sizes/font_size = 18
+ExecutarButton/styles/disabled = SubResource("StyleBoxFlat_exec_normal")
+ExecutarButton/styles/focus = SubResource("StyleBoxFlat_exec_focus")
+ExecutarButton/styles/hover = SubResource("StyleBoxFlat_exec_hover")
+ExecutarButton/styles/hover_pressed = SubResource("StyleBoxFlat_exec_pressed")
+ExecutarButton/styles/normal = SubResource("StyleBoxFlat_exec_normal")
+ExecutarButton/styles/pressed = SubResource("StyleBoxFlat_exec_pressed")
+FeedbackLabel/base_type = &"Label"
+FeedbackLabel/colors/font_color = Color(0.9098, 0.9412, 0.949, 1)
+FeedbackLabel/font_sizes/font_size = 18
+Label/colors/font_color = Color(0.7255, 0.7765, 0.7961, 1)
+Label/font_sizes/font_size = 17
+LimparButton/base_type = &"Button"
+LimparButton/colors/font_color = Color(0.7255, 0.7765, 0.7961, 1)
+LimparButton/colors/font_focus_color = Color(0.9098, 0.9412, 0.949, 1)
+LimparButton/colors/font_hover_color = Color(0.9098, 0.9412, 0.949, 1)
+LimparButton/colors/font_hover_pressed_color = Color(0.9098, 0.9412, 0.949, 1)
+LimparButton/colors/font_pressed_color = Color(0.9098, 0.9412, 0.949, 1)
+LimparButton/font_sizes/font_size = 16
+LimparButton/styles/disabled = SubResource("StyleBoxFlat_limpar_normal")
+LimparButton/styles/focus = SubResource("StyleBoxFlat_limpar_focus")
+LimparButton/styles/hover = SubResource("StyleBoxFlat_limpar_hover")
+LimparButton/styles/hover_pressed = SubResource("StyleBoxFlat_limpar_pressed")
+LimparButton/styles/normal = SubResource("StyleBoxFlat_limpar_normal")
+LimparButton/styles/pressed = SubResource("StyleBoxFlat_limpar_pressed")
+OpcaoButton/base_type = &"Button"
+OpcaoButton/colors/font_color = Color(0.9098, 0.9412, 0.949, 1)
+OpcaoButton/colors/font_disabled_color = Color(0.3686, 0.4235, 0.4392, 1)
+OpcaoButton/colors/font_focus_color = Color(0.9098, 0.9412, 0.949, 1)
+OpcaoButton/colors/font_hover_color = Color(0.9098, 0.9412, 0.949, 1)
+OpcaoButton/colors/font_hover_pressed_color = Color(0.9098, 0.9412, 0.949, 1)
+OpcaoButton/colors/font_pressed_color = Color(0.9098, 0.9412, 0.949, 1)
+OpcaoButton/font_sizes/font_size = 15
+OpcaoButton/styles/disabled = SubResource("StyleBoxFlat_opcao_disabled")
+OpcaoButton/styles/focus = SubResource("StyleBoxFlat_opcao_focus")
+OpcaoButton/styles/hover = SubResource("StyleBoxFlat_opcao_hover")
+OpcaoButton/styles/hover_pressed = SubResource("StyleBoxFlat_opcao_pressed")
+OpcaoButton/styles/normal = SubResource("StyleBoxFlat_opcao_normal")
+OpcaoButton/styles/pressed = SubResource("StyleBoxFlat_opcao_pressed")
+Panel/styles/panel = SubResource("StyleBoxFlat_painel")
+RichTextLabel/colors/default_color = Color(0.9098, 0.9412, 0.949, 1)
+RichTextLabel/font_sizes/normal_font_size = 15
+SlotButton/base_type = &"Button"
+SlotButton/colors/font_color = Color(0.6275, 0.9412, 0.9608, 1)
+SlotButton/colors/font_disabled_color = Color(0.3686, 0.4235, 0.4392, 1)
+SlotButton/colors/font_focus_color = Color(0.9098, 0.9412, 0.949, 1)
+SlotButton/colors/font_hover_color = Color(0.9098, 0.9412, 0.949, 1)
+SlotButton/colors/font_hover_pressed_color = Color(0.9098, 0.9412, 0.949, 1)
+SlotButton/colors/font_pressed_color = Color(0.9098, 0.9412, 0.949, 1)
+SlotButton/font_sizes/font_size = 16
+SlotButton/styles/disabled = SubResource("StyleBoxFlat_slot_disabled")
+SlotButton/styles/focus = SubResource("StyleBoxFlat_slot_focus")
+SlotButton/styles/hover = SubResource("StyleBoxFlat_slot_hover")
+SlotButton/styles/hover_pressed = SubResource("StyleBoxFlat_slot_pressed")
+SlotButton/styles/normal = SubResource("StyleBoxFlat_slot_normal")
+SlotButton/styles/pressed = SubResource("StyleBoxFlat_slot_pressed")
+TituloLabel/base_type = &"Label"
+TituloLabel/colors/font_color = Color(0.6275, 0.9412, 0.9608, 1)
+TituloLabel/font_sizes/font_size = 18
+TituloPrincipal/base_type = &"Label"
+TituloPrincipal/colors/font_color = Color(0.6275, 0.9412, 0.9608, 1)
+TituloPrincipal/font_sizes/font_size = 26
+
+[sub_resource type="Gradient" id="Gradient_bg"]
+colors = PackedColorArray(0.0275, 0.0431, 0.051, 1, 0.0275, 0.0431, 0.051, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
+gradient = SubResource("Gradient_bg")
+width = 8
+height = 8
+
+[node name="Puzzle_Nucleo" type="Control" unique_id=1136377851]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1281.0
+offset_bottom = 611.0
+theme = SubResource("Theme_main")
+script = ExtResource("1_tt3qi")
+
+[node name="Fundo" type="TextureRect" parent="." unique_id=816031207]
+layout_mode = 0
+offset_right = 1281.0
+offset_bottom = 611.0
+texture = SubResource("GradientTexture2D_bg")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Titulo" type="Label" parent="." unique_id=933016601]
+layout_mode = 0
+offset_top = 8.0
+offset_right = 1281.0
+offset_bottom = 42.0
+theme_type_variation = &"TituloPrincipal"
+text = "NÚCLEO DO SISTEMA — CLASSES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PainelCodigo" type="Panel" parent="." unique_id=130028967]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 50.0
+offset_right = 670.0
+offset_bottom = 480.0
+
+[node name="TituloArea" type="Label" parent="PainelCodigo" unique_id=752841860]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 10.0
+offset_right = 630.0
+offset_bottom = 34.0
+theme_type_variation = &"TituloLabel"
+text = "CONSTRUA O CÓDIGO"
+
+[node name="Linha1" type="HBoxContainer" parent="PainelCodigo" unique_id=1627659603]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 55.0
+offset_right = 620.0
+offset_bottom = 87.0
+theme_override_constants/separation = 8
+
+[node name="Label_Class" type="Label" parent="PainelCodigo/Linha1" unique_id=811861725]
+layout_mode = 2
+text = "class"
+
+[node name="Slot1" type="Button" parent="PainelCodigo/Linha1" unique_id=1677518430]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+theme_type_variation = &"SlotButton"
+
+[node name="Label_Chave1" type="Label" parent="PainelCodigo/Linha1" unique_id=349216709]
+layout_mode = 2
+text = "{"
+
+[node name="Linha2" type="HBoxContainer" parent="PainelCodigo" unique_id=942676432]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 95.0
+offset_right = 620.0
+offset_bottom = 127.0
+theme_override_constants/separation = 8
+
+[node name="Label_Indentacao" type="Label" parent="PainelCodigo/Linha2" unique_id=1315069904]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Label_Constructor" type="Label" parent="PainelCodigo/Linha2" unique_id=370375805]
+layout_mode = 2
+text = "constructor("
+
+[node name="Slot2" type="Button" parent="PainelCodigo/Linha2" unique_id=231126829]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+theme_type_variation = &"SlotButton"
+
+[node name="Label_Virgula" type="Label" parent="PainelCodigo/Linha2" unique_id=384327616]
+layout_mode = 2
+text = ","
+
+[node name="Slot3" type="Button" parent="PainelCodigo/Linha2" unique_id=155066241]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+theme_type_variation = &"SlotButton"
+
+[node name="Label_Parenteses" type="Label" parent="PainelCodigo/Linha2" unique_id=136176924]
+layout_mode = 2
+text = ") {"
+
+[node name="Linha3" type="HBoxContainer" parent="PainelCodigo" unique_id=216758003]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 135.0
+offset_right = 620.0
+offset_bottom = 167.0
+theme_override_constants/separation = 8
+
+[node name="Label_Indentacao" type="Label" parent="PainelCodigo/Linha3" unique_id=1943033279]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+
+[node name="Label_Chave2" type="Label" parent="PainelCodigo/Linha3" unique_id=473464019]
+layout_mode = 2
+text = "{"
+
+[node name="Linha4" type="HBoxContainer" parent="PainelCodigo" unique_id=1379197455]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 175.0
+offset_right = 620.0
+offset_bottom = 207.0
+theme_override_constants/separation = 8
+
+[node name="Label_Indentacao" type="Label" parent="PainelCodigo/Linha4" unique_id=1328248659]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+
+[node name="Label_This1" type="Label" parent="PainelCodigo/Linha4" unique_id=1296462570]
+layout_mode = 2
+text = "this."
+
+[node name="Slot4" type="Button" parent="PainelCodigo/Linha4" unique_id=1997875768]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+theme_type_variation = &"SlotButton"
+
+[node name="Label_Igual1" type="Label" parent="PainelCodigo/Linha4" unique_id=1851469665]
+layout_mode = 2
+text = "="
+
+[node name="Slot5" type="Button" parent="PainelCodigo/Linha4" unique_id=1863941032]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+theme_type_variation = &"SlotButton"
+
+[node name="Label_PontoVirgula1" type="Label" parent="PainelCodigo/Linha4" unique_id=561433844]
+layout_mode = 2
+text = ";"
+
+[node name="Linha5" type="HBoxContainer" parent="PainelCodigo" unique_id=8799749]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 215.0
+offset_right = 620.0
+offset_bottom = 247.0
+theme_override_constants/separation = 8
+
+[node name="Label_Indentacao" type="Label" parent="PainelCodigo/Linha5" unique_id=2138923179]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+
+[node name="Label_This2" type="Label" parent="PainelCodigo/Linha5" unique_id=1788575480]
+layout_mode = 2
+text = "this."
+
+[node name="Slot6" type="Button" parent="PainelCodigo/Linha5" unique_id=1568951159]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+theme_type_variation = &"SlotButton"
+
+[node name="Label_Igual2" type="Label" parent="PainelCodigo/Linha5" unique_id=814963397]
+layout_mode = 2
+text = "="
+
+[node name="Slot7" type="Button" parent="PainelCodigo/Linha5" unique_id=1560559182]
+custom_minimum_size = Vector2(90, 32)
+layout_mode = 2
+theme_type_variation = &"SlotButton"
+
+[node name="Label_PontoVirgula2" type="Label" parent="PainelCodigo/Linha5" unique_id=1136769006]
+layout_mode = 2
+text = ";"
+
+[node name="Linha6" type="HBoxContainer" parent="PainelCodigo" unique_id=1329627401]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 255.0
+offset_right = 620.0
+offset_bottom = 287.0
+theme_override_constants/separation = 8
+
+[node name="Label_Chave3" type="Label" parent="PainelCodigo/Linha6" unique_id=324841098]
+layout_mode = 2
+text = "    }"
+
+[node name="Linha7" type="HBoxContainer" parent="PainelCodigo" unique_id=593594292]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 295.0
+offset_right = 620.0
+offset_bottom = 327.0
+theme_override_constants/separation = 8
+
+[node name="Label_Chave4" type="Label" parent="PainelCodigo/Linha7" unique_id=1152276447]
+layout_mode = 2
+text = "}"
+
+[node name="PainelObjetivo" type="Panel" parent="." unique_id=982496501]
+layout_mode = 0
+offset_left = 690.0
+offset_top = 50.0
+offset_right = 1261.0
+offset_bottom = 170.0
+
+[node name="TituloArea" type="Label" parent="PainelObjetivo" unique_id=1394520024]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 8.0
+offset_right = 556.0
+offset_bottom = 30.0
+theme_type_variation = &"TituloLabel"
+text = "OBJETIVO"
+
+[node name="TextoObjetivo" type="RichTextLabel" parent="PainelObjetivo" unique_id=956504040]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 36.0
+offset_right = 556.0
+offset_bottom = 112.0
+text = "Crie uma classe chamada \"Jogador\" com as propriedades nome e nivel."
+fit_content = true
+scroll_active = false
+
+[node name="PainelOpcoes" type="Panel" parent="." unique_id=1578061141]
+layout_mode = 0
+offset_left = 690.0
+offset_top = 180.0
+offset_right = 1261.0
+offset_bottom = 400.0
+
+[node name="TituloArea" type="Label" parent="PainelOpcoes" unique_id=1305577068]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 8.0
+offset_right = 556.0
+offset_bottom = 30.0
+theme_type_variation = &"TituloLabel"
+text = "OPÇÕES"
+
+[node name="Opcao1" type="Button" parent="PainelOpcoes" unique_id=1778150344]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 45.0
+offset_right = 145.0
+offset_bottom = 81.0
+theme_type_variation = &"OpcaoButton"
+text = "Jogador"
+
+[node name="Opcao2" type="Button" parent="PainelOpcoes" unique_id=546083424]
+layout_mode = 0
+offset_left = 155.0
+offset_top = 45.0
+offset_right = 285.0
+offset_bottom = 81.0
+theme_type_variation = &"OpcaoButton"
+text = "nome"
+
+[node name="Opcao3" type="Button" parent="PainelOpcoes" unique_id=1021479615]
+layout_mode = 0
+offset_left = 295.0
+offset_top = 45.0
+offset_right = 425.0
+offset_bottom = 81.0
+theme_type_variation = &"OpcaoButton"
+text = "nivel"
+
+[node name="Opcao4" type="Button" parent="PainelOpcoes" unique_id=538098789]
+layout_mode = 0
+offset_left = 435.0
+offset_top = 45.0
+offset_right = 565.0
+offset_bottom = 81.0
+theme_type_variation = &"OpcaoButton"
+text = "\"Pedro\""
+
+[node name="Opcao5" type="Button" parent="PainelOpcoes" unique_id=934320336]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 90.0
+offset_right = 145.0
+offset_bottom = 126.0
+theme_type_variation = &"OpcaoButton"
+text = "100"
+
+[node name="Opcao6" type="Button" parent="PainelOpcoes" unique_id=1689970119]
+layout_mode = 0
+offset_left = 155.0
+offset_top = 90.0
+offset_right = 285.0
+offset_bottom = 126.0
+theme_type_variation = &"OpcaoButton"
+text = "vida"
+
+[node name="Opcao7" type="Button" parent="PainelOpcoes" unique_id=884089758]
+layout_mode = 0
+offset_left = 295.0
+offset_top = 90.0
+offset_right = 425.0
+offset_bottom = 126.0
+theme_type_variation = &"OpcaoButton"
+text = "idade"
+
+[node name="Opcao8" type="Button" parent="PainelOpcoes" unique_id=1475033962]
+layout_mode = 0
+offset_left = 435.0
+offset_top = 90.0
+offset_right = 565.0
+offset_bottom = 126.0
+theme_type_variation = &"OpcaoButton"
+text = "ativo"
+
+[node name="Opcao9" type="Button" parent="PainelOpcoes" unique_id=778553769]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 135.0
+offset_right = 145.0
+offset_bottom = 171.0
+theme_type_variation = &"OpcaoButton"
+text = "\"João\""
+
+[node name="Opcao10" type="Button" parent="PainelOpcoes" unique_id=711023124]
+layout_mode = 0
+offset_left = 155.0
+offset_top = 135.0
+offset_right = 285.0
+offset_bottom = 171.0
+theme_type_variation = &"OpcaoButton"
+text = "50"
+
+[node name="Opcao11" type="Button" parent="PainelOpcoes" unique_id=269093014]
+layout_mode = 0
+offset_left = 295.0
+offset_top = 135.0
+offset_right = 425.0
+offset_bottom = 171.0
+theme_type_variation = &"OpcaoButton"
+text = "function"
+
+[node name="PainelDica" type="Panel" parent="." unique_id=1897988621]
+layout_mode = 0
+offset_left = 690.0
+offset_top = 410.0
+offset_right = 1261.0
+offset_bottom = 600.0
+
+[node name="TituloArea" type="Label" parent="PainelDica" unique_id=108941751]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 8.0
+offset_right = 556.0
+offset_bottom = 30.0
+theme_type_variation = &"TituloLabel"
+text = "DICA"
+
+[node name="TextoDica" type="RichTextLabel" parent="PainelDica" unique_id=2061805860]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 36.0
+offset_right = 556.0
+offset_bottom = 83.0
+text = "Uma classe é um molde para criar objetos. O constructor define os valores iniciais de suas propriedades."
+fit_content = true
+scroll_active = false
+
+[node name="Feedback" type="Label" parent="." unique_id=400040169]
+layout_mode = 0
+offset_left = 706.0
+offset_top = 524.0
+offset_right = 1246.0
+offset_bottom = 593.0
+theme_type_variation = &"FeedbackLabel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BotaoExecutar" type="Button" parent="." unique_id=1367705827]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 490.0
+offset_right = 331.0
+offset_bottom = 601.0
+theme_type_variation = &"ExecutarButton"
+text = "EXECUTAR"
+
+[node name="BotaoLimpar" type="Button" parent="." unique_id=704160819]
+layout_mode = 0
+offset_left = 352.0
+offset_top = 488.0
+offset_right = 671.0
+offset_bottom = 601.0
+theme_type_variation = &"LimparButton"
+text = "LIMPAR"

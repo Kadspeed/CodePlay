@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b35tcsjap4g7r"
+path="res://.godot/imported/pulo normal e duplo.mp3-7c5f21631a2cd03e064649d78ffc2aad.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Player/pulo normal e duplo.mp3"
+dest_files=["res://.godot/imported/pulo normal e duplo.mp3-7c5f21631a2cd03e064649d78ffc2aad.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

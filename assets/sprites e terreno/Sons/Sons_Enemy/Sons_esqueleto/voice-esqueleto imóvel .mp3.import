@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://di8pehrui4t27"
+path="res://.godot/imported/voice-esqueleto imóvel .mp3-fe883187168965d01fd510a2d97dd0b3.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-esqueleto imóvel .mp3"
+dest_files=["res://.godot/imported/voice-esqueleto imóvel .mp3-fe883187168965d01fd510a2d97dd0b3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
