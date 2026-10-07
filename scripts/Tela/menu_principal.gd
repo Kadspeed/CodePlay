@@ -29,7 +29,14 @@ func _ready() -> void:
 	# Modo Desenvolvedor: pula o menu e entra direto em Mundo.tscn.
 	# O GameManager é quem decide a fase inicial.
 	if _deve_pular_menu():
-		_entrar_direto_no_jogo()
+		# Impede qualquer atividade do menu a partir de agora (inclusive o
+		# _process, que usaria _logo_posicao_base ainda não inicializada).
+		visible = false
+		set_process(false)
+		# A troca de cena precisa ser adiada: durante o _ready() a raiz da árvore
+		# ainda está adicionando este nó, e o change_scene_to_file() faz um
+		# remove_child() interno que não pode ocorrer nesse momento.
+		_entrar_direto_no_jogo.call_deferred()
 		return
 
 	_conectar_sinais()
@@ -81,10 +88,8 @@ func _encontrar_game_manager(raiz: Node) -> Node:
 	return null
 
 
+## Chamada de forma adiada (call_deferred) pelo _ready(), quando a árvore já está livre.
 func _entrar_direto_no_jogo() -> void:
-	# Impede qualquer atividade do menu no frame em que a troca é agendada.
-	visible = false
-	set_process(false)
 	get_tree().change_scene_to_file(CENA_JOGO)
 
 
