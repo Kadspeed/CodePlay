@@ -4,7 +4,7 @@ extends CharacterBody2D
 # 1. NÓS
 # ============================================================
 
-@onready var animated: AnimatedSprite2D = $CollisionShape2D/AnimatedSprite2D
+@onready var animated: AnimatedSprite2D = $AnimatedSprite2D
 @onready var interaction_area: Area2D = $"InteractionArea"
 @onready var hitbox_area: Area2D = $HitboxArea
 @onready var attack_area: Area2D = $AttackArea
