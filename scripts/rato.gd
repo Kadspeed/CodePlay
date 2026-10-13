@@ -46,7 +46,7 @@ enum Estado {
 @export var sprite_olha_para_direita: bool = true
 
 @export_group("Vida")
-@export var vida_maxima: int = 10
+@export var vida_maxima: int = 50
 @export var dano_ataque: int = 5
 
 @export_group("Detecção e Ataque")

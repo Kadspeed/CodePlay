@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bjngbpuairv2j"
+path="res://.godot/imported/mago-atacando_AY5De5je.mp3-dba07b2adb8742b9834f0a2beb8fb926.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Player/mago-atacando_AY5De5je.mp3"
+dest_files=["res://.godot/imported/mago-atacando_AY5De5je.mp3-dba07b2adb8742b9834f0a2beb8fb926.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

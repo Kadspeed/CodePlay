@@ -1514,10 +1514,10 @@ z_index = 10
 y_sort_enabled = true
 
 [node name="PC" parent="Ysort" unique_id=797175659 instance=ExtResource("157_sof7l")]
-position = Vector2(194, 655)
+position = Vector2(2520, 642)
 
 [node name="Disquete_azul" parent="Ysort" unique_id=1834738538 instance=ExtResource("158_20htb")]
-position = Vector2(153, 662)
+position = Vector2(2185, 531)
 
 [node name="Enemys" type="Node2D" parent="." unique_id=532798127]
 position = Vector2(53, 303)

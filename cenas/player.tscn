@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://dm60ga5ne3ngl" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Jump.png" id="6_8bq56"]
 [ext_resource type="Script" uid="uid://ix5d68iwg8tp" path="res://scripts/Enemy_Esqueleto/attack_area.gd" id="7_4y2i1"]
 [ext_resource type="Texture2D" uid="uid://kv0bdim7du55" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Run.png" id="7_tckef"]
+[ext_resource type="AudioStream" uid="uid://bjngbpuairv2j" path="res://assets/sprites e terreno/Sons/Player/mago-atacando_AY5De5je.mp3" id="8_mp0j6"]
+[ext_resource type="AudioStream" uid="uid://bx7arklvhqdrk" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_cogumelo/cogumelo correndo_.mp3" id="9_8bq56"]
+[ext_resource type="AudioStream" uid="uid://df2xwbpqldnoe" path="res://assets/sprites e terreno/Sons/Player/pulo-normal-e-duplo_p80pAKxS.mp3" id="10_tckef"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8v4ht"]
 atlas = ExtResource("2_4y2i1")
@@ -236,13 +239,13 @@ animations = [{
 radius = 6.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4y2i1"]
-radius = 30.016663
+radius = 20.024984
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ogt8j"]
-radius = 23.021729
+radius = 11.045361
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rijvs"]
-radius = 59.07622
+radius = 33.01515
 
 [node name="player" type="CharacterBody2D" unique_id=1016961734]
 z_index = 10
@@ -284,3 +287,12 @@ limit_left = 0
 limit_top = -1000000
 limit_right = 5000
 limit_bottom = 100000
+
+[node name="Attack" type="AudioStreamPlayer2D" parent="." unique_id=1150365742]
+stream = ExtResource("8_mp0j6")
+
+[node name="Run" type="AudioStreamPlayer2D" parent="." unique_id=1366928362]
+stream = ExtResource("9_8bq56")
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="." unique_id=1132017178]
+stream = ExtResource("10_tckef")
