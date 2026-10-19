@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bguuasqgfr53c"]
 
+[ext_resource type="Script" uid="uid://bvb4l3n5frw" path="res://scripts/slime.gd" id="1_jpl8i"]
 [ext_resource type="Texture2D" uid="uid://cm0p7i1l5r0bo" path="res://assets/sprites e terreno/sprite/enemy/Monsters Creatures Fantasy 2/Monsters Creatures Fantasy 2/Slime/attack.png" id="1_s3qyi"]
 [ext_resource type="Texture2D" uid="uid://dwh6u768r81oa" path="res://assets/sprites e terreno/sprite/enemy/Monsters Creatures Fantasy 2/Monsters Creatures Fantasy 2/Slime/death.png" id="2_jpl8i"]
 [ext_resource type="Texture2D" uid="uid://crqn83uac1ylg" path="res://assets/sprites e terreno/sprite/enemy/Monsters Creatures Fantasy 2/Monsters Creatures Fantasy 2/Slime/hurt.png" id="3_7bu1y"]
@@ -414,12 +415,13 @@ size = Vector2(118, 28)
 size = Vector2(133, 17)
 
 [node name="Slime" type="CharacterBody2D" unique_id=1527311156]
+script = ExtResource("1_jpl8i")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=233806066]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_bdv2i")
-animation = &"Attack"
-frame_progress = 0.70452106
+animation = &"Run"
+frame_progress = 0.98234254
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2120128976]
 position = Vector2(0, -1)

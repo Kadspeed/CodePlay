@@ -233,19 +233,22 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ebum8"]
+radius = 8.0
 height = 20.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xvf33"]
-radius = 21.0
+radius = 22.022715
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uiv75"]
-size = Vector2(298, 46)
+size = Vector2(94, 21)
 
 [node name="Rato" type="CharacterBody2D" unique_id=2020656812]
 script = ExtResource("1_gyuke")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=397042730]
 texture_filter = 1
+position = Vector2(0, -3.8146973e-06)
+scale = Vector2(1.1214285, 0.98571426)
 sprite_frames = SubResource("SpriteFrames_6gcmc")
 animation = &"Walk"
 frame_progress = 0.36366418
@@ -261,7 +264,7 @@ shape = SubResource("CircleShape2D_xvf33")
 [node name="AreaDeteccao" type="Area2D" parent="." unique_id=1147320800]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDeteccao" unique_id=1205277898]
-position = Vector2(1, -13)
+position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_uiv75")
 
 [node name="FloorRayCast" type="RayCast2D" parent="." unique_id=800625338]
@@ -269,3 +272,5 @@ shape = SubResource("RectangleShape2D_uiv75")
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1388526484]
 
 [node name="Timer" type="Timer" parent="." unique_id=81957872]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1683893732]

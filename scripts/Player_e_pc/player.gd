@@ -10,6 +10,32 @@ extends CharacterBody2D
 @onready var attack_area: Area2D = $AttackArea
 @onready var camera: Camera2D = $Camera2D
 
+# 🔊 Nós de áudio (filhos do Player). get_node_or_null evita erro caso
+# algum deles não exista na cena; todas as funções de som checam null.
+@onready var som_attack: AudioStreamPlayer2D = get_node_or_null("Attack")
+@onready var som_run: AudioStreamPlayer2D = get_node_or_null("Run")
+@onready var som_jump: AudioStreamPlayer2D = get_node_or_null("Jump")
+
+# 🔊 Volume de cada som, editável no Inspector (aba "Volume dos Sons").
+# Escala de 0 a 100: 0 = mudo, 100 = volume máximo (ver VOLUME_MAX_DB).
+# O valor também pode ser mudado em tempo de execução (o setter reaplica).
+const VOLUME_MAX_DB: float = 12.0  # ganho em dB correspondente ao valor 100
+
+@export_group("Volume dos Sons")
+@export_range(0, 100, 1) var volume_attack: int = 50:
+	set(valor):
+		volume_attack = valor
+		_aplicar_volume(som_attack, volume_attack)
+@export_range(0, 100, 1) var volume_run: int = 50:
+	set(valor):
+		volume_run = valor
+		_aplicar_volume(som_run, volume_run)
+@export_range(0, 100, 1) var volume_jump: int = 50:
+	set(valor):
+		volume_jump = valor
+		_aplicar_volume(som_jump, volume_jump)
+@export_group("")
+
 # ============================================================
 # 2. VARIÁVEIS DE ESTADO
 # ============================================================
@@ -117,6 +143,22 @@ func _ready():
 	elif camera.limit_bottom <= 0:
 		push_warning("⚠️ Camera2D.limit_bottom não configurado! Sistema de respawn por limite desativado.")
 	
+	# 🔊 Validar nós de áudio (apenas avisos; o jogo funciona sem eles)
+	if not som_attack:
+		push_warning("⚠️ Nó de áudio 'Attack' não encontrado no Player.")
+	if not som_run:
+		push_warning("⚠️ Nó de áudio 'Run' não encontrado no Player.")
+	if not som_jump:
+		push_warning("⚠️ Nó de áudio 'Jump' não encontrado no Player.")
+	
+	# Aplica os volumes definidos no Inspector (0 a 100)
+	_aplicar_volume(som_attack, volume_attack)
+	_aplicar_volume(som_run, volume_run)
+	_aplicar_volume(som_jump, volume_jump)
+	
+	# Garante que nenhum som comece sozinho ao carregar a cena
+	_parar_som_corrida()
+	
 	print("✅ Player pronto!")
 
 # ============================================================
@@ -139,6 +181,7 @@ func _physics_process(delta: float) -> void:
 	
 	# SE ESTIVER MORTO, ZERA VELOCIDADE E NÃO FAZ NADA
 	if esta_morto:
+		_parar_som_corrida()  # 🔊
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
@@ -159,6 +202,7 @@ func _physics_process(delta: float) -> void:
 	# aberto de qualquer forma — ver tomar_dano(), que já ignora dano
 	# enquanto terminal_aberto é true).
 	if terminal_aberto:
+		_parar_som_corrida()  # 🔊
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
@@ -182,11 +226,13 @@ func _physics_process(delta: float) -> void:
 			# 🔥 PRIMEIRO PULO (do chão)
 			velocity.y = JUMP_VELOCITY
 			pulos_restantes = PULOS_MAXIMOS - 1  # 🔥 Fica com 1 pulo restante
+			_tocar_som_pulo()  # 🔊
 			print("💨 Pulo 1! Pulos restantes: ", pulos_restantes)
 		elif pulos_restantes > 0:
 			# 🔥 SEGUNDO PULO (pulo duplo)
 			velocity.y = JUMP_VELOCITY
 			pulos_restantes -= 1  # 🔥 Zera os pulos restantes
+			_tocar_som_pulo()  # 🔊
 			print("💨 Pulo duplo! Pulos restantes: ", pulos_restantes)
 	
 	# 🔥 Resetar pulos quando tocar no chão (volta a ter 2 pulos)
@@ -195,7 +241,7 @@ func _physics_process(delta: float) -> void:
 			pulos_restantes = PULOS_MAXIMOS
 			print("🔄 Pulos resetados! Pulos restantes: ", pulos_restantes)
 	
-	# ANIMAÇÕES
+	# ANIMAÇÕES (e som de corrida, que acompanha o estado da animação)
 	_atualizar_animacao()
 	
 	# ============ INTERAÇÕES ============
@@ -287,6 +333,9 @@ func _coletar_disquete_proximo():
 # ============================================================
 
 func _atualizar_animacao():
+	# 🔊 Sincroniza o som de corrida com o estado atual (inicia/para só quando muda)
+	_atualizar_som_corrida()
+	
 	# SE ESTIVER MORTO, MANTÉM IDLE
 	if esta_morto:
 		if animated.animation != "idle":
@@ -317,6 +366,70 @@ func _atualizar_animacao():
 		animated.play("idle")
 
 # ============================================================
+# 7.1 EFEITOS SONOROS
+# ============================================================
+
+## Converte o valor 0-100 do Inspector em volume_db do player de áudio.
+## 0 = mudo; 100 = +VOLUME_MAX_DB; a curva é logarítmica (linear_to_db),
+## então a diferença entre os valores soa natural ao ouvido.
+## (O valor 25 equivale a 0 dB, ou seja, o volume original do arquivo.)
+func _aplicar_volume(player_audio: AudioStreamPlayer2D, valor: int) -> void:
+	if player_audio == null:
+		return
+	if valor <= 0:
+		player_audio.volume_db = -80.0
+	else:
+		player_audio.volume_db = linear_to_db(float(valor) / 100.0) + VOLUME_MAX_DB
+
+## Corrida: toca em loop enquanto o Player está no chão, em movimento
+## horizontal e livre para agir. Só chama play() se o som ainda não estiver
+## tocando (não reinicia a cada frame) e só chama stop() se estiver tocando.
+func _atualizar_som_corrida() -> void:
+	if som_run == null:
+		return
+	
+	var deve_correr: bool = (
+		not esta_morto
+		and not terminal_aberto
+		and not ataque_em_progresso
+		and is_on_floor()
+		and velocity.y >= 0.0  # no frame do pulo, velocity.y já é negativa
+		and absf(velocity.x) > 0.0
+	)
+	
+	if deve_correr:
+		if not som_run.playing:
+			som_run.play()
+	else:
+		if som_run.playing:
+			som_run.stop()
+
+func _parar_som_corrida() -> void:
+	if som_run and som_run.playing:
+		som_run.stop()
+
+## Pulo: chamado apenas quando um pulo válido (1º ou duplo) é executado.
+## Se o som do pulo anterior ainda estiver tocando, é interrompido e
+## reiniciado para o novo pulo ser audível.
+func _tocar_som_pulo() -> void:
+	if som_jump == null:
+		return
+	_parar_som_corrida()
+	if som_jump.playing:
+		som_jump.stop()
+	som_jump.play()
+
+## Ataque: chamado apenas depois que _realizar_ataque() passou pelas
+## verificações (não está morto nem atacando), junto com a animação.
+func _tocar_som_ataque() -> void:
+	if som_attack == null:
+		return
+	_parar_som_corrida()
+	if som_attack.playing:
+		som_attack.stop()
+	som_attack.play()
+
+# ============================================================
 # 8. ATAQUE
 # ============================================================
 
@@ -326,6 +439,9 @@ func _realizar_ataque():
 	
 	print("⚔️ ATAQUE!")
 	ataque_em_progresso = true
+	
+	# 🔊 Som do ataque começa junto com a animação
+	_tocar_som_ataque()
 	
 	# ATUALIZAR DIREÇÃO DO ATAQUE ANTES DE EXECUTAR
 	var direcao = 1 if not animated.flip_h else -1
@@ -425,6 +541,9 @@ func _morrer():
 	terminal_aberto = true
 	ataque_em_progresso = false
 	
+	# 🔊 Para o som de corrida ao morrer (sons curtos terminam sozinhos)
+	_parar_som_corrida()
+	
 	# ZERAR VELOCIDADE
 	velocity = Vector2.ZERO
 	
@@ -470,6 +589,9 @@ func _respawnar_apos_morte() -> void:
 	"""
 	global_position = ultima_posicao_segura
 	velocity = Vector2.ZERO
+	
+	# 🔊 Garante que a corrida não retome com som residual no renascimento
+	_parar_som_corrida()
 	
 	# resetar_vida() já zera 'esta_morto' e reemite vida_atualizada.
 	resetar_vida()
@@ -533,13 +655,16 @@ func _on_hitbox_area_entered(area):
 ## _unhandled_input().
 func abrir_puzzle() -> void:
 	terminal_aberto = true
+	_parar_som_corrida()  # 🔊 corte imediato, sem esperar o próximo frame
 
 func fechar_terminal():
 	print("🔓 Player liberado do terminal")
 	terminal_aberto = false
+	_parar_som_corrida()  # 🔊 a corrida só volta se o Player estiver realmente correndo
 
 func desbloquear():
 	terminal_aberto = false
+	_parar_som_corrida()  # 🔊 idem
 	print("🔓 Player desbloqueado!")
 
 # ============================================================

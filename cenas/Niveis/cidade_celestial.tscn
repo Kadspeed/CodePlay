@@ -466,7 +466,7 @@ tile_map_data = PackedByteArray("AAAAACwAAAAJABQAAAAAAC0AAAAJABQAAAADACwAAAADAAs
 tile_set = SubResource("TileSet_7quve")
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1162828261]
-position = Vector2(1035, 474)
+position = Vector2(70, 306)
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1801126436]
 
@@ -520,13 +520,11 @@ position = Vector2(1120, 968)
 [node name="Monster_Sky10" parent="Enemys" unique_id=780445363 instance=ExtResource("6_75qxh")]
 position = Vector2(1383, 843)
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1539731977]
-
 [node name="Ysort" type="Node2D" parent="." unique_id=1654818090]
 
 [node name="PC" parent="Ysort" unique_id=797175659 instance=ExtResource("3_duq20")]
 y_sort_enabled = true
-position = Vector2(233, 494)
+position = Vector2(236, 494)
 
 [node name="Disquete_Roxo" parent="Ysort" unique_id=645163889 instance=ExtResource("3_ux0cy")]
 position = Vector2(1133, 547)

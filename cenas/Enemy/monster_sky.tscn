@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://bt2vbpbe0ek2d"]
 
-[ext_resource type="Script" uid="uid://cec3pxca7qbq3" path="res://scripts/monster_sky.gd" id="1_kkef4"]
+[ext_resource type="Script" uid="uid://cec3pxca7qbq3" path="res://scripts/Enemy_monster_SKY/monster_sky.gd" id="1_kkef4"]
 [ext_resource type="Texture2D" uid="uid://d3g24lcre32tm" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Flying eye/Attack.png" id="2_e6ilp"]
 [ext_resource type="Texture2D" uid="uid://c27nm3pydo0ce" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Flying eye/Death.png" id="3_2esau"]
 [ext_resource type="Texture2D" uid="uid://de1cvrw7j2dmq" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Flying eye/Flight.png" id="4_nd3cl"]
 [ext_resource type="Texture2D" uid="uid://d08hbdjcvidq7" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Flying eye/Take Hit.png" id="5_5d463"]
+[ext_resource type="AudioStream" uid="uid://dx0u72xl2k2cl" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Morcego/morcego morrendo_.mp3" id="6_f5ph3"]
+[ext_resource type="AudioStream" uid="uid://db1hgt3fkxpf" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Morcego/morcego tomando dano.mp3" id="7_jgeca"]
+[ext_resource type="AudioStream" uid="uid://4o3675s5lr1a" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Morcego/som das asas.mp3" id="8_aoiw0"]
+[ext_resource type="AudioStream" uid="uid://b6g6fewu1se4" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Morcego/morcego mordendo_.mp3" id="9_xigww"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kkef4"]
 
@@ -131,7 +135,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gs2vg")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Attack",
 "speed": 10.0
 }, {
@@ -148,7 +152,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mo1rn")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Death",
 "speed": 8.0
 }, {
@@ -177,7 +181,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_a2cav")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Idle",
 "speed": 15.0
 }, {
@@ -194,7 +198,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_i8qwr")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Take_hit",
 "speed": 9.0
 }]
@@ -207,6 +211,8 @@ radius = 61.0
 
 [node name="Monster_Sky" type="CharacterBody2D" unique_id=1925291013]
 script = ExtResource("1_kkef4")
+volume_death = 100
+volume_hurt = 100
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1184896129]
 shape = SubResource("CapsuleShape2D_kkef4")
@@ -229,3 +235,15 @@ shape = SubResource("CircleShape2D_4ufht")
 shape = SubResource("CircleShape2D_h7n73")
 
 [node name="AttackCooldownTimer" type="Timer" parent="." unique_id=797308208]
+
+[node name="Death" type="AudioStreamPlayer2D" parent="." unique_id=998903839]
+stream = ExtResource("6_f5ph3")
+
+[node name="Hurt" type="AudioStreamPlayer2D" parent="." unique_id=364164048]
+stream = ExtResource("7_jgeca")
+
+[node name="Fly" type="AudioStreamPlayer2D" parent="." unique_id=1167009697]
+stream = ExtResource("8_aoiw0")
+
+[node name="Attack" type="AudioStreamPlayer2D" parent="." unique_id=132043194]
+stream = ExtResource("9_xigww")

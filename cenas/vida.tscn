@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://r7k4m6mlxcip"]
+
+[ext_resource type="Texture2D" uid="uid://ynj7m1p4nucm" path="res://assets/sprites e terreno/imagens/Coração Pixelado Vermelho Retro.png" id="1_s8q48"]
+[ext_resource type="Script" uid="uid://ctv88wda76uoq" path="res://scripts/vida.gd" id="1_ysi0r"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7quve"]
+radius = 15.033297
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f2ycp"]
+radius = 13.0
+
+[node name="Vida" type="RigidBody2D" unique_id=850729425]
+script = ExtResource("1_ysi0r")
+
+[node name="AreaDeteccao" type="Area2D" parent="." unique_id=997355790]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDeteccao" unique_id=727216277]
+shape = SubResource("CircleShape2D_7quve")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=183567422]
+shape = SubResource("CircleShape2D_f2ycp")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1114722304]
+offset_left = -20.0
+offset_top = -18.0
+offset_right = 20.0
+offset_bottom = 22.0
+texture = ExtResource("1_s8q48")
+expand_mode = 1

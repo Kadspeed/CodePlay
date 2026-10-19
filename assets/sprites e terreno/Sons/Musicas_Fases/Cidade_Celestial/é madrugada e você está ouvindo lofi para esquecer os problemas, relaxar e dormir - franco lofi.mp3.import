@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://du325rwu4nvdr"
+path="res://.godot/imported/é madrugada e você está ouvindo lofi para esquecer os problemas, relaxar e dormir - franco lofi.mp3-b2b76b0e0ac8889b52b32243c9f2b21b.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Musicas_Fases/Cidade_Celestial/é madrugada e você está ouvindo lofi para esquecer os problemas, relaxar e dormir - franco lofi.mp3"
+dest_files=["res://.godot/imported/é madrugada e você está ouvindo lofi para esquecer os problemas, relaxar e dormir - franco lofi.mp3-b2b76b0e0ac8889b52b32243c9f2b21b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

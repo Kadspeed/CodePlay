@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bs8cxbapw1jra"]
 
+[ext_resource type="Script" uid="uid://qgwq5y27bp3t" path="res://scripts/necromante.gd" id="1_hnsdu"]
 [ext_resource type="Texture2D" uid="uid://73tewigk65xg" path="res://assets/sprites e terreno/sprite/enemy/Necromancer_creativekind-Sheet.png" id="1_xa1yo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dn7lh"]
@@ -184,7 +185,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ogc42")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Attack",
 "speed": 7.0
 }, {
@@ -216,7 +217,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1bqyh")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Death",
 "speed": 8.0
 }, {
@@ -245,7 +246,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_70yb3")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Idle",
 "speed": 6.0
 }, {
@@ -265,15 +266,29 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hm7k3")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Take_hit",
 "speed": 8.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f2ycp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7quve"]
+radius = 159.08803
+
 [node name="Necromante" type="CharacterBody2D" unique_id=1163175241]
+script = ExtResource("1_hnsdu")
+inimigos_por_onda = 5
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1679102758]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_vjn3f")
-animation = &"Take_hit"
-frame_progress = 0.4579582
+animation = &"Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1502499398]
+shape = SubResource("CapsuleShape2D_f2ycp")
+
+[node name="AreaDeteccao" type="Area2D" parent="." unique_id=1902989877]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDeteccao" unique_id=1341508793]
+shape = SubResource("CircleShape2D_7quve")

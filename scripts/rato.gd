@@ -36,8 +36,8 @@ enum Estado {
 ## ------------------------------------------------------------
 
 @export_group("Movimento")
-@export var velocidade_patrulha: float = 40.0
-@export var velocidade_perseguicao: float = 70.0
+@export var velocidade_patrulha: float = 50.0
+@export var velocidade_perseguicao: float = 100.0
 @export var gravidade: float = 980.0
 
 @export_group("Sprite")
@@ -47,7 +47,7 @@ enum Estado {
 
 @export_group("Vida")
 @export var vida_maxima: int = 50
-@export var dano_ataque: int = 5
+@export var dano_ataque: int = 10
 
 @export_group("Detecção e Ataque")
 @export var attack_cooldown_tempo: float = 1.0

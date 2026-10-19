@@ -41,6 +41,10 @@ extends Control
 # quando vazios e quando preenchidos, exatamente como no Puzzle_cidade
 # — por isso pequenas chamadas de atualização visual foram adicionadas
 # nas seções 7 e 11, sem alterar nenhuma lógica funcional.
+#
+# ATUALIZAÇÃO 5: Removido tudo o que era relacionado ao botão de fechar
+# (BotaoFechar), que não existe neste puzzle: referência do nó,
+# conexão do sinal, função de fechamento e estilo visual dele.
 # ==================================================================
 
 
@@ -61,7 +65,6 @@ signal desafio_concluido
 
 @onready var _janela_puzzle: Panel = $JanelaPuzzle
 @onready var _barra_titulo: Panel = $JanelaPuzzle/BarraTitulo
-@onready var _botao_fechar: TextureButton = $JanelaPuzzle/BarraTitulo/BotaoFechar
 
 @onready var _label_desafio: Label = $JanelaPuzzle/Desafio
 
@@ -275,7 +278,6 @@ func _ready() -> void:
 	_configurar_botoes_slots()
 	_configurar_botao_executar()
 	_configurar_botao_limpar()
-	_configurar_botao_fechar()
 	_configurar_dicas()
 	_configurar_texto_feedback()
 	_aplicar_estilo_visual()
@@ -361,10 +363,6 @@ func _configurar_botao_executar() -> void:
 
 func _configurar_botao_limpar() -> void:
 	_conectar_botao(_botao_limpar, _on_botao_limpar_pressed, "Limpar")
-
-
-func _configurar_botao_fechar() -> void:
-	_conectar_botao(_botao_fechar, _on_botao_fechar_pressed, "BarraTitulo/BotaoFechar")
 
 
 # ==================================================================
@@ -842,16 +840,11 @@ func _concluir_puzzle() -> void:
 
 
 # ==================================================================
-# 13. FECHAMENTO
-# ==================================================================
-
-func _on_botao_fechar_pressed() -> void:
-	queue_free()
-
-
-# ==================================================================
 # 14. VISUAL — TEMA "CAVERNA DE CRISTAL"
 # ==================================================================
+# (A numeração pula a seção 13, que era o fechamento via botão de fechar
+# e foi removida. Os comentários que citam "seção 14" continuam válidos.)
+#
 # Aplica apenas theme overrides (cores, styleboxes) e propriedades
 # visuais nos nós já existentes. Não cria nenhum nó novo, não altera
 # posição, tamanho, nomes ou estrutura da cena.
@@ -947,7 +940,6 @@ func _aplicar_estilo_visual() -> void:
 	_aplicar_estilo_slots()
 	_aplicar_estilo_botoes_acao()
 	_aplicar_estilo_labels_sintaxe()
-	_aplicar_estilo_botao_fechar()
 
 
 ## JanelaPuzzle: painel principal, fundo bem escuro e borda roxa com
@@ -1082,16 +1074,6 @@ func _aplicar_estilo_labels_sintaxe() -> void:
 		_dois_pontos_if.add_theme_color_override("font_color", COR_TEXTO_CODIGO)
 	if _dois_pontos_else != null:
 		_dois_pontos_else.add_theme_color_override("font_color", COR_TEXTO_CODIGO)
-
-
-## BotaoFechar é um TextureButton — não usa StyleBoxFlat como os Button
-## comuns (normal/hover/pressed dele são texturas definidas no editor).
-## Para não arriscar alterar seu funcionamento, aplicamos só uma
-## modulação de cor sutil (tint), sem trocar textura, sinal ou hitbox.
-func _aplicar_estilo_botao_fechar() -> void:
-	if _botao_fechar == null:
-		return
-	_botao_fechar.self_modulate = COR_TEXTO
 
 
 ## PainelOpcoes continua sendo um Control puro (sem stylebox de "panel"

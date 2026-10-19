@@ -45,6 +45,30 @@ enum Estado { IDLE, CHASE, ATTACK, HIT, DEATH, FALLING, FADING }
 @export var tempo_espera_antes_fade: float = 1.5  # Tempo parado no chão antes de começar o fade
 @export var tempo_fade: float = 1.0
 
+# 🔊 Volume de cada som, editável no Inspector (aba "Volume dos Sons").
+# Escala de 0 a 100: 0 = mudo, 100 = volume máximo (ver VOLUME_MAX_DB).
+# O valor também pode ser mudado em tempo de execução (o setter reaplica).
+const VOLUME_MAX_DB: float = 12.0  # ganho em dB correspondente ao valor 100
+
+@export_group("Volume dos Sons")
+@export_range(0, 100, 1) var volume_death: int = 50:
+	set(valor):
+		volume_death = valor
+		_aplicar_volume(som_death, volume_death)
+@export_range(0, 100, 1) var volume_hurt: int = 50:
+	set(valor):
+		volume_hurt = valor
+		_aplicar_volume(som_hurt, volume_hurt)
+@export_range(0, 100, 1) var volume_fly: int = 50:
+	set(valor):
+		volume_fly = valor
+		_aplicar_volume(som_fly, volume_fly)
+@export_range(0, 100, 1) var volume_attack: int = 50:
+	set(valor):
+		volume_attack = valor
+		_aplicar_volume(som_attack, volume_attack)
+@export_group("")
+
 
 # -------------------------------------------------------------
 # VARIÁVEIS INTERNAS
@@ -80,6 +104,13 @@ var fade_iniciado: bool = false
 @onready var area_attack: Area2D = $AttackArea
 @onready var attack_timer: Timer = $AttackCooldownTimer
 
+# 🔊 Nós de áudio (filhos do inimigo). get_node_or_null evita erro caso
+# algum deles não exista na cena; todas as funções de som checam null.
+@onready var som_death: AudioStreamPlayer2D = get_node_or_null("Death")
+@onready var som_hurt: AudioStreamPlayer2D = get_node_or_null("Hurt")
+@onready var som_fly: AudioStreamPlayer2D = get_node_or_null("Fly")
+@onready var som_attack: AudioStreamPlayer2D = get_node_or_null("Attack")
+
 
 # -------------------------------------------------------------
 # CICLO DE VIDA
@@ -108,6 +139,25 @@ func _ready() -> void:
 	# Garante que Attack, Take_hit e Death não fiquem em loop.
 	_configurar_animacoes_nao_looping()
 
+	# 🔊 Validar nós de áudio (apenas avisos; o jogo funciona sem eles)
+	if not som_death:
+		push_warning("⚠️ Nó de áudio 'Death' não encontrado no MonsterSky.")
+	if not som_hurt:
+		push_warning("⚠️ Nó de áudio 'Hurt' não encontrado no MonsterSky.")
+	if not som_fly:
+		push_warning("⚠️ Nó de áudio 'Fly' não encontrado no MonsterSky.")
+	if not som_attack:
+		push_warning("⚠️ Nó de áudio 'Attack' não encontrado no MonsterSky.")
+
+	# 🔊 Aplica os volumes definidos no Inspector (0 a 100)
+	_aplicar_volume(som_death, volume_death)
+	_aplicar_volume(som_hurt, volume_hurt)
+	_aplicar_volume(som_fly, volume_fly)
+	_aplicar_volume(som_attack, volume_attack)
+
+	# 🔊 Garante que nenhum som comece sozinho ao carregar a cena
+	_parar_som(som_fly)
+
 	_tocar_animacao("Idle")
 
 
@@ -130,6 +180,9 @@ func _physics_process(delta: float) -> void:
 		Estado.FADING:
 			_processar_fading(delta)
 
+	# 🔊 Sincroniza o som de voo com o estado atual (inicia/para só quando muda)
+	_atualizar_som_voo()
+
 	move_and_slide()
 
 
@@ -138,6 +191,55 @@ func _atualizar_invulnerabilidade(delta: float) -> void:
 		invulneravel_tempo_restante -= delta
 		if invulneravel_tempo_restante <= 0.0:
 			invulneravel = false
+
+
+# -------------------------------------------------------------
+# EFEITOS SONOROS
+# -------------------------------------------------------------
+
+## Converte o valor 0-100 do Inspector em volume_db do player de áudio.
+## 0 = mudo; 100 = +VOLUME_MAX_DB; a curva é logarítmica (linear_to_db),
+## então a diferença entre os valores soa natural ao ouvido.
+## (O valor 25 equivale a 0 dB, ou seja, o volume original do arquivo.)
+func _aplicar_volume(player_audio: AudioStreamPlayer2D, valor: int) -> void:
+	if player_audio == null:
+		return
+	if valor <= 0:
+		player_audio.volume_db = -80.0
+	else:
+		player_audio.volume_db = linear_to_db(float(valor) / 100.0) + VOLUME_MAX_DB
+
+
+## Toca um efeito curto do começo. Se ele ainda estiver tocando
+## (ex.: dois ataques seguidos), é interrompido e reiniciado.
+func _tocar_som(player_audio: AudioStreamPlayer2D) -> void:
+	if player_audio == null:
+		return
+	if player_audio.playing:
+		player_audio.stop()
+	player_audio.play()
+
+
+func _parar_som(player_audio: AudioStreamPlayer2D) -> void:
+	if player_audio and player_audio.playing:
+		player_audio.stop()
+
+
+## Voo: toca em loop apenas enquanto o inimigo persegue o player (CHASE)
+## e está vivo. Só chama play() se o som ainda não estiver tocando (não
+## reinicia a cada frame) e só chama stop() se estiver tocando.
+func _atualizar_som_voo() -> void:
+	if som_fly == null:
+		return
+
+	var deve_voar: bool = estado_atual == Estado.CHASE and not esta_morto
+
+	if deve_voar:
+		if not som_fly.playing:
+			som_fly.play()
+	else:
+		if som_fly.playing:
+			som_fly.stop()
 
 
 # -------------------------------------------------------------
@@ -187,6 +289,7 @@ func _processar_attack(_delta: float) -> void:
 func _executar_ataque() -> void:
 	pode_atacar = false
 	_tocar_animacao("Attack")
+	_tocar_som(som_attack) # 🔊 começa junto com a animação de ataque
 	_aplicar_dano_area_attack()
 	attack_timer.start()
 
@@ -212,6 +315,7 @@ func _processar_hit(delta: float) -> void:
 func _receber_hit(quem_atacou: Node2D) -> void:
 	_mudar_estado(Estado.HIT)
 	_tocar_animacao("Take_hit")
+	_tocar_som(som_hurt) # 🔊 começa junto com a animação de dano
 
 	var direcao_recuo: Vector2 = Vector2(-direcao, 0.0)
 	if is_instance_valid(quem_atacou):
@@ -235,6 +339,13 @@ func _morrer() -> void:
 
 	esta_morto = true
 	velocity = Vector2.ZERO
+
+	# 🔊 Morte tem prioridade: interrompe voo, ataque e dano em andamento
+	# e toca o som de morte junto com a animação Death.
+	_parar_som(som_fly)
+	_parar_som(som_attack)
+	_parar_som(som_hurt)
+	_tocar_som(som_death)
 
 	# Desativa detecção e ataque imediatamente, antes mesmo da
 	# animação de morte terminar, para evitar dano/ataques póstumos.

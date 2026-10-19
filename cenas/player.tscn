@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://bkkff28qhqm4l" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Fall.png" id="4_rijvs"]
 [ext_resource type="Texture2D" uid="uid://buyds7ppl3gnj" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Idle.png" id="5_mp0j6"]
 [ext_resource type="Texture2D" uid="uid://dm60ga5ne3ngl" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Jump.png" id="6_8bq56"]
-[ext_resource type="Script" uid="uid://ix5d68iwg8tp" path="res://scripts/Enemy_Esqueleto/attack_area.gd" id="7_4y2i1"]
 [ext_resource type="Texture2D" uid="uid://kv0bdim7du55" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Run.png" id="7_tckef"]
 [ext_resource type="AudioStream" uid="uid://bjngbpuairv2j" path="res://assets/sprites e terreno/Sons/Player/mago-atacando_AY5De5je.mp3" id="8_mp0j6"]
 [ext_resource type="AudioStream" uid="uid://bx7arklvhqdrk" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_cogumelo/cogumelo correndo_.mp3" id="9_8bq56"]
@@ -252,6 +251,9 @@ z_index = 10
 y_sort_enabled = true
 texture_filter = 1
 script = ExtResource("1_unwft")
+volume_attack = 100
+volume_run = 100
+volume_jump = 100
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2038865023]
 position = Vector2(2, -10)
@@ -276,7 +278,6 @@ shape = SubResource("CircleShape2D_ogt8j")
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=1175183885]
 monitoring = false
-script = ExtResource("7_4y2i1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1758000481]
 shape = SubResource("CircleShape2D_rijvs")
