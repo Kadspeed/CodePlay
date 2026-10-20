@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" uid="uid://qgwq5y27bp3t" path="res://scripts/necromante.gd" id="1_hnsdu"]
 [ext_resource type="Texture2D" uid="uid://73tewigk65xg" path="res://assets/sprites e terreno/sprite/enemy/Necromancer_creativekind-Sheet.png" id="1_xa1yo"]
+[ext_resource type="AudioStream" uid="uid://5uk5ettbay2i" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Necromante/boss atacando (invocando).mp3" id="3_rrg5w"]
+[ext_resource type="AudioStream" uid="uid://bilj5umu8tkt" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Necromante/boss inativo.mp3" id="4_w55uq"]
+[ext_resource type="AudioStream" uid="uid://cay43282yk161" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Necromante/Boss morrendo.mp3" id="5_5670u"]
+[ext_resource type="AudioStream" uid="uid://c7u07apldww5g" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Necromante/boss tomando dano.mp3" id="6_73hnc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dn7lh"]
 atlas = ExtResource("1_xa1yo")
@@ -292,3 +296,15 @@ shape = SubResource("CapsuleShape2D_f2ycp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaDeteccao" unique_id=1341508793]
 shape = SubResource("CircleShape2D_7quve")
+
+[node name="Attack" type="AudioStreamPlayer2D" parent="." unique_id=1892888280]
+stream = ExtResource("3_rrg5w")
+
+[node name="Idle" type="AudioStreamPlayer2D" parent="." unique_id=1390656359]
+stream = ExtResource("4_w55uq")
+
+[node name="Death" type="AudioStreamPlayer2D" parent="." unique_id=106406189]
+stream = ExtResource("5_5670u")
+
+[node name="Hurt" type="AudioStreamPlayer2D" parent="." unique_id=1126023502]
+stream = ExtResource("6_73hnc")

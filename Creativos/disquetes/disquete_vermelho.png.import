@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://viyir1hq8ta8"
-path="res://.godot/imported/branco.png-7458f06f12be53fae47eb99d4ebe4a54.ctex"
+uid="uid://bwx77o6yrwots"
+path="res://.godot/imported/disquete_vermelho.png-6edea625c9ef83fcd273f794847db065.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Creativos/disquetes/branco.png"
-dest_files=["res://.godot/imported/branco.png-7458f06f12be53fae47eb99d4ebe4a54.ctex"]
+source_file="res://Creativos/disquetes/disquete_vermelho.png"
+dest_files=["res://.godot/imported/disquete_vermelho.png-6edea625c9ef83fcd273f794847db065.ctex"]
 
 [params]
 

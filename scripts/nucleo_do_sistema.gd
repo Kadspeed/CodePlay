@@ -4,12 +4,36 @@ extends Node
 ## registrá-los de volta nele e liberar o disquete onde o chefe morrer.
 ## O Necromante controla voo, vida, ondas e a eliminação dos inimigos invocados.
 ## Cada pedido do Necromante é de UM inimigo; o ritmo (um a cada X segundos) é dele.
+##
+## Local de nascimento: o inimigo é instanciado FORA da árvore, a forma de colisão REAL dele é lida
+## e testada contra o cenário nos dois lados da âncora (jogador ou Necromante). Só nasce onde o corpo
+## inteiro cabe, existe caminho livre até a âncora e (opcionalmente) há chão. Se nenhum ponto servir,
+## o inimigo NÃO é criado (o Necromante conta isso como uma falha de invocação).
 
 ## Emitido uma vez, quando a batalha termina (útil para efeitos, música, HUD etc.).
 signal batalha_concluida(posicao_global: Vector2)
 
+## De onde parte a procura pelo ponto de nascimento.
+enum OrigemSpawn {
+	JOGADOR,     ## Perto do jogador (comportamento anterior).
+	NECROMANTE,  ## Perto do Necromante, no lado que estiver livre.
+}
+
 const GRUPO_JOGADOR: StringName = &"player"
-const TENTATIVAS_SPAWN: int = 20
+## Quantos pontos são testados em CADA lado, em cada altura (limite total = 3 alturas x 2 lados x isto).
+const CANDIDATOS_POR_LADO: int = 6
+
+
+## Corpo de teste do inimigo (forma real + posição relativa à origem dele).
+class CorpoTeste:
+	var forma: Shape2D = null
+	## Transformação da forma relativa à origem do inimigo (inclui escala da raiz).
+	var transformacao: Transform2D = Transform2D.IDENTITY
+	## Retângulo que envolve a forma, relativo à origem do inimigo.
+	var retangulo: Rect2 = Rect2()
+	## Collision Mask do próprio inimigo (só usada se nenhuma máscara de cenário estiver definida).
+	var mascara_proprio: int = 0
+
 
 @export_category("Referências (se vazias, são procuradas pelo nome na fase)")
 @export var necromante: Node
@@ -27,26 +51,31 @@ const TENTATIVAS_SPAWN: int = 20
 @export_category("Invocação")
 ## Arraste aqui as cenas de res://cenas/Enemy/ que podem ser invocadas (sem o Necromante).
 @export var cenas_inimigos: Array[PackedScene] = []
-## Distância horizontal do jogador (esquerda ou direita) onde os inimigos nascem.
+## Ponto de partida da procura (JOGADOR mantém o comportamento anterior).
+@export var origem_spawn: OrigemSpawn = OrigemSpawn.JOGADOR
+## Distância horizontal da âncora (esquerda ou direita) onde os inimigos nascem.
 @export var distancia_spawn_minima: float = 120.0
 @export var distancia_spawn_maxima: float = 260.0
-## Quanto acima do jogador os inimigos nascem (eles caem até o chão).
+## Quanto acima da âncora os inimigos nascem (eles caem até o chão). Se não couber, a procura
+## tenta alturas maiores antes de desistir.
 @export var altura_spawn_extra: float = 20.0
 
 @export_category("Segurança do spawn (evita nascer dentro de estruturas)")
-## Camadas de colisão do cenário (chão/paredes/estruturas). Use as MESMAS camadas marcadas na
-## Collision Mask do corpo dos inimigos e em "mascara_obstaculos" do Necromante.
-## 0 = não verifica nada (o inimigo pode nascer dentro de paredes!).
+## Camadas de colisão do cenário (chão/paredes/estruturas). Se 0, usa a "mascara_obstaculos" do
+## Necromante; se ela também for 0, usa a Collision Mask do próprio inimigo; se tudo for 0,
+## nada é verificado (o inimigo pode nascer dentro de paredes!).
 @export_flags_2d_physics var mascara_obstaculos: int = 0
-## Tamanho aproximado do corpo do MAIOR inimigo invocado. O ponto só vale se esse retângulo
-## inteiro couber sem encostar em nada. Prefira exagerar um pouco.
+## Usados SÓ se o inimigo não tiver um CollisionShape2D filho direto de um corpo físico.
+## Tamanho aproximado do corpo do MAIOR inimigo invocado. Prefira exagerar um pouco.
 @export var tamanho_corpo_inimigo: Vector2 = Vector2(48.0, 48.0)
 ## Deslocamento do centro do corpo em relação à origem do inimigo (ex.: origem nos pés = (0, -24)).
 @export var centro_do_corpo: Vector2 = Vector2.ZERO
-## Se true, não pode haver parede/estrutura entre o jogador e o ponto de nascimento
-## (evita nascer do outro lado de uma parede).
+## Folga extra (px) ao redor do corpo do inimigo no teste de encaixe.
+@export var margem_seguranca_corpo: float = 2.0
+## Se true, não pode haver parede/estrutura entre a âncora e o ponto de nascimento
+## (evita nascer do outro lado de uma parede). Testado em três alturas do corpo.
 @export var exigir_linha_livre: bool = true
-## Se true (e a máscara acima estiver definida), só nasce onde há chão logo abaixo.
+## Se true (e houver máscara de cenário), só nasce onde há chão logo abaixo.
 @export var exigir_chao: bool = true
 @export var altura_busca_chao: float = 300.0
 ## Retângulo global onde os inimigos podem nascer. Tamanho zero = sem limite.
@@ -70,15 +99,12 @@ var _proximo_lado: int = 1
 var _mortes_desde_ultima_vida: int = 0
 var _chefe_ativado: bool = false
 var _avisou_sem_cena_vida: bool = false
-var _forma_teste: RectangleShape2D = null
-var _tem_ultima_posicao_valida: bool = false
-var _ultima_posicao_valida: Vector2 = Vector2.ZERO
+var _avisou_sem_mascara: bool = false
+var _avisou_mascara_do_inimigo: bool = false
 
 
 func _ready() -> void:
 	_proximo_lado = 1 if randf() < 0.5 else -1
-	_forma_teste = RectangleShape2D.new()
-	_forma_teste.size = tamanho_corpo_inimigo
 
 	if necromante == null:
 		necromante = find_child("Necromante", true, false)
@@ -105,8 +131,8 @@ func _ready() -> void:
 		push_warning("Nucleo_do_Sistema: 'cenas_inimigos' está vazio; nenhum inimigo será invocado.")
 	if marcador_disquete == null:
 		push_warning("Nucleo_do_Sistema: marcador 'Disquete_Branco' não encontrado.")
-	if mascara_obstaculos == 0:
-		push_warning("Nucleo_do_Sistema: 'mascara_obstaculos' é 0; os inimigos invocados podem nascer dentro de paredes/estruturas. Marque as camadas do cenário no Inspector.")
+	if _mascara_cenario() == 0:
+		push_warning("Nucleo_do_Sistema: 'mascara_obstaculos' é 0 aqui e no Necromante; será usada a Collision Mask do próprio inimigo. Marque as camadas do cenário no Inspector para uma validação confiável.")
 
 	necromante.connect(&"invocacao_solicitada", _on_invocacao_solicitada)
 	necromante.connect(&"chefe_derrotado", _on_chefe_derrotado, CONNECT_ONE_SHOT)
@@ -170,16 +196,26 @@ func _on_invocacao_solicitada(quantidade: int) -> void:
 		return
 
 	for i in quantidade:
-		# Alterna esquerda/direita a cada inimigo para espalhar a onda dos dois lados.
-		var posicao: Vector2 = _calcular_posicao_spawn(jogador.global_position, _proximo_lado)
+		# Alterna o lado preferido a cada inimigo para espalhar a onda; o lado só é usado
+		# se estiver realmente livre (senão a procura vai para o outro).
+		var lado: int = _proximo_lado
 		_proximo_lado = -_proximo_lado
 		var cena: PackedScene = cenas.pick_random() as PackedScene
-		if not _criar_inimigo(cena, posicao):
+		var ancora: Vector2 = _obter_ancora(jogador)
+		if not _criar_inimigo(cena, ancora, lado):
 			push_warning("Nucleo_do_Sistema: falha ao criar inimigo '%s'." % cena.resource_path)
 
 
-## Cria o inimigo, coloca em "Enemys" e registra no Necromante. Retorna false se falhar.
-func _criar_inimigo(cena: PackedScene, posicao: Vector2) -> bool:
+## Ponto de partida da procura (jogador ou Necromante, conforme `origem_spawn`).
+func _obter_ancora(jogador: Node2D) -> Vector2:
+	if origem_spawn == OrigemSpawn.NECROMANTE and necromante is Node2D:
+		return (necromante as Node2D).global_position
+	return jogador.global_position
+
+
+## Instancia o inimigo (ainda fora da árvore), acha um ponto válido para o corpo REAL dele, coloca
+## em "Enemys" e registra no Necromante. Retorna false se falhar (inclui "nenhum ponto livre").
+func _criar_inimigo(cena: PackedScene, ancora: Vector2, lado_preferido: int) -> bool:
 	var no: Node = cena.instantiate()
 	if no == null:
 		push_error("Nucleo_do_Sistema: não foi possível instanciar '%s'." % cena.resource_path)
@@ -191,8 +227,15 @@ func _criar_inimigo(cena: PackedScene, posicao: Vector2) -> bool:
 		no.free() # ainda fora da árvore: free() direto, sem deixar nó órfão
 		return false
 
+	var corpo: CorpoTeste = _extrair_corpo(inimigo)
+	var resultado: PackedVector2Array = _procurar_posicao_spawn(ancora, lado_preferido, corpo)
+	if resultado.is_empty():
+		push_warning("Nucleo_do_Sistema: nenhuma posição livre para '%s'; inimigo não criado." % cena.resource_path)
+		inimigo.free() # nunca entrou na árvore
+		return false
+
 	# Posição definida ANTES de entrar na árvore, para o _ready do inimigo já ver o local certo.
-	inimigo.position = no_dos_inimigos.to_local(posicao)
+	inimigo.position = no_dos_inimigos.to_local(resultado[0])
 	no_dos_inimigos.add_child(inimigo)
 
 	# Avisa o Necromante, que passa a acompanhar este inimigo.
@@ -208,60 +251,148 @@ func _cenas_validas() -> Array[PackedScene]:
 	return resultado
 
 
-## Procura um ponto livre perto do jogador. Nunca devolve um ponto sabidamente inválido:
-## se nenhuma tentativa servir, usa a última posição válida ou a do próprio jogador
-## (que, por definição, é um espaço livre).
-func _calcular_posicao_spawn(posicao_jogador: Vector2, lado_preferido: int) -> Vector2:
+# --- Validação física do local de nascimento ---
+
+## Lê a colisão REAL do inimigo: o maior CollisionShape2D habilitado que seja filho de um corpo
+## físico (as Area2D de hitbox/detecção são ignoradas). Sem nenhum, usa o retângulo exportado.
+func _extrair_corpo(inimigo: Node2D) -> CorpoTeste:
+	var corpo: CorpoTeste = CorpoTeste.new()
+	var objeto: CollisionObject2D = inimigo as CollisionObject2D
+	if objeto != null:
+		corpo.mascara_proprio = objeto.collision_mask
+
+	var escala_raiz: Transform2D = Transform2D(0.0, inimigo.scale, 0.0, Vector2.ZERO)
+	var maior_area: float = -1.0
+	for no in inimigo.find_children("*", "CollisionShape2D", true, false):
+		var colisao: CollisionShape2D = no as CollisionShape2D
+		if colisao == null or colisao.disabled or colisao.shape == null:
+			continue
+		if not (colisao.get_parent() is PhysicsBody2D):
+			continue
+
+		var transf_local: Transform2D = colisao.transform
+		var pai: Node = colisao.get_parent()
+		while pai != null and pai != inimigo:
+			if pai is Node2D:
+				transf_local = (pai as Node2D).transform * transf_local
+			pai = pai.get_parent()
+		transf_local = escala_raiz * transf_local
+
+		var retangulo: Rect2 = transf_local * colisao.shape.get_rect()
+		var area: float = retangulo.size.x * retangulo.size.y
+		if area > maior_area:
+			maior_area = area
+			corpo.forma = colisao.shape
+			corpo.transformacao = transf_local
+			corpo.retangulo = retangulo
+
+	if corpo.forma == null:
+		var reserva: RectangleShape2D = RectangleShape2D.new()
+		reserva.size = tamanho_corpo_inimigo
+		corpo.forma = reserva
+		corpo.transformacao = Transform2D(0.0, centro_do_corpo)
+		corpo.retangulo = corpo.transformacao * reserva.get_rect()
+	return corpo
+
+
+## Máscara de cenário definida na fase ou no Necromante (0 se nenhuma das duas).
+func _mascara_cenario() -> int:
+	if mascara_obstaculos != 0:
+		return mascara_obstaculos
+	if is_instance_valid(necromante):
+		var do_chefe: Variant = necromante.get(&"mascara_obstaculos")
+		if do_chefe is int and int(do_chefe) != 0:
+			return int(do_chefe)
+	return 0
+
+
+func _mascara_efetiva(corpo: CorpoTeste) -> int:
+	var mascara: int = _mascara_cenario()
+	if mascara != 0:
+		return mascara
+	if corpo.mascara_proprio != 0:
+		if not _avisou_mascara_do_inimigo:
+			_avisou_mascara_do_inimigo = true
+			push_warning("Nucleo_do_Sistema: sem 'mascara_obstaculos' definida; usando a Collision Mask do inimigo (pode incluir jogador/outros inimigos). Defina as camadas do cenário.")
+		return corpo.mascara_proprio
+	return 0
+
+
+## Procura um ponto válido, no máximo 3 alturas x 2 lados x CANDIDATOS_POR_LADO testes.
+## Tenta primeiro o lado preferido; um lado só é escolhido se tiver pontos realmente livres,
+## então parede de um lado empurra a invocação para o outro. Retorna vazio se nada servir.
+func _procurar_posicao_spawn(ancora: Vector2, lado_preferido: int, corpo: CorpoTeste) -> PackedVector2Array:
 	var minimo: float = minf(distancia_spawn_minima, distancia_spawn_maxima)
 	var maximo: float = maxf(distancia_spawn_minima, distancia_spawn_maxima)
-	var lado: int = lado_preferido
+	var mascara: int = _mascara_efetiva(corpo)
+	if mascara == 0 and not _avisou_sem_mascara:
+		_avisou_sem_mascara = true
+		push_error("Nucleo_do_Sistema: nenhuma máscara de colisão disponível; o local de nascimento NÃO está sendo verificado.")
 
-	for tentativa in TENTATIVAS_SPAWN:
-		var distancia: float = randf_range(minimo, maximo)
-		var candidato: Vector2 = posicao_jogador + Vector2(lado * distancia, -altura_spawn_extra)
-		if _posicao_valida(candidato, posicao_jogador):
-			_ultima_posicao_valida = candidato
-			_tem_ultima_posicao_valida = true
-			return candidato
-		lado = -lado # alterna o lado a cada tentativa
+	var altura_corpo: float = corpo.retangulo.size.y
+	var alturas: Array[float] = [
+		altura_spawn_extra,
+		altura_spawn_extra + altura_corpo * 0.5,
+		altura_spawn_extra + altura_corpo,
+	]
 
-	push_warning("Nucleo_do_Sistema: nenhuma posição livre achada perto do jogador; usando fallback seguro.")
-	if _tem_ultima_posicao_valida:
-		return _ultima_posicao_valida
-	return posicao_jogador
+	for altura: float in alturas:
+		var lado: int = lado_preferido
+		for tentativa_de_lado in 2:
+			var validos: Array[Vector2] = []
+			for k in CANDIDATOS_POR_LADO:
+				# Distâncias espalhadas entre mínimo e máximo, com sorteio dentro de cada faixa.
+				var fracao: float = (float(k) + randf()) / float(CANDIDATOS_POR_LADO)
+				var distancia: float = lerpf(minimo, maximo, fracao)
+				var candidato: Vector2 = ancora + Vector2(lado * distancia, -altura)
+				if _posicao_valida(candidato, ancora, corpo, mascara):
+					validos.append(candidato)
+			if not validos.is_empty():
+				var escolhido: Vector2 = validos.pick_random()
+				return PackedVector2Array([escolhido])
+			lado = -lado # este lado não tem espaço nesta altura: tenta o outro
+
+	return PackedVector2Array()
 
 
-func _posicao_valida(posicao: Vector2, origem_visao: Vector2) -> bool:
+func _posicao_valida(posicao: Vector2, origem_visao: Vector2, corpo: CorpoTeste, mascara: int) -> bool:
 	if limites_spawn.has_area() and not limites_spawn.has_point(posicao):
 		return false
-	if mascara_obstaculos == 0:
+	if mascara == 0:
 		return true
 
 	var espaco: PhysicsDirectSpaceState2D = get_viewport().world_2d.direct_space_state
 
-	# O corpo INTEIRO precisa caber sem encostar em parede/chão/estrutura.
-	_forma_teste.size = tamanho_corpo_inimigo
+	# 1. O corpo INTEIRO (forma real do inimigo) precisa caber sem encostar em nada.
 	var consulta: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
-	consulta.shape = _forma_teste
-	consulta.transform = Transform2D(0.0, posicao + centro_do_corpo)
-	consulta.collision_mask = mascara_obstaculos
+	consulta.shape = corpo.forma
+	consulta.transform = Transform2D(0.0, posicao) * corpo.transformacao
+	consulta.collision_mask = mascara
 	consulta.collide_with_areas = false
+	consulta.margin = margem_seguranca_corpo
 	if not espaco.intersect_shape(consulta, 1).is_empty():
 		return false
 
-	# Sem parede entre o jogador e o ponto (no nível do ponto, na horizontal).
-	if exigir_linha_livre:
-		var inicio: Vector2 = Vector2(origem_visao.x, posicao.y)
-		var visao: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(
-			inicio, posicao, mascara_obstaculos
-		)
-		if not espaco.intersect_ray(visao).is_empty():
-			return false
+	var centro_corpo: Vector2 = posicao + corpo.retangulo.get_center()
 
-	# Precisa haver chão logo abaixo (evita nascer sobre um buraco).
+	# 2. Sem parede entre a âncora e o ponto: raios horizontais no topo, meio e base do corpo
+	# (um raio só deixaria passar frestas mais baixas que o inimigo).
+	if exigir_linha_livre:
+		var meia_altura: float = maxf(corpo.retangulo.size.y * 0.5 - 2.0, 0.0)
+		for deslocamento: float in [-meia_altura, 0.0, meia_altura]:
+			var y: float = centro_corpo.y + deslocamento
+			var visao: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(
+				Vector2(origem_visao.x, y), Vector2(centro_corpo.x, y), mascara
+			)
+			if not espaco.intersect_ray(visao).is_empty():
+				return false
+
+	# 3. Precisa haver chão logo abaixo (evita nascer sobre um buraco).
 	if exigir_chao:
 		var raio: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(
-			posicao, posicao + Vector2(0.0, altura_busca_chao), mascara_obstaculos
+			centro_corpo,
+			centro_corpo + Vector2(0.0, corpo.retangulo.size.y * 0.5 + altura_busca_chao),
+			mascara
 		)
 		if espaco.intersect_ray(raio).is_empty():
 			return false

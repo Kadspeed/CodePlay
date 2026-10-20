@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfngts15j27uq"
-path="res://.godot/imported/curlar.png-f138ad810c3f543b78961bd9e433485c.ctex"
+uid="uid://dp2euccpl2mnd"
+path="res://.godot/imported/disquete_roxo.png-b96beff13b23dc76c3cadd89022ed0d2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Creativos/disquetes/disc/curlar.png"
-dest_files=["res://.godot/imported/curlar.png-f138ad810c3f543b78961bd9e433485c.ctex"]
+source_file="res://Creativos/disquetes/disquete_roxo.png"
+dest_files=["res://.godot/imported/disquete_roxo.png-b96beff13b23dc76c3cadd89022ed0d2.ctex"]
 
 [params]
 

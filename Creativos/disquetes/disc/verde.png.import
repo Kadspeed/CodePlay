@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbijqri82gfh1"
-path="res://.godot/imported/roxo.png-980fbd55d666314fb7aff8694912ffe2.ctex"
+uid="uid://crpvs5yxp5lep"
+path="res://.godot/imported/verde.png-9a2976cdbd78016afc01acbd33303c29.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Creativos/disquetes/roxo.png"
-dest_files=["res://.godot/imported/roxo.png-980fbd55d666314fb7aff8694912ffe2.ctex"]
+source_file="res://Creativos/disquetes/disc/verde.png"
+dest_files=["res://.godot/imported/verde.png-9a2976cdbd78016afc01acbd33303c29.ctex"]
 
 [params]
 

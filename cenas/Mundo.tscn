@@ -7,8 +7,6 @@
 [node name="Mundo" type="Node2D" unique_id=2054302126]
 scale = Vector2(2, 2)
 script = ExtResource("1_yinxq")
-modo_desenvolvedor = true
-fase_inicial_desenvolvedor = 5
 metadata/_edit_horizontal_guides_ = [1474.0, 3074.0, 1244.0, 3091.0]
 metadata/_edit_vertical_guides_ = [10043.0]
 

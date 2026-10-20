@@ -10,6 +10,11 @@ extends CharacterBody2D
 @onready var attack_area: Area2D = $AttackArea
 @onready var camera: Camera2D = $Camera2D
 
+# ❤️ Barra de vida (AnimatedSprite2D "Vida", antes na HUD). find_child acha o nó
+# mesmo que ele esteja dentro de outro nó filho do Player (ex.: um CanvasLayer).
+# Se não existir, fica null e a barra simplesmente não é atualizada.
+@onready var sprite_vida: AnimatedSprite2D = find_child("Vida", true, false) as AnimatedSprite2D
+
 # 🔊 Nós de áudio (filhos do Player). get_node_or_null evita erro caso
 # algum deles não exista na cena; todas as funções de som checam null.
 @onready var som_attack: AudioStreamPlayer2D = get_node_or_null("Attack")
@@ -53,6 +58,20 @@ var vida_atual: int = 100
 var invencivel: bool = false
 var tempo_invencivel: float = 1.0
 var timer_invencivel: float = 0.0
+
+# ❤️ Barra de vida: o AnimatedSprite2D "Vida" tem as animações vida0 (vazia)
+# até vida4 (cheia), ou seja, TOTAL_NIVEIS_VIDA níveis.
+const TOTAL_NIVEIS_VIDA: int = 5
+
+# ❤️ A barra fica invisível por padrão; aparece quando o Player leva dano ou
+# recupera vida e some de novo depois de `duracao_barra_visivel` segundos.
+@export_group("Barra de Vida")
+@export var duracao_barra_visivel: float = 10.0
+@export_group("")
+
+var _timer_barra_vida: Timer = null
+## Última vida (>= 0) mostrada na barra; usada para só exibir a barra quando a vida MUDA.
+var _vida_exibida: int = 0
 
 # Sistema de ataque
 var pode_atacar: bool = true
@@ -124,6 +143,12 @@ func _ready():
 		attack_area.body_entered.connect(_on_attack_area_body_entered)
 		attack_area.monitoring = false
 	
+	# ❤️ O próprio Player escuta o sinal que ele emite (tomar_dano, curar,
+	# resetar_vida e _morrer já emitem), então a barra acompanha qualquer
+	# mudança de vida sem precisar de código extra em cada lugar.
+	if not vida_atualizada.is_connected(_on_vida_atualizada):
+		vida_atualizada.connect(_on_vida_atualizada)
+	
 	# Configurar animação de ataque
 	if animated.sprite_frames.has_animation("atack"):
 		animated.sprite_frames.set_animation_loop("atack", false)
@@ -142,6 +167,20 @@ func _ready():
 		push_warning("⚠️ Camera2D não encontrada! Sistema de respawn por limite desativado.")
 	elif camera.limit_bottom <= 0:
 		push_warning("⚠️ Camera2D.limit_bottom não configurado! Sistema de respawn por limite desativado.")
+	
+	# ❤️ Barra de vida: começa INVISÍVEL, já na animação do estado inicial. Só aparece
+	# quando a vida mudar (dano ou cura) e some sozinha por um Timer.
+	if not sprite_vida:
+		push_warning("⚠️ AnimatedSprite2D 'Vida' não encontrado no Player. A barra de vida não será atualizada.")
+	else:
+		sprite_vida.visible = false
+		_timer_barra_vida = Timer.new()
+		_timer_barra_vida.one_shot = true
+		_timer_barra_vida.wait_time = maxf(duracao_barra_visivel, 0.1)
+		_timer_barra_vida.timeout.connect(_esconder_barra_vida)
+		add_child(_timer_barra_vida)
+		_vida_exibida = maxi(vida_atual, 0)
+		_atualizar_animacao_vida(vida_atual, vida_maxima)
 	
 	# 🔊 Validar nós de áudio (apenas avisos; o jogo funciona sem eles)
 	if not som_attack:
@@ -507,7 +546,7 @@ func tomar_dano(quantidade: int, posicao_inimigo: Vector2 = Vector2.ZERO):
 	vida_atual -= quantidade
 	print("💥 Player tomou ", quantidade, " de dano! Vida: ", vida_atual, "/", vida_maxima)
 	
-	# EMITIR SINAL DE DANO PARA A HUD
+	# EMITIR SINAL DE DANO PARA A HUD (e para a barra de vida do próprio Player)
 	vida_atualizada.emit(vida_atual, vida_maxima)
 	
 	player_dano.emit(quantidade, vida_atual)
@@ -695,6 +734,66 @@ func resetar_vida():
 	invencivel = false
 	esta_morto = false
 	vida_atualizada.emit(vida_atual, vida_maxima)
+
+# ============================================================
+# 13.1 BARRA DE VIDA (ANIMAÇÃO)
+# ============================================================
+
+## Chamada sempre que `vida_atualizada` é emitido. Atualiza a animação e, se a vida
+## realmente mudou (dano ou cura), mostra a barra por `duracao_barra_visivel`
+## segundos. Emissões sem mudança de valor não mostram a barra. Os parâmetros têm
+## nomes diferentes dos atributos do Player para não sombreá-los.
+func _on_vida_atualizada(vida_nova: int, vida_maxima_nova: int) -> void:
+	if sprite_vida == null:
+		return
+
+	var vida_limitada: int = maxi(vida_nova, 0)
+	_atualizar_animacao_vida(vida_limitada, vida_maxima_nova)
+
+	if vida_limitada != _vida_exibida:
+		_vida_exibida = vida_limitada
+		_mostrar_barra_vida()
+
+## Converte a proporção de vida em um nível de 0 a TOTAL_NIVEIS_VIDA - 1
+## e toca a animação correspondente ("vida0" a "vida4"). Não mexe na visibilidade.
+func _atualizar_animacao_vida(vida_nova: int, vida_maxima_nova: int) -> void:
+	if sprite_vida == null:
+		return
+
+	if vida_maxima_nova <= 0:
+		push_warning("Player: vida_maxima inválida (<= 0) ao atualizar a barra de vida.")
+		return
+
+	var proporcao: float = clampf(float(vida_nova) / float(vida_maxima_nova), 0.0, 1.0)
+	var ultimo_indice: int = TOTAL_NIVEIS_VIDA - 1
+	var indice: int = clampi(roundi(proporcao * ultimo_indice), 0, ultimo_indice)
+
+	_tocar_animacao_vida(indice)
+
+## Só chama play() se a animação mudou, e avisa (sem travar o jogo) se o nome
+## não existir nos SpriteFrames do nó "Vida".
+func _tocar_animacao_vida(indice: int) -> void:
+	var nome_animacao: String = "vida%d" % indice
+
+	if sprite_vida.sprite_frames == null or not sprite_vida.sprite_frames.has_animation(nome_animacao):
+		push_warning("Player: animação '%s' não existe no AnimatedSprite2D 'Vida'." % nome_animacao)
+		return
+
+	if sprite_vida.animation != nome_animacao:
+		sprite_vida.play(nome_animacao)
+
+## Mostra a barra e (re)inicia a contagem para escondê-la. Se a vida mudar de
+## novo durante a contagem, o tempo recomeça do zero.
+func _mostrar_barra_vida() -> void:
+	if sprite_vida == null:
+		return
+	sprite_vida.visible = true
+	if _timer_barra_vida != null:
+		_timer_barra_vida.start(maxf(duracao_barra_visivel, 0.1))
+
+func _esconder_barra_vida() -> void:
+	if sprite_vida != null:
+		sprite_vida.visible = false
 
 # ============================================================
 # 14. SISTEMA DE RESPAWN

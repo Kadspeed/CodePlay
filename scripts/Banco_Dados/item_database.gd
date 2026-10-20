@@ -78,43 +78,43 @@ var _itens: Dictionary = {
 		Operador de Atribuição: O sinal de igual (=), que insere o valor na variável.
 
 		Valor: Os dados armazenados.""",
-		"icone": preload("res://Creativos/disquetes/disc/disquete_azul.png"),
+		"icone": preload("res://Creativos/disquetes/disquete_azul.png"),
 	},
 	"disquete_vermelho": {
 		"nome": "disquete_vermelho",
 		"titulo": "If / Else",
 		"texto": "Este disquete contém informações sobre estruturas condicionais: como tomar decisões dentro de um programa usando if e else.",
-		"icone": preload("res://Creativos/disquetes/disc/disquete_vermelho.png"),
+		"icone": preload("res://Creativos/disquetes/disquete_vermelho.png"),
 	},
 	"disquete_verde": {
 		"nome": "disquete_verde",
 		"titulo": "Loops",
 		"texto": "Este disquete contém informações sobre laços de repetição: como repetir ações várias vezes usando for e while.",
-		"icone": preload("res://Creativos/disquetes/verde.png"),
+		"icone": preload("res://Creativos/disquetes/disquete_verde.png"),
 	},
 	"disquete_roxo": {
 		"nome": "disquete_roxo",
 		"titulo": "Funções",
 		"texto": "Este disquete contém informações sobre funções: como organizar código em blocos reutilizáveis.",
-		"icone": preload("res://Creativos/disquetes/roxo.png"),
+		"icone": preload("res://Creativos/disquetes/disquete_roxo.png"),
 	},
 	"disquete_amarelo": {
 		"nome": "disquete_amarelo",
 		"titulo": "Arrays",
 		"texto": "Este disquete contém informações sobre arrays: como armazenar e organizar listas de valores.",
-		"icone": preload("res://Creativos/disquetes/amarelo.png"),
+		"icone": preload("res://Creativos/disquetes/disquete_amarelo.png"),
 	},
 	"disquete_laranja": {
 		"nome": "disquete_laranja",
 		"titulo": "Objetos",
 		"texto": "Este disquete contém informações sobre objetos: como agrupar dados e comportamentos relacionados.",
-		"icone": preload("res://Creativos/disquetes/laranja.png"),
+		"icone": preload("res://Creativos/disquetes/disquete_laranja.png"),
 	},
 	"disquete_branco": {
 		"nome": "disquete_branco",
 		"titulo": "Classes",
 		"texto": "Este disquete contém informações sobre classes: como criar modelos para gerar objetos com estrutura e comportamento em comum.",
-		"icone": preload("res://Creativos/disquetes/branco.png"),
+		"icone": preload("res://Creativos/disquetes/disquete_branco.png"),
 	},
 }
 

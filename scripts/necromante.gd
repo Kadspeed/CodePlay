@@ -13,6 +13,11 @@ extends CharacterBody2D
 ##
 ## A sequência de invocação é uma máquina de estados dirigida pelo _physics_process
 ## (sem `await` na lógica de ondas): interromper (dano/morte) é só trocar o estado.
+##
+## Sons (nós AudioStreamPlayer2D filhos): Attack (início da conjuração), Idle (repouso),
+## Death (uma vez, ao morrer) e Hurt (só quando o dano é realmente aplicado). Todos passam por
+## `_tocar_som()`, que confere se o nó e o `stream` existem. Nenhum som toca dentro de lógica
+## repetida por frame.
 
 ## Emitido uma única vez, ao morrer, com a posição global exata da morte.
 signal chefe_derrotado(posicao_global: Vector2)
@@ -52,6 +57,11 @@ const DISTANCIA_PROGRESSO_MIN: float = 8.0
 const DURACAO_DESVIO: float = 1.2
 const INTERVALO_REVALIDAR_DESTINO: float = 0.5
 const RETANGULO_ILIMITADO: Rect2 = Rect2(-10000000.0, -10000000.0, 20000000.0, 20000000.0)
+## Tempo máximo que o chefe morto fica na cena esperando o som de morte terminar (segurança
+## para o nó nunca ficar preso se o áudio for muito longo).
+const TEMPO_MAX_ESPERA_SOM_MORTE: float = 5.0
+## De quanto em quanto tempo se confere se o som de morte já acabou.
+const PASSO_ESPERA_SOM: float = 0.1
 
 const GRUPO_JOGADOR: StringName = &"player"
 const SINAL_MORTE_INIMIGO: StringName = &"inimigo_morto"
@@ -187,6 +197,11 @@ var _tempo_etapa: float = 0.0        # contagem da etapa atual (ida / conjuraç�
 
 @onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var _colisao: CollisionShape2D = $CollisionShape2D
+# Nós de áudio (nomes exatos da cena). Se algum não existir, fica null e o som é simplesmente ignorado.
+@onready var _som_attack: AudioStreamPlayer2D = get_node_or_null("Attack") as AudioStreamPlayer2D
+@onready var _som_idle: AudioStreamPlayer2D = get_node_or_null("Idle") as AudioStreamPlayer2D
+@onready var _som_death: AudioStreamPlayer2D = get_node_or_null("Death") as AudioStreamPlayer2D
+@onready var _som_hurt: AudioStreamPlayer2D = get_node_or_null("Hurt") as AudioStreamPlayer2D
 
 
 func _ready() -> void:
@@ -325,7 +340,7 @@ func tomar_dano(quantidade: int, _posicao_jogador: Vector2 = Vector2.ZERO) -> vo
 	if _morto:
 		return
 
-	# Dormente: o golpe o acorda, mas esse golpe não causa dano.
+	# Dormente: o golpe o acorda, mas esse golpe não causa dano (e portanto não toca Hurt).
 	if _estado == Estado.DORMENTE:
 		_despertar()
 		_piscar_imune()
@@ -349,9 +364,13 @@ func tomar_dano(quantidade: int, _posicao_jogador: Vector2 = Vector2.ZERO) -> vo
 	_vida -= quantidade
 	if _vida <= 0:
 		_vida = 0
-		_morrer()
+		_morrer() # golpe fatal: toca só o som de morte, não o de dano
 		return
 
+	# Dano realmente aplicado e o chefe continua vivo: corta o som da conjuração interrompida
+	# (a animação Attack também é interrompida pela Take_hit) e toca o som de dano.
+	_parar_som(_som_attack)
+	_tocar_som(_som_hurt)
 	_tocar_temporaria(ANIM_DANO)
 	_reagir_ao_dano()
 
@@ -399,6 +418,13 @@ func _morrer() -> void:
 	if _tween_imune != null and _tween_imune.is_valid():
 		_tween_imune.kill()
 
+	# Sons: silencia os demais e toca o de morte UMA vez (_morto garante que esta função não repete).
+	# Nada mais neste script chama _tocar_som/_parar_som no Death depois daqui.
+	_parar_som(_som_attack)
+	_parar_som(_som_idle)
+	_parar_som(_som_hurt)
+	_tocar_som(_som_death)
+
 	# 5. Elimina só os inimigos invocados por ele que ainda estão vivos.
 	_eliminar_inimigos_invocados()
 
@@ -413,6 +439,10 @@ func _morrer() -> void:
 	var tween: Tween = create_tween()
 	tween.tween_property(_sprite, "modulate:a", 0.0, death_fade_duracao)
 	await tween.finished
+
+	# Já invisível e sem colisão: se o som de morte ainda estiver tocando, espera ele terminar
+	# (com limite de tempo) antes de remover o nó, senão o queue_free() cortaria o áudio.
+	await _aguardar_fim_do_som(_som_death, TEMPO_MAX_ESPERA_SOM_MORTE)
 	queue_free()
 
 
@@ -498,9 +528,13 @@ func _processar_ida_ao_ponto(delta: float) -> void:
 
 
 ## Toca Attack e agenda o pedido de UM inimigo para o momento configurado da animação.
+## Esta função roda UMA vez por conjuração (não por frame), então é o ponto certo do som Attack.
 func _comecar_conjuracao() -> void:
 	_mudar_estado(Estado.CONJURANDO)
 	_tempo_etapa = _duracao_animacao(ANIM_ATAQUE) * momento_da_invocacao
+	# Reinicia o som se ainda houver sobra de uma conjuração anterior: cada conjuração nova
+	# precisa começar junto com a animação.
+	_tocar_som(_som_attack, true)
 	_tocar_temporaria(ANIM_ATAQUE)
 
 
@@ -900,6 +934,66 @@ func _sem_progresso(delta: float) -> bool:
 	return _tempo_sem_progresso >= TEMPO_PRESO
 
 
+# --- Sons ---
+
+## Toca o som com segurança: ignora se o nó/stream não existir, se o chefe já morreu (exceto o
+## próprio som de morte) e, por padrão, não reinicia um som que já está tocando.
+## `reiniciar = true` só deve ser usado quando o início do som precisa coincidir com um evento novo.
+func _tocar_som(player: AudioStreamPlayer2D, reiniciar: bool = false) -> void:
+	if player == null or not is_instance_valid(player) or player.stream == null:
+		return
+	if not is_inside_tree():
+		return
+	if _morto and player != _som_death:
+		return
+	if player.playing and not reiniciar:
+		return
+	player.play()
+
+
+func _parar_som(player: AudioStreamPlayer2D) -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	if player.playing:
+		player.stop()
+
+
+## Sobe true se o recurso de áudio está configurado para repetir sozinho.
+func _stream_tem_loop(stream: AudioStream) -> bool:
+	if stream is AudioStreamWAV:
+		return (stream as AudioStreamWAV).loop_mode != AudioStreamWAV.LOOP_DISABLED
+	if stream is AudioStreamOggVorbis:
+		return (stream as AudioStreamOggVorbis).loop
+	if stream is AudioStreamMP3:
+		return (stream as AudioStreamMP3).loop
+	return false
+
+
+## Espera o som terminar, com limite de tempo. Usa o Timer de `_esperar`, então é seguro se o nó
+## for removido no meio. Som com loop nunca termina sozinho: nesse caso é cortado em vez de esperado.
+func _aguardar_fim_do_som(player: AudioStreamPlayer2D, tempo_maximo: float) -> void:
+	if player == null or not is_instance_valid(player) or not player.playing:
+		return
+	if player.stream != null and _stream_tem_loop(player.stream):
+		push_warning("Necromante: o som de morte está com loop ligado; ele será cortado em vez de esperado.")
+		player.stop()
+		return
+
+	var decorrido: float = 0.0
+	while is_inside_tree() and player.playing and decorrido < tempo_maximo:
+		await _esperar(PASSO_ESPERA_SOM)
+		decorrido += PASSO_ESPERA_SOM
+
+
+## Som de repouso. Se o recurso tem loop, começa uma vez e segue tocando (o `_tocar_som` não
+## reinicia enquanto `playing`). Se for um efeito curto sem loop, toca no máximo uma vez a cada
+## volta ao Idle e só se o anterior já terminou; nunca é reiniciado no meio.
+func _atualizar_som_idle() -> void:
+	if _morto:
+		return
+	_tocar_som(_som_idle)
+
+
 # --- Animações e utilidades ---
 
 ## Attack, Take_hit e Death não devem repetir sozinhas (mesmo padrão do Esqueleto).
@@ -919,6 +1013,7 @@ func _tem_animacao(nome: StringName) -> bool:
 func _voltar_idle() -> void:
 	if _tem_animacao(ANIM_IDLE):
 		_sprite.play(ANIM_IDLE)
+	_atualizar_som_idle()
 
 
 ## Toca uma animação pontual e volta ao Idle depois. Só mexe na animação: não afeta a lógica

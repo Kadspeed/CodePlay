@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpnwa82nvqdc7"
-path="res://.godot/imported/disquete_vermelho.png-48c56dae56b98f4eaed0cf112c21dbec.ctex"
+uid="uid://c752xm734thbn"
+path="res://.godot/imported/disquete_azul.png-d94a754c09e13f9de04d37fb861109ad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Creativos/disquetes/disc/disquete_vermelho.png"
-dest_files=["res://.godot/imported/disquete_vermelho.png-48c56dae56b98f4eaed0cf112c21dbec.ctex"]
+source_file="res://Creativos/disquetes/disquete_azul.png"
+dest_files=["res://.godot/imported/disquete_azul.png-d94a754c09e13f9de04d37fb861109ad.ctex"]
 
 [params]
 

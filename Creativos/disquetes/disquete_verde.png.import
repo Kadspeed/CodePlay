@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://baiahb8ackv5e"
-path="res://.godot/imported/amarelo.png-e8aed1b39c9ef735a1b8f8a4af5d09ae.ctex"
+uid="uid://de8umw24wp7dm"
+path="res://.godot/imported/disquete_verde.png-2270ae00539efc2964fd7bccb87aeba8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Creativos/disquetes/amarelo.png"
-dest_files=["res://.godot/imported/amarelo.png-e8aed1b39c9ef735a1b8f8a4af5d09ae.ctex"]
+source_file="res://Creativos/disquetes/disquete_verde.png"
+dest_files=["res://.godot/imported/disquete_verde.png-2270ae00539efc2964fd7bccb87aeba8.ctex"]
 
 [params]
 

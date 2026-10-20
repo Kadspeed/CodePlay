@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btllbrtknaawq"
-path="res://.godot/imported/laranja.png-9f615e37a369f00677b11f7c451b7353.ctex"
+uid="uid://dbijqri82gfh1"
+path="res://.godot/imported/roxo.png-48f33da329d794aabb570b751f6ee5ae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Creativos/disquetes/laranja.png"
-dest_files=["res://.godot/imported/laranja.png-9f615e37a369f00677b11f7c451b7353.ctex"]
+source_file="res://Creativos/disquetes/disc/roxo.png"
+dest_files=["res://.godot/imported/roxo.png-48f33da329d794aabb570b751f6ee5ae.ctex"]
 
 [params]
 
