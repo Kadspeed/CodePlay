@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cbg46t80uggam"]
 
-[ext_resource type="Script" uid="uid://dtik2fnfd2afl" path="res://scripts/puzzle_nucleo.gd" id="1_tt3qi"]
+[ext_resource type="Script" uid="uid://dtik2fnfd2afl" path="res://scripts/Puzzles/puzzle_nucleo.gd" id="1_tt3qi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exec_normal"]
 bg_color = Color(0.0706, 0.2118, 0.2275, 1)
@@ -422,28 +422,12 @@ theme_type_variation = &"SlotButton"
 layout_mode = 2
 text = ") {"
 
-[node name="Linha3" type="HBoxContainer" parent="PainelCodigo" unique_id=216758003]
+[node name="Linha4" type="HBoxContainer" parent="PainelCodigo" unique_id=1379197455]
 layout_mode = 0
 offset_left = 30.0
 offset_top = 135.0
 offset_right = 620.0
 offset_bottom = 167.0
-theme_override_constants/separation = 8
-
-[node name="Label_Indentacao" type="Label" parent="PainelCodigo/Linha3" unique_id=1943033279]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-
-[node name="Label_Chave2" type="Label" parent="PainelCodigo/Linha3" unique_id=473464019]
-layout_mode = 2
-text = "{"
-
-[node name="Linha4" type="HBoxContainer" parent="PainelCodigo" unique_id=1379197455]
-layout_mode = 0
-offset_left = 30.0
-offset_top = 175.0
-offset_right = 620.0
-offset_bottom = 207.0
 theme_override_constants/separation = 8
 
 [node name="Label_Indentacao" type="Label" parent="PainelCodigo/Linha4" unique_id=1328248659]
@@ -475,9 +459,9 @@ text = ";"
 [node name="Linha5" type="HBoxContainer" parent="PainelCodigo" unique_id=8799749]
 layout_mode = 0
 offset_left = 30.0
-offset_top = 215.0
+offset_top = 175.0
 offset_right = 620.0
-offset_bottom = 247.0
+offset_bottom = 207.0
 theme_override_constants/separation = 8
 
 [node name="Label_Indentacao" type="Label" parent="PainelCodigo/Linha5" unique_id=2138923179]
@@ -509,9 +493,9 @@ text = ";"
 [node name="Linha6" type="HBoxContainer" parent="PainelCodigo" unique_id=1329627401]
 layout_mode = 0
 offset_left = 30.0
-offset_top = 255.0
+offset_top = 215.0
 offset_right = 620.0
-offset_bottom = 287.0
+offset_bottom = 247.0
 theme_override_constants/separation = 8
 
 [node name="Label_Chave3" type="Label" parent="PainelCodigo/Linha6" unique_id=324841098]
@@ -521,9 +505,9 @@ text = "    }"
 [node name="Linha7" type="HBoxContainer" parent="PainelCodigo" unique_id=593594292]
 layout_mode = 0
 offset_left = 30.0
-offset_top = 295.0
+offset_top = 255.0
 offset_right = 620.0
-offset_bottom = 327.0
+offset_bottom = 287.0
 theme_override_constants/separation = 8
 
 [node name="Label_Chave4" type="Label" parent="PainelCodigo/Linha7" unique_id=1152276447]
@@ -552,7 +536,8 @@ offset_left = 15.0
 offset_top = 36.0
 offset_right = 556.0
 offset_bottom = 112.0
-text = "Crie uma classe chamada \"Jogador\" com as propriedades nome e nivel."
+text = "Monte a classe Jogador, definindo seu construtor e suas propriedades.
+Clique em um espaço do código e depois escolha uma opção para preenchê-lo."
 fit_content = true
 scroll_active = false
 
@@ -686,6 +671,15 @@ offset_right = 556.0
 offset_bottom = 30.0
 theme_type_variation = &"TituloLabel"
 text = "DICA"
+
+[node name="BotaoDica" type="Button" parent="PainelDica" unique_id=1928374650]
+layout_mode = 0
+offset_left = 376.0
+offset_top = 5.0
+offset_right = 556.0
+offset_bottom = 33.0
+theme_type_variation = &"LimparButton"
+text = "PEDIR DICA"
 
 [node name="TextoDica" type="RichTextLabel" parent="PainelDica" unique_id=2061805860]
 layout_mode = 0

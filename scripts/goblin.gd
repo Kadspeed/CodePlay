@@ -18,6 +18,17 @@ extends CharacterBody2D
 ## - Os Timers de patrulha, de parada e de passo são criados por
 ##   código, então você só precisa do AttackCooldownTimer na cena.
 ## - O Marker2D não é usado por este script.
+##
+## MUDANÇAS DESTA VERSÃO:
+## - O dano ao Player só é aplicado DURANTE a animação "Attack", dentro
+##   da janela de frames frame_inicio_dano..frame_fim_dano, no máximo
+##   uma vez por ataque e só se o Player estiver na AreaAttack naquele
+##   momento.
+## - Depois do TAKE_HIT/Attack, se o Player ainda estiver na AreaAttack
+##   (e a recarga acabou), ele volta direto a atacar.
+## - Corrigido: se o Player saía da detecção durante o dano, o Goblin
+##   podia ficar parado em IDLE para sempre (memória do Player ativa).
+## - Na morte, o corpo deixa de colidir com qualquer coisa.
 
 ## ------------------------------------------------------------
 ## ENUM DE ESTADOS
@@ -50,6 +61,10 @@ enum Estado {
 @export_group("Detecção e Ataque")
 @export var attack_cooldown_tempo: float = 1.2
 @export var tempo_memoria_player: float = 3.0 # quanto tempo ele "lembra" do Player
+## O dano só é aplicado enquanto a animação "Attack" estiver nesses
+## frames (contando a partir de 0). -1 em frame_fim_dano = até o último.
+@export var frame_inicio_dano: int = 2
+@export var frame_fim_dano: int = -1
 
 @export_group("Áudio - Volume")
 @export var volume_extra_db: float = 6.0      # somado ao volume atual de TODOS os sons
@@ -112,6 +127,7 @@ var player_alvo: Node2D = null
 var jogador_detectado: bool = false
 
 var pode_atacar: bool = true
+var dano_ja_aplicado: bool = false  # garante 1 dano por ataque
 
 # Memória do Player (última posição vista)
 var perseguindo_memoria: bool = false
@@ -164,6 +180,7 @@ func _ready() -> void:
 	area_ataque.body_entered.connect(_on_area_ataque_body_entered)
 
 	sprite.animation_finished.connect(_on_animated_sprite_animation_finished)
+	sprite.frame_changed.connect(_on_sprite_frame_changed)
 
 	_mudar_estado(Estado.IDLE)
 
@@ -362,7 +379,7 @@ func _on_attack_cooldown_timeout() -> void:
 	if esta_morto:
 		return
 	if estado_atual == Estado.ATTACK or estado_atual == Estado.TAKE_HIT:
-		return
+		return # ao terminar a animação, a checagem é refeita
 	if _jogador_esta_na_area_ataque():
 		_mudar_estado(Estado.ATTACK)
 
@@ -380,22 +397,45 @@ func _jogador_esta_na_area_ataque() -> bool:
 func _entrar_attack() -> void:
 	velocity.x = 0.0
 	pode_atacar = false
+	dano_ja_aplicado = false
 
 	sprite.play("Attack")
 
 	attack_cooldown.wait_time = attack_cooldown_tempo
 	attack_cooldown.start()
 
-	_aplicar_dano_area_ataque()
 	_tocar_som_com_atraso(som_attack, atraso_som_ataque)
 
-func _processar_attack(_delta: float) -> void:
-	pass # dano já aplicado ao entrar; só espera a animação terminar
+	# O dano NÃO é aplicado aqui: acontece em _on_sprite_frame_changed(),
+	# somente durante os frames de dano da animação "Attack".
+	_tentar_aplicar_dano() # cobre o caso de frame_inicio_dano = 0
 
-func _aplicar_dano_area_ataque() -> void:
+func _processar_attack(_delta: float) -> void:
+	pass # o dano é aplicado pelos frames da animação; só espera ela terminar
+
+## Se a animação estiver dentro da janela de dano e o Player estiver na
+## AreaAttack, aplica o dano uma única vez.
+func _tentar_aplicar_dano() -> void:
+	if dano_ja_aplicado or esta_morto:
+		return
+	if estado_atual != Estado.ATTACK or sprite.animation != "Attack":
+		return
+
+	var ultimo_frame: int = sprite.sprite_frames.get_frame_count("Attack") - 1
+	var inicio: int = mini(frame_inicio_dano, ultimo_frame)
+	var fim: int = ultimo_frame if frame_fim_dano < 0 else mini(frame_fim_dano, ultimo_frame)
+
+	if sprite.frame < inicio or sprite.frame > fim:
+		return
+
 	for corpo in area_ataque.get_overlapping_bodies():
 		if corpo.is_in_group("player") and corpo.has_method("tomar_dano"):
 			corpo.tomar_dano(dano_ataque)
+			dano_ja_aplicado = true
+			return
+
+func _on_sprite_frame_changed() -> void:
+	_tentar_aplicar_dano()
 
 
 ## ==============================================================
@@ -445,6 +485,9 @@ func _entrar_death() -> void:
 	area_deteccao.set_deferred("monitoring", false)
 	area_ataque.set_deferred("monitoring", false)
 	colisao.set_deferred("disabled", true)
+	# Garante que nada mais colida com o cadáver (nem o Player)
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
 
 	sprite.play("Death")
 	som_death.play()
@@ -486,8 +529,12 @@ func _on_animated_sprite_animation_finished() -> void:
 			if estado_atual == Estado.DEATH:
 				_iniciar_fade_e_remover()
 
+## Se o Player ainda está na AreaAttack e a recarga acabou, ataca de
+## novo (o sinal body_entered não dispara outra vez sozinho).
 func _voltar_para_chase_ou_idle() -> void:
-	if jogador_detectado:
+	if pode_atacar and _jogador_esta_na_area_ataque():
+		_mudar_estado(Estado.ATTACK)
+	elif jogador_detectado or perseguindo_memoria:
 		_mudar_estado(Estado.CHASE)
 	else:
 		_mudar_estado(Estado.IDLE)

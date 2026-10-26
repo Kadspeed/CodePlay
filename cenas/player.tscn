@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://bkkff28qhqm4l" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Fall.png" id="4_rijvs"]
 [ext_resource type="Texture2D" uid="uid://buyds7ppl3gnj" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Idle.png" id="5_mp0j6"]
 [ext_resource type="Texture2D" uid="uid://dm60ga5ne3ngl" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Jump.png" id="6_8bq56"]
+[ext_resource type="AudioStream" uid="uid://tln2etbfj706" path="res://assets/sprites e terreno/Sons/Player/ataque-do-player-v2_tshdXli1.mp3" id="7_mp0j6"]
 [ext_resource type="Texture2D" uid="uid://kv0bdim7du55" path="res://assets/sprites e terreno/sprite/personagem/EVil Wizard 2/Sprites/Run.png" id="7_tckef"]
-[ext_resource type="AudioStream" uid="uid://bjngbpuairv2j" path="res://assets/sprites e terreno/Sons/Player/mago-atacando_AY5De5je.mp3" id="8_mp0j6"]
 [ext_resource type="AudioStream" uid="uid://bx7arklvhqdrk" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_cogumelo/cogumelo correndo_.mp3" id="9_8bq56"]
 [ext_resource type="Texture2D" uid="uid://bof26lkxq8dao" path="res://assets/sprites e terreno/HUD/All.png" id="10_mp0j6"]
 [ext_resource type="AudioStream" uid="uid://df2xwbpqldnoe" path="res://assets/sprites e terreno/Sons/Player/pulo-normal-e-duplo_p80pAKxS.mp3" id="10_tckef"]
@@ -354,7 +354,7 @@ limit_right = 5000
 limit_bottom = 100000
 
 [node name="Attack" type="AudioStreamPlayer2D" parent="." unique_id=1150365742]
-stream = ExtResource("8_mp0j6")
+stream = ExtResource("7_mp0j6")
 
 [node name="Run" type="AudioStreamPlayer2D" parent="." unique_id=1366928362]
 stream = ExtResource("9_8bq56")

@@ -9,6 +9,10 @@ class_name MonsterSky
 ## Enquanto vivo, o inimigo VOA livremente (X e Y) em direção ao player,
 ## sem sofrer gravidade. Gravidade só é ativada após a animação de morte
 ## terminar, fazendo o corpo cair fisicamente até o chão.
+##
+## Ao morrer, o corpo deixa de colidir com o player (collision_layer = 0
+## + exceção de colisão), mas continua colidindo com o cenário (máscara
+## mantida) para poder cair e pousar no chão.
 ## =============================================================
 
 
@@ -32,10 +36,24 @@ enum Estado { IDLE, CHASE, ATTACK, HIT, DEATH, FALLING, FADING }
 @export_group("Ataque")
 @export var dano: int = 8
 @export var cooldown_ataque: float = 2.0
-@export var alcance_ataque: float = 50.0     # Autoconfigura a forma da AttackArea
+@export var alcance_ataque: float = 50.0     # Só usado se "ajustar_areas_por_codigo" estiver ligado
+
+# O dano só é aplicado enquanto a animação "Attack" está nesses frames
+# (contando a partir de 0). Use -1 em frame_fim_dano para "até o último frame".
+# O dano acontece no máximo UMA vez por ataque, e só se o player estiver
+# dentro da AttackArea naquele momento.
+@export var frame_inicio_dano: int = 2
+@export var frame_fim_dano: int = -1
 
 @export_group("Detecção")
-@export var tamanho_deteccao: float = 250.0  # Autoconfigura a forma da DetectionArea
+@export var tamanho_deteccao: float = 250.0  # Só usado se "ajustar_areas_por_codigo" estiver ligado
+
+@export_group("Áreas")
+## Se DESLIGADO (padrão), as CollisionShape2D da DetectionArea e da
+## AttackArea ficam exatamente como você desenhou no editor.
+## Se LIGADO, o código redimensiona as formas usando alcance_ataque e
+## tamanho_deteccao (raio do círculo ou metade da largura do retângulo).
+@export var ajustar_areas_por_codigo: bool = false
 
 @export_group("Hit e Invulnerabilidade")
 @export var tempo_invulnerabilidade: float = 0.6
@@ -87,6 +105,7 @@ var esta_no_alcance_attack: bool = false
 
 var direcao: int = 1           # 1 = direita | -1 = esquerda
 var pode_atacar: bool = true
+var dano_ja_aplicado: bool = false   # garante 1 dano por ataque
 
 # Controle interno da sequência de morte (sem usar await)
 var pousou_no_chao: bool = false
@@ -131,10 +150,14 @@ func _ready() -> void:
 	area_attack.body_entered.connect(_on_area_attack_body_entered)
 	area_attack.body_exited.connect(_on_area_attack_body_exited)
 	sprite.animation_finished.connect(_on_animation_finished)
+	sprite.frame_changed.connect(_on_sprite_frame_changed)
 	attack_timer.timeout.connect(_on_attack_cooldown_timeout)
 
-	_configurar_forma_area(area_deteccao, tamanho_deteccao)
-	_configurar_forma_area(area_attack, alcance_ataque)
+	# Só mexe nas formas se o ajuste por código estiver ligado; caso
+	# contrário, vale o tamanho desenhado no editor.
+	if ajustar_areas_por_codigo:
+		_configurar_forma_area(area_deteccao, tamanho_deteccao)
+		_configurar_forma_area(area_attack, alcance_ataque)
 
 	# Garante que Attack, Take_hit e Death não fiquem em loop.
 	_configurar_animacoes_nao_looping()
@@ -288,19 +311,39 @@ func _processar_attack(_delta: float) -> void:
 
 func _executar_ataque() -> void:
 	pode_atacar = false
+	dano_ja_aplicado = false
 	_tocar_animacao("Attack")
 	_tocar_som(som_attack) # 🔊 começa junto com a animação de ataque
-	_aplicar_dano_area_attack()
 	attack_timer.start()
+	# O dano NÃO é aplicado aqui: ele acontece em _on_sprite_frame_changed(),
+	# somente durante os frames de dano da animação "Attack".
+	_tentar_aplicar_dano() # cobre o caso de frame_inicio_dano = 0
 
 
-func _aplicar_dano_area_attack() -> void:
-	# Dano aplicado uma única vez por ataque: esta função só roda a
-	# partir de _executar_ataque(), chamada apenas quando pode_atacar
-	# é true — e essa flag é derrubada imediatamente em seguida.
+## Verifica se a animação está dentro da janela de dano e, se o player
+## estiver na AttackArea, aplica o dano uma única vez.
+func _tentar_aplicar_dano() -> void:
+	if dano_ja_aplicado or esta_morto:
+		return
+	if estado_atual != Estado.ATTACK or sprite.animation != "Attack":
+		return
+
+	var ultimo_frame: int = sprite.sprite_frames.get_frame_count("Attack") - 1
+	var fim: int = ultimo_frame if frame_fim_dano < 0 else mini(frame_fim_dano, ultimo_frame)
+	var inicio: int = mini(frame_inicio_dano, ultimo_frame)
+
+	if sprite.frame < inicio or sprite.frame > fim:
+		return
+
 	for corpo in area_attack.get_overlapping_bodies():
 		if corpo.is_in_group("player") and corpo.has_method("tomar_dano"):
 			corpo.tomar_dano(dano)
+			dano_ja_aplicado = true
+			return
+
+
+func _on_sprite_frame_changed() -> void:
+	_tentar_aplicar_dano()
 
 
 # -------------------------------------------------------------
@@ -329,6 +372,22 @@ func _receber_hit(quem_atacou: Node2D) -> void:
 	invulneravel_tempo_restante = tempo_invulnerabilidade
 
 
+## Decide para qual estado voltar depois do HIT.
+## CORREÇÃO: se o player ainda está dentro da AttackArea, volta direto
+## para ATTACK (o sinal body_entered não dispara de novo, então sem isso
+## o monstro ficava preso em CHASE colado no player e nunca atacava).
+func _voltar_do_hit() -> void:
+	if esta_morto:
+		return
+
+	if esta_no_alcance_attack and is_instance_valid(player):
+		_mudar_estado(Estado.ATTACK)
+	elif esta_jogador_detectado and is_instance_valid(player):
+		_mudar_estado(Estado.CHASE)
+	else:
+		_mudar_estado(Estado.IDLE)
+
+
 # -------------------------------------------------------------
 # ESTADO: DEATH (toca a animação uma vez, sem gravidade ainda)
 # -------------------------------------------------------------
@@ -353,6 +412,20 @@ func _morrer() -> void:
 	area_deteccao.set_deferred("monitorable", false)
 	area_attack.set_deferred("monitoring", false)
 	area_attack.set_deferred("monitorable", false)
+
+	# 🚫 Remove a colisão do corpo com o player (e com qualquer coisa que
+	# "enxergue" este corpo): collision_layer = 0 faz os outros corpos
+	# pararem de colidir com ele. A collision_mask é mantida de propósito,
+	# para o cadáver ainda colidir com o chão/cenário durante a queda.
+	# set_deferred evita erro caso a morte aconteça dentro de um callback
+	# de física (ex.: dano vindo de uma Area2D do player).
+	set_deferred("collision_layer", 0)
+
+	# Reforço: ignora também o(s) player(s) na própria movimentação,
+	# caso a máscara deste corpo inclua a layer do player.
+	for jogador in get_tree().get_nodes_in_group("player"):
+		if jogador is PhysicsBody2D:
+			add_collision_exception_with(jogador)
 
 	_mudar_estado(Estado.DEATH)
 	_tocar_animacao("Death")
@@ -468,11 +541,14 @@ func _configurar_forma_area(area: Area2D, tamanho: float) -> void:
 		return
 	for filho in area.get_children():
 		if filho is CollisionShape2D and filho.shape != null:
-			var forma: Shape2D = filho.shape
+			# duplicate(): evita alterar o recurso de forma compartilhado
+			# com outras instâncias/cenas.
+			var forma: Shape2D = filho.shape.duplicate()
 			if forma is CircleShape2D:
 				forma.radius = tamanho
 			elif forma is RectangleShape2D:
 				forma.size = Vector2(tamanho * 2.0, forma.size.y)
+			filho.shape = forma
 
 
 # -------------------------------------------------------------
@@ -487,7 +563,8 @@ func _on_area_deteccao_body_entered(body: Node2D) -> void:
 	esta_jogador_detectado = true
 	print("Monster_sky detectou o Player")
 
-	if estado_atual != Estado.HIT:
+	# Só começa a perseguir se estiver parado; não interrompe HIT nem ATTACK.
+	if estado_atual == Estado.IDLE:
 		_mudar_estado(Estado.CHASE)
 
 
@@ -514,6 +591,8 @@ func _on_area_attack_body_entered(body: Node2D) -> void:
 	player = body
 	esta_no_alcance_attack = true
 
+	# Durante o HIT apenas registra que o player está no alcance;
+	# _voltar_do_hit() cuida de ir para ATTACK quando a animação acabar.
 	if estado_atual != Estado.HIT:
 		_mudar_estado(Estado.ATTACK)
 
@@ -538,8 +617,7 @@ func _on_animation_finished() -> void:
 			if estado_atual == Estado.ATTACK:
 				_tocar_animacao("Idle") # aguarda o cooldown "parado" visualmente
 		"Take_hit":
-			if not esta_morto:
-				_mudar_estado(Estado.CHASE if esta_jogador_detectado else Estado.IDLE)
+			_voltar_do_hit()
 		"Death":
 			# Animação de morte terminou: mantém o último frame (o
 			# AnimatedSprite2D já para sozinho por não estar em loop)
@@ -563,7 +641,7 @@ func _on_attack_cooldown_timeout() -> void:
 # API PÚBLICA (usada pelo Player)
 # -------------------------------------------------------------
 
-func tomar_dano(quantidade: int) -> void:
+func tomar_dano(quantidade: int, _posicao: Vector2 = Vector2.ZERO) -> void:
 	if esta_morto or invulneravel:
 		return
 

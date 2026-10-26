@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dqqc35s8hsn1b"
+path="res://.godot/imported/slime tomando dano.mp3-24a7dcaf54654812e0abdf173727dda4.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_slime/slime tomando dano.mp3"
+dest_files=["res://.godot/imported/slime tomando dano.mp3-24a7dcaf54654812e0abdf173727dda4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

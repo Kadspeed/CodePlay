@@ -10,7 +10,8 @@
 [ext_resource type="AudioStream" uid="uid://4o3675s5lr1a" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Morcego/som das asas.mp3" id="8_aoiw0"]
 [ext_resource type="AudioStream" uid="uid://b6g6fewu1se4" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_Morcego/morcego mordendo_.mp3" id="9_xigww"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kkef4"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yinxq"]
+radius = 8.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e6ilp"]
 atlas = ExtResource("2_e6ilp")
@@ -204,10 +205,10 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ufht"]
-radius = 197.16237
+radius = 92.541885
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_h7n73"]
-radius = 61.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_7quve"]
+radius = 17.029387
 
 [node name="Monster_Sky" type="CharacterBody2D" unique_id=1925291013]
 script = ExtResource("1_kkef4")
@@ -215,24 +216,25 @@ volume_death = 100
 volume_hurt = 100
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1184896129]
-shape = SubResource("CapsuleShape2D_kkef4")
+position = Vector2(0, 7)
+shape = SubResource("CapsuleShape2D_yinxq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1535220014]
 texture_filter = 1
 position = Vector2(-4, -2)
 sprite_frames = SubResource("SpriteFrames_mtyja")
-animation = &"Take_hit"
-frame_progress = 0.7427882
+animation = &"Attack"
+frame_progress = 0.8530202
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=745269933]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1175242864]
 shape = SubResource("CircleShape2D_4ufht")
 
-[node name="AttackArea" type="Area2D" parent="." unique_id=391236313]
+[node name="AttackArea" type="Area2D" parent="." unique_id=728714956]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1740407573]
-shape = SubResource("CircleShape2D_h7n73")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1094263188]
+shape = SubResource("CircleShape2D_7quve")
 
 [node name="AttackCooldownTimer" type="Timer" parent="." unique_id=797308208]
 

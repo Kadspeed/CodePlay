@@ -40,80 +40,136 @@ var _itens: Dictionary = {
 	"disquete_azul": {
 		"nome": "disquete_azul",
 		"titulo": "Variáveis",
-		"texto": """SISTEMA DE ARQUIVOS // MÓDULO 01: VARIÁVEIS 
-		O que é JavaScript?
-		JavaScript (JS) é a linguagem de programação que dá vida, dinamismo e interatividade às páginas da web e jogos. Enquanto o HTML constrói a estrutura e o CSS define o visual, o JavaScript funciona como o "cérebro", processando dados e respondendo aos comandos do jogador.
+		"texto":"""O que você precisa saber
 
-		O que são Variáveis?
-		Variáveis funcionam como "caixas etiquetadas" na memória do computador. Elas servem para armazenar informações que o código precisa consultar, calcular ou modificar ao longo da execução — como a pontuação do jogador, a quantidade de vida ou o nome de um item.
+Variáveis são espaços na memória usados para guardar informações. Cada variável tem um nome e armazena um valor que pode ser utilizado pelo programa.
 
-		Como declarar variáveis no JS
-		No JavaScript moderno, existem duas palavras-chave principais para criar variáveis:
+Exemplo:
+let energia = 100;
+let nome = "Explorador";
 
-		let: Usado quando o valor guardado pode mudar durante a partida.
+let permite criar uma variável cujo valor pode mudar. Números são escritos sem aspas; textos usam aspas.
 
-		const: Usado para definir uma constante, ou seja, um valor que nunca muda após ser atribuído.
-
-		JavaScript
-		// Exemplo de código:
-		let pontos = 0;             // A pontuação altera no decorrer do jogo
-		const nomeJogador = "Alex"; // O nome permanece fixo
-
-		pontos = 10;                // Atualiza o valor de 'pontos' para 10
-		Tipos Básicos de Dados
-		Dentro dessas variáveis, você pode armazenar diferentes tipos de valores:
-
-		Number: Números inteiros ou decimais (ex: let vida = 100;)
-
-		String: Textos envolvidos por aspas (ex: let item = "Disquete";)
-
-		Boolean: Valores lógicos de verdadeiro ou falso (ex: let portaAberta = false;)
-
-		Estrutura de Declaração
-
-		Palavra-chave: let ou const (indica a criação da variável).
-
-		Nome da Variável: O identificador da caixa (convenção camelCase, ex: pontosAtuais).
-
-		Operador de Atribuição: O sinal de igual (=), que insere o valor na variável.
-
-		Valor: Os dados armazenados.""",
+Pista para o puzzle: observe o tipo de informação que precisa ser guardada e escolha um nome que represente essa informação.""",
 		"icone": preload("res://Creativos/disquetes/disquete_azul.png"),
 	},
 	"disquete_vermelho": {
 		"nome": "disquete_vermelho",
 		"titulo": "If / Else",
-		"texto": "Este disquete contém informações sobre estruturas condicionais: como tomar decisões dentro de um programa usando if e else.",
+		"texto": """"O que você precisa saber
+
+Condicionais permitem que o programa tome decisões. O if executa um bloco quando uma condição é verdadeira; o else define o que acontece quando ela é falsa.
+
+Exemplo:
+if (energia > 50) {
+    // liberar o portal
+} else {
+    // manter o portal fechado
+}
+
+O símbolo > significa "maior que". Já === verifica se dois valores são iguais.
+
+Pista para o puzzle: identifique a condição que precisa ser verdadeira e confira o operador de comparação antes de escolher a resposta.""",
 		"icone": preload("res://Creativos/disquetes/disquete_vermelho.png"),
 	},
 	"disquete_verde": {
 		"nome": "disquete_verde",
 		"titulo": "Loops",
-		"texto": "Este disquete contém informações sobre laços de repetição: como repetir ações várias vezes usando for e while.",
+		"texto": """"O que você precisa saber
+
+Laços repetem instruções sem precisar escrever o mesmo código várias vezes.
+
+O for é útil quando você controla a repetição por um contador. O while repete enquanto uma condição for verdadeira.
+
+Exemplo com for:
+for (let i = 0; i < 3; i++) {
+    // executar uma ação
+}
+
+Exemplo com while:
+while (energia > 0) {
+    // continuar a ação
+}
+
+No primeiro exemplo, i++ aumenta o contador em uma unidade. No segundo, a condição precisa eventualmente se tornar falsa para que o laço termine.
+
+Pista para o puzzle: se o desafio envolve uma quantidade definida de repetições, pense em for. Se depende de uma condição que continua mudando, considere while.""",
 		"icone": preload("res://Creativos/disquetes/disquete_verde.png"),
 	},
 	"disquete_roxo": {
 		"nome": "disquete_roxo",
 		"titulo": "Funções",
-		"texto": "Este disquete contém informações sobre funções: como organizar código em blocos reutilizáveis.",
+		"texto": """O que você precisa saber
+
+Uma função reúne instruções que podem ser executadas sempre que necessário. Ela pode receber parâmetros e devolver um resultado.
+
+Exemplo:
+function somar(a, b) {
+    return a + b;
+}
+
+function declara a função, a e b são parâmetros e return devolve o resultado.
+
+Para executar a função:
+somar(2, 3);
+
+Pista para o puzzle: identifique onde a função começa, quais informações ela recebe e qual instrução precisa executar.""",
 		"icone": preload("res://Creativos/disquetes/disquete_roxo.png"),
 	},
 	"disquete_amarelo": {
 		"nome": "disquete_amarelo",
 		"titulo": "Arrays",
-		"texto": "Este disquete contém informações sobre arrays: como armazenar e organizar listas de valores.",
+		"texto": """O que você precisa saber
+
+Um array guarda vários valores em uma única estrutura, mantendo-os em uma ordem definida.
+
+Exemplo:
+let ferramentas = ["chave", "martelo", "serrote"];
+
+Cada elemento tem um índice, que começa em 0. Assim, ferramentas[0] acessa "chave".
+
+Você também pode consultar quantos elementos existem usando .length.
+
+Pista para o puzzle: quando precisar guardar uma coleção de itens, procure uma estrutura com colchetes []. Lembre-se de que o primeiro elemento está no índice zero.""",
 		"icone": preload("res://Creativos/disquetes/disquete_amarelo.png"),
 	},
 	"disquete_laranja": {
 		"nome": "disquete_laranja",
 		"titulo": "Objetos",
-		"texto": "Este disquete contém informações sobre objetos: como agrupar dados e comportamentos relacionados.",
+		"texto": """O que você precisa saber
+
+Objetos agrupam informações relacionadas em propriedades, organizadas por pares de chave e valor.
+
+Exemplo:
+let porta = {
+    material: "ferro",
+    aberta: false
+};
+
+Nesse exemplo, material e aberta são propriedades. Você pode acessar uma propriedade usando a notação de ponto, como porta.material.
+
+Pista para o puzzle: se várias informações pertencem à mesma entidade, pense em um objeto. Cada propriedade precisa de uma chave e de um valor correspondente.""",
 		"icone": preload("res://Creativos/disquetes/disquete_laranja.png"),
 	},
 	"disquete_branco": {
 		"nome": "disquete_branco",
 		"titulo": "Classes",
-		"texto": "Este disquete contém informações sobre classes: como criar modelos para gerar objetos com estrutura e comportamento em comum.",
+		"texto":"""O que você precisa saber
+
+Uma classe funciona como um modelo para criar objetos. Ela define características e comportamentos que esses objetos podem ter.
+
+Exemplo:
+class Nave {
+    constructor(modelo) {
+        this.modelo = modelo;
+    }
+}
+
+class declara a classe. constructor inicializa o objeto, recebendo os parâmetros necessários. A palavra-chave this referencia o objeto atual.
+
+Em this.modelo = modelo, o lado esquerdo indica a propriedade do objeto e o lado direito indica o valor recebido pelo parâmetro.
+
+Pista para o puzzle: observe a relação entre os parâmetros do construtor e as propriedades após this. O nome de uma propriedade e o nome de um parâmetro podem ser iguais, mas representam papéis diferentes.""",
 		"icone": preload("res://Creativos/disquetes/disquete_branco.png"),
 	},
 }

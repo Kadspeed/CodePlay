@@ -1,392 +1,375 @@
-[gd_scene format=3 uid="uid://d27ge3dxci2u"]
+[gd_scene format=3 uid="uid://d1jbakat7hyf7"]
 
 [ext_resource type="Script" uid="uid://bfu8iha0wd5x4" path="res://scripts/Puzzles/puzzle_variaveis.gd" id="1_7kvg5"]
-[ext_resource type="Script" uid="uid://c1enc2crskusw" path="res://scripts/Puzzles/Slot_codigo.gd" id="1_8cyl5"]
-[ext_resource type="Texture2D" uid="uid://prwdqfl3vvpu" path="res://Creativos/puzzles/Elemento puzzle/moldura_laranja.png" id="1_88qav"]
-[ext_resource type="Texture2D" uid="uid://b8h75bgb000ti" path="res://Creativos/puzzles/Elemento puzzle/moudura_cinza.png" id="3_8cyl5"]
-[ext_resource type="Script" uid="uid://206saguxu03c" path="res://scripts/Puzzles/Bloco_Codigo.gd" id="3_he6mm"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u43wt"]
-bg_color = Color(0.004019165, 0.004019165, 0.004019165, 1)
+[sub_resource type="StyleBoxFlat" id="Estilo_Janela"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.659, 0.624, 0.133, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qiap"]
-bg_color = Color(0.00055181305, 0.00021206182, 0, 1)
+[sub_resource type="StyleBoxFlat" id="Estilo_Barra"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.902, 0.847, 0.31, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
-[sub_resource type="LabelSettings" id="LabelSettings_u43wt"]
-font_size = 34
+[sub_resource type="StyleBoxFlat" id="Estilo_Codigo"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.051, 0.055, 0.024, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.902, 0.847, 0.31, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[node name="Puzzle_Variaveis" type="Control" unique_id=640555564]
-z_index = 10
+[sub_resource type="StyleBoxFlat" id="Estilo_Painel"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.051, 0.055, 0.024, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.659, 0.624, 0.133, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Estilo_Terminal"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.031, 0.035, 0.012, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.404, 0.173, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Puzzle_Variaveis" type="Control" unique_id=1011295054]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 2.0
-offset_right = 942.0
-offset_bottom = 613.0
+offset_right = 1281.0
+offset_bottom = 611.0
 script = ExtResource("1_7kvg5")
 
-[node name="Fundo" type="Panel" parent="." unique_id=42661104]
-layout_mode = 0
-offset_left = -5.0
-offset_top = 2.0
-offset_right = 1291.0
-offset_bottom = 613.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_u43wt")
+[node name="JanelaPuzzle" type="Panel" parent="." unique_id=2064479830]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Estilo_Janela")
 
-[node name="TituloDesafio" type="Label" parent="." unique_id=770439084]
-layout_mode = 0
-offset_left = 11.0
-offset_top = 20.0
-offset_right = 1216.0
-offset_bottom = 43.0
-text = "Variaveis
-"
+[node name="Margem" type="MarginContainer" parent="JanelaPuzzle" unique_id=1537223399]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Raiz" type="VBoxContainer" parent="JanelaPuzzle/Margem" unique_id=155201208]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BarraTitulo" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz" unique_id=848426553]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Estilo_Barra")
+
+[node name="Titulo" type="Label" parent="JanelaPuzzle/Margem/Raiz/BarraTitulo" unique_id=772737328]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Puzzle de Variáveis: como é a estrutura de uma variável no JavaScript? Monte o código com os blocos."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BarraProgresso" type="HBoxContainer" parent="JanelaPuzzle/Margem/Raiz" unique_id=146399133]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="IndicadorDesafio" type="Label" parent="JanelaPuzzle/Margem/Raiz/BarraProgresso" unique_id=1569950129]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Progresso: 0 de 1 desafio   |   Blocos no código: 0 de 3   |   Floresta Biotech"
+vertical_alignment = 1
+
+[node name="ChipVariaveis" type="Label" parent="JanelaPuzzle/Margem/Raiz/BarraProgresso" unique_id=774191069]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 28)
+layout_mode = 2
+text = "1  VARIÁVEIS  (atual)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Corpo" type="HBoxContainer" parent="JanelaPuzzle/Margem/Raiz" unique_id=938237387]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="ColunaCodigo" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo" unique_id=1555504]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/separation = 10
+
+[node name="PainelCodigo" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo" unique_id=1414944805]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("Estilo_Codigo")
+
+[node name="ConteudoCodigo" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo" unique_id=67359605]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CabecalhoCodigo" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo" unique_id=1878038106]
+unique_name_in_owner = true
+layout_mode = 2
+text = "FLORESTA BIOTECH — VARIÁVEIS"
 horizontal_alignment = 1
 
-[node name="DescriçaoDesafio" type="RichTextLabel" parent="." unique_id=80304676]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 64.0
-offset_right = 1228.0
-offset_bottom = 104.0
-text = "Como é a estrutura de uma variavel no JavaScript?"
+[node name="ComentarioCodigo" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo" unique_id=144024098]
+layout_mode = 2
+text = "// declare uma variável usando a sintaxe correta"
+
+[node name="LinhaCodigo" type="HBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo" unique_id=756736517]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Slot1" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaCodigo" unique_id=1707660209]
+custom_minimum_size = Vector2(140, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "___"
+
+[node name="Slot2" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaCodigo" unique_id=446487540]
+custom_minimum_size = Vector2(140, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "___"
+
+[node name="Slot3" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaCodigo" unique_id=1558327605]
+custom_minimum_size = Vector2(140, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "___"
+
+[node name="PontoVirgula" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaCodigo" unique_id=2037418834]
+layout_mode = 2
+text = ";"
+vertical_alignment = 1
+
+[node name="PainelOpcoes" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo" unique_id=1875111737]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Estilo_Painel")
+
+[node name="ConteudoOpcoes" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes" unique_id=858575296]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TituloOpcoes" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes" unique_id=57124595]
+unique_name_in_owner = true
+layout_mode = 2
+text = "BLOCOS DE CÓDIGO"
 horizontal_alignment = 1
 
-[node name="AreaMontagem" type="Panel" parent="." unique_id=435704509]
-layout_mode = 0
-offset_left = 348.0
-offset_top = 159.0
-offset_right = 892.0
-offset_bottom = 243.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_4qiap")
+[node name="LegendaBlocos" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes" unique_id=2083826968]
+unique_name_in_owner = true
+layout_mode = 2
+text = "borda amarela: declaração   |   âmbar: operador   |   verde: valor"
+horizontal_alignment = 1
 
-[node name="Slot3" type="Control" parent="AreaMontagem" unique_id=119197987]
-anchors_preset = 0
-offset_left = 26.0
-offset_top = 23.0
-offset_right = 26.0
-offset_bottom = 63.0
-script = ExtResource("1_8cyl5")
+[node name="AreaBlocos" type="HFlowContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes" unique_id=1089577411]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
 
-[node name="TextureRect" type="TextureRect" parent="AreaMontagem/Slot3" unique_id=326043343]
-layout_mode = 0
-offset_right = 155.0
-offset_bottom = 40.0
-texture = ExtResource("1_88qav")
+[node name="Bloco1" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=2037784569]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "LET test"
 
-[node name="Label" type="Label" parent="AreaMontagem/Slot3" unique_id=1371198145]
-layout_mode = 0
-offset_right = 154.0
-offset_bottom = 39.0
+[node name="Bloco2" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=464935062]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "LET 1test"
 
-[node name="Slot2" type="Control" parent="AreaMontagem" unique_id=1014240468]
-anchors_preset = 0
-offset_left = 194.0
-offset_top = 22.0
-offset_right = 194.0
-offset_bottom = 62.0
-script = ExtResource("1_8cyl5")
+[node name="Bloco3" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=1231514889]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "VAR test"
 
-[node name="TextureRect" type="TextureRect" parent="AreaMontagem/Slot2" unique_id=1962465366]
-layout_mode = 0
-offset_right = 155.0
-offset_bottom = 40.0
-texture = ExtResource("1_88qav")
+[node name="Bloco4" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=1492734236]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "="
 
-[node name="Label" type="Label" parent="AreaMontagem/Slot2" unique_id=50293746]
-layout_mode = 0
-offset_right = 155.0
-offset_bottom = 40.0
+[node name="Bloco5" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=1830960115]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "+"
 
-[node name="Slot1" type="Control" parent="AreaMontagem" unique_id=1085354597]
-anchors_preset = 0
-offset_left = 362.0
-offset_top = 22.0
-offset_right = 362.0
-offset_bottom = 62.0
-script = ExtResource("1_8cyl5")
+[node name="Bloco6" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=805072874]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = ";"
 
-[node name="TextureRect" type="TextureRect" parent="AreaMontagem/Slot1" unique_id=1236070544]
-texture_filter = 1
-layout_mode = 0
-offset_right = 155.0
-offset_bottom = 40.0
-texture = ExtResource("1_88qav")
+[node name="Bloco7" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=1535112760]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "10"
 
-[node name="Label" type="Label" parent="AreaMontagem/Slot1" unique_id=763708514]
-layout_mode = 0
-offset_right = 155.0
-offset_bottom = 40.0
+[node name="Bloco8" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=1824795330]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "\"Test\""
 
-[node name="BotaoLimpar" type="Button" parent="." unique_id=443224684]
-layout_mode = 0
-offset_left = 354.0
-offset_top = 516.0
-offset_right = 610.0
-offset_bottom = 557.0
-text = "limpar"
+[node name="Bloco9" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/AreaBlocos" unique_id=1474093177]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "@"
 
-[node name="Feedback" type="Label" parent="." unique_id=640393628]
-layout_mode = 0
-offset_left = 368.0
-offset_top = 255.0
-offset_right = 999.0
-offset_bottom = 279.0
-text = "Feedback"
+[node name="ColunaInfo" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo" unique_id=1334138888]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
 
-[node name="BotaoExecutar" type="Button" parent="." unique_id=1370560696]
-layout_mode = 0
-offset_left = 636.0
-offset_top = 514.0
-offset_right = 892.0
-offset_bottom = 555.0
+[node name="PainelInformacoes" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaInfo" unique_id=1308474608]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Estilo_Painel")
+
+[node name="ConteudoInformacoes" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaInfo/PainelInformacoes" unique_id=1393389905]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TituloInformacoes" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaInfo/PainelInformacoes/ConteudoInformacoes" unique_id=395635792]
+unique_name_in_owner = true
+layout_mode = 2
+text = "INFORMAÇÕES ÚTEIS"
+horizontal_alignment = 1
+
+[node name="TextoInformacoes" type="RichTextLabel" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaInfo/PainelInformacoes/ConteudoInformacoes" unique_id=2036823535]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColunaAcoes" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo" unique_id=1328910973]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="PainelBotoes" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes" unique_id=1968021019]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("Estilo_Painel")
+
+[node name="GradeBotoes" type="GridContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes" unique_id=386056820]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Dica" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes/GradeBotoes" unique_id=1135677285]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Dica"
+
+[node name="Testar" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes/GradeBotoes" unique_id=870288860]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Testar"
+
+[node name="Limpar" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes/GradeBotoes" unique_id=1195196565]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Limpar"
+
+[node name="Executar" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes/GradeBotoes" unique_id=2071946570]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
 text = "Executar"
 
-[node name="AreaBlocos" type="Panel" parent="." unique_id=1728366346]
-layout_mode = 0
-offset_left = 359.0
-offset_top = 287.0
-offset_right = 879.0
-offset_bottom = 466.0
+[node name="PainelFeedback" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes" unique_id=1202574395]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Estilo_Terminal")
 
-[node name="Bloco1" type="Control" parent="AreaBlocos" unique_id=398099192]
-anchors_preset = 0
-offset_left = 7.0
-offset_top = 127.0
-offset_right = 7.0
-offset_bottom = 127.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco1" unique_id=243914357]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco1" unique_id=1279498007]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = "LET"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Bloco2" type="Control" parent="AreaBlocos" unique_id=283186118]
-anchors_preset = 0
-offset_left = 181.0
-offset_top = 127.0
-offset_right = 181.0
-offset_bottom = 127.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco2" unique_id=837831860]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco2" unique_id=869194839]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = "VAR"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Bloco3" type="Control" parent="AreaBlocos" unique_id=146318799]
-anchors_preset = 0
-offset_left = 355.0
-offset_top = 127.0
-offset_right = 355.0
-offset_bottom = 127.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco3" unique_id=1853633399]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco3" unique_id=1752951618]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = "CONST"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Bloco4" type="Control" parent="AreaBlocos" unique_id=321920207]
-anchors_preset = 0
-offset_left = 7.0
-offset_top = 77.0
-offset_right = 7.0
-offset_bottom = 77.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco4" unique_id=1560901776]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco4" unique_id=124703403]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = "="
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Bloco5" type="Control" parent="AreaBlocos" unique_id=1314662295]
-anchors_preset = 0
-offset_left = 181.0
-offset_top = 77.0
-offset_right = 181.0
-offset_bottom = 77.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco5" unique_id=1352683911]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco5" unique_id=1949500722]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = "+"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Bloco6" type="Control" parent="AreaBlocos" unique_id=2120532955]
-anchors_preset = 0
-offset_left = 355.0
-offset_top = 77.0
-offset_right = 355.0
-offset_bottom = 77.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco6" unique_id=299671003]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco6" unique_id=1160189534]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = ":"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Bloco7" type="Control" parent="AreaBlocos" unique_id=1451154772]
-anchors_preset = 0
-offset_left = 8.0
-offset_top = 26.0
-offset_right = 8.0
-offset_bottom = 26.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco7" unique_id=1156913824]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco7" unique_id=710422875]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = "Test"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Bloco8" type="Control" parent="AreaBlocos" unique_id=457288918]
-anchors_preset = 0
-offset_left = 181.0
-offset_top = 26.0
-offset_right = 181.0
-offset_bottom = 26.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco8" unique_id=117096073]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco8" unique_id=1443918714]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = "1Test"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Bloco9" type="Control" parent="AreaBlocos" unique_id=1997698819]
-anchors_preset = 0
-offset_left = 355.0
-offset_top = 26.0
-offset_right = 355.0
-offset_bottom = 26.0
-script = ExtResource("3_he6mm")
-
-[node name="TextureRect" type="TextureRect" parent="AreaBlocos/Bloco9" unique_id=460268944]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-texture = ExtResource("3_8cyl5")
-
-[node name="Label" type="Label" parent="AreaBlocos/Bloco9" unique_id=230926751]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 156.0
-offset_bottom = 41.0
-text = "test"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Label" type="Label" parent="." unique_id=1932205728]
-layout_mode = 0
-offset_left = 882.0
-offset_top = 171.0
-offset_right = 922.0
-offset_bottom = 225.0
-text = ";"
-label_settings = SubResource("LabelSettings_u43wt")
+[node name="TextoFeedback" type="RichTextLabel" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelFeedback" unique_id=430241406]
+unique_name_in_owner = true
+layout_mode = 2

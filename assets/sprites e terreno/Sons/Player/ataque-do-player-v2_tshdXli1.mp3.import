@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://tln2etbfj706"
+path="res://.godot/imported/ataque-do-player-v2_tshdXli1.mp3-5b6b7ab6cedf19b0758ce85952cda205.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Player/ataque-do-player-v2_tshdXli1.mp3"
+dest_files=["res://.godot/imported/ataque-do-player-v2_tshdXli1.mp3-5b6b7ab6cedf19b0758ce85952cda205.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b2hvwlng3o3p4"
+path="res://.godot/imported/rato correndo_.mp3-e491a4d309a0cf5a0e9b621d372a10c9.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_rato/rato correndo_.mp3"
+dest_files=["res://.godot/imported/rato correndo_.mp3-e491a4d309a0cf5a0e9b621d372a10c9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

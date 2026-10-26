@@ -1,284 +1,449 @@
-[gd_scene format=3 uid="uid://cgoo08dychbek"]
+[gd_scene format=3 uid="uid://bjydqolx8yt1u"]
 
-[ext_resource type="Script" uid="uid://cbh3ij8no33mc" path="res://scripts/puzzle_jardins.gd" id="1_2cxta"]
+[ext_resource type="Script" uid="uid://cbh3ij8no33mc" path="res://scripts/Puzzles/puzzle_jardins.gd" id="1_2cxta"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_7quve"]
-font_size = 20
+[sub_resource type="StyleBoxFlat" id="Estilo_Janela"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.659, 0.624, 0.133, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_f2ycp"]
-font_size = 20
+[sub_resource type="StyleBoxFlat" id="Estilo_Barra"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.902, 0.847, 0.31, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
-[sub_resource type="LabelSettings" id="LabelSettings_j3lt5"]
-font_size = 20
+[sub_resource type="StyleBoxFlat" id="Estilo_Codigo"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.051, 0.055, 0.024, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.902, 0.847, 0.31, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[node name="Puzzle_Jardins" type="Control" unique_id=778320276]
+[sub_resource type="StyleBoxFlat" id="Estilo_Painel"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.051, 0.055, 0.024, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.659, 0.624, 0.133, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Estilo_Terminal"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.031, 0.035, 0.012, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.404, 0.173, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Puzzle_Jardins" type="Control" unique_id=1144719887]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1281.0
 offset_bottom = 611.0
 script = ExtResource("1_2cxta")
 
-[node name="Fundo" type="ColorRect" parent="." unique_id=1798580661]
-layout_mode = 0
-offset_right = 1281.0
-offset_bottom = 611.0
-color = Color(0, 0, 0, 1)
+[node name="JanelaPuzzle" type="Panel" parent="." unique_id=862328269]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Estilo_Janela")
 
-[node name="Titulo" type="Label" parent="." unique_id=803206281]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 9.0
-offset_right = 1272.0
-offset_bottom = 42.0
-text = "Array"
+[node name="Margem" type="MarginContainer" parent="JanelaPuzzle" unique_id=215471846]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Raiz" type="VBoxContainer" parent="JanelaPuzzle/Margem" unique_id=1665787796]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BarraTitulo" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz" unique_id=1922853421]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Estilo_Barra")
+
+[node name="Titulo" type="Label" parent="JanelaPuzzle/Margem/Raiz/BarraTitulo" unique_id=611586749]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Objetivo: crie um array chamado frutas com três frutas e mostre a segunda fruta no console."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BarraProgresso" type="HBoxContainer" parent="JanelaPuzzle/Margem/Raiz" unique_id=799738757]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="IndicadorDesafio" type="Label" parent="JanelaPuzzle/Margem/Raiz/BarraProgresso" unique_id=1282086603]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Progresso: 0 de 1 desafio   |   Elementos no array: 0 de 3   |   Índice: —"
+vertical_alignment = 1
+
+[node name="ChipArray" type="Label" parent="JanelaPuzzle/Margem/Raiz/BarraProgresso" unique_id=1388965741]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 28)
+layout_mode = 2
+text = "1  ARRAY  (atual)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Corpo" type="HBoxContainer" parent="JanelaPuzzle/Margem/Raiz" unique_id=1106448782]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="ColunaCodigo" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo" unique_id=676763686]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme_override_constants/separation = 10
+
+[node name="PainelCodigo" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo" unique_id=558428448]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("Estilo_Codigo")
+
+[node name="ConteudoCodigo" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo" unique_id=1206512194]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CabecalhoCodigo" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo" unique_id=504658418]
+unique_name_in_owner = true
+layout_mode = 2
+text = "JARDINS MECÂNICOS — ARRAY"
 horizontal_alignment = 1
 
-[node name="PainelObjetivo" type="Panel" parent="." unique_id=1646094612]
-layout_mode = 0
-offset_left = 659.0
-offset_top = 63.0
-offset_right = 1220.0
-offset_bottom = 259.0
+[node name="LinhaArray" type="HBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo" unique_id=383622945]
+layout_mode = 2
+theme_override_constants/separation = 6
 
-[node name="Label" type="Label" parent="PainelObjetivo" unique_id=930136278]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 560.0
-offset_bottom = 24.0
-text = "OBJETIVO"
+[node name="TextoDeclaracao" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray" unique_id=400334357]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 0
+text = "let frutas = ["
+vertical_alignment = 1
+
+[node name="ColunaSlot1" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray" unique_id=750415323]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="SlotFruta1" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray/ColunaSlot1" unique_id=637739791]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "___"
+
+[node name="IndiceFruta1" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray/ColunaSlot1" unique_id=521695873]
+layout_mode = 2
+text = "índice 0"
 horizontal_alignment = 1
 
-[node name="TextoObjetivo" type="RichTextLabel" parent="PainelObjetivo" unique_id=1053197192]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 46.0
-offset_right = 545.0
-offset_bottom = 186.0
+[node name="Virgula1" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray" unique_id=1606950325]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 0
+text = ","
+vertical_alignment = 1
 
-[node name="PainelCodigo" type="Panel" parent="." unique_id=2104262701]
-layout_mode = 0
-offset_left = 62.0
-offset_top = 61.0
-offset_right = 635.0
-offset_bottom = 259.0
+[node name="ColunaSlot2" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray" unique_id=168187123]
+layout_mode = 2
+theme_override_constants/separation = 2
 
-[node name="CampoDeclaracao" type="LineEdit" parent="PainelCodigo" unique_id=1346412180]
-layout_mode = 0
-offset_left = 33.0
-offset_top = 41.0
-offset_right = 173.0
-offset_bottom = 81.0
-alignment = 1
+[node name="SlotFruta2" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray/ColunaSlot2" unique_id=319298667]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "___"
 
-[node name="SlotFruta1" type="Button" parent="PainelCodigo" unique_id=1183926453]
-layout_mode = 0
-offset_left = 192.0
-offset_top = 41.0
-offset_right = 272.0
-offset_bottom = 81.0
+[node name="IndiceFruta2" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray/ColunaSlot2" unique_id=1071017901]
+layout_mode = 2
+text = "índice 1"
+horizontal_alignment = 1
 
-[node name="SlotFruta2" type="Button" parent="PainelCodigo" unique_id=796294807]
-layout_mode = 0
-offset_left = 287.0
-offset_top = 41.0
-offset_right = 367.0
-offset_bottom = 81.0
+[node name="Virgula2" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray" unique_id=90158248]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 0
+text = ","
+vertical_alignment = 1
 
-[node name="SlotFruta3" type="Button" parent="PainelCodigo" unique_id=709507325]
-layout_mode = 0
-offset_left = 390.0
-offset_top = 41.0
-offset_right = 470.0
-offset_bottom = 81.0
+[node name="ColunaSlot3" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray" unique_id=2042275117]
+layout_mode = 2
+theme_override_constants/separation = 2
 
-[node name="LabelConsoleInicio" type="Label" parent="PainelCodigo" unique_id=823937543]
-layout_mode = 0
-offset_left = 35.0
-offset_top = 117.0
-offset_right = 222.0
-offset_bottom = 145.0
-text = "cosole.log(frutas["
-label_settings = SubResource("LabelSettings_7quve")
+[node name="SlotFruta3" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray/ColunaSlot3" unique_id=381509142]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 40)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "___"
 
-[node name="SlotIndice" type="Button" parent="PainelCodigo" unique_id=381114949]
-layout_mode = 0
-offset_left = 214.0
-offset_top = 114.0
-offset_right = 294.0
-offset_bottom = 154.0
+[node name="IndiceFruta3" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray/ColunaSlot3" unique_id=1906969593]
+layout_mode = 2
+text = "índice 2"
+horizontal_alignment = 1
 
-[node name="LabelConsoleFim" type="Label" parent="PainelCodigo" unique_id=517846507]
-layout_mode = 0
-offset_left = 306.0
-offset_top = 117.0
-offset_right = 346.0
-offset_bottom = 145.0
+[node name="TextoFimArray" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaArray" unique_id=721318325]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 0
+text = "];"
+vertical_alignment = 1
+
+[node name="LinhaConsole" type="HBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo" unique_id=879163373]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TextoConsoleInicio" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaConsole" unique_id=1292649342]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 0
+text = "console.log(frutas["
+vertical_alignment = 1
+
+[node name="SlotIndice" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaConsole" unique_id=1098106376]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 40)
+layout_mode = 2
+size_flags_vertical = 0
+mouse_default_cursor_shape = 2
+text = "___"
+
+[node name="TextoConsoleFim" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelCodigo/ConteudoCodigo/LinhaConsole" unique_id=514515497]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 0
 text = "]);"
-label_settings = SubResource("LabelSettings_f2ycp")
+vertical_alignment = 1
 
-[node name="Label" type="Label" parent="PainelCodigo" unique_id=1849247983]
-layout_mode = 0
-offset_left = 180.0
-offset_top = 46.0
-offset_right = 220.0
-offset_bottom = 74.0
-text = "["
-label_settings = SubResource("LabelSettings_j3lt5")
+[node name="PainelOpcoes" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo" unique_id=619536042]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Estilo_Painel")
 
-[node name="Label2" type="Label" parent="PainelCodigo" unique_id=118355900]
-layout_mode = 0
-offset_left = 480.0
-offset_top = 45.0
-offset_right = 520.0
-offset_bottom = 73.0
-text = "]"
-label_settings = SubResource("LabelSettings_j3lt5")
+[node name="ConteudoOpcoes" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes" unique_id=1538463452]
+layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="Label3" type="Label" parent="PainelCodigo" unique_id=931414158]
-layout_mode = 0
-offset_left = 277.0
-offset_top = 57.0
-offset_right = 317.0
-offset_bottom = 85.0
-text = ","
-label_settings = SubResource("LabelSettings_j3lt5")
+[node name="TituloOpcoes" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes" unique_id=136941354]
+unique_name_in_owner = true
+layout_mode = 2
+text = "ELEMENTOS DO ARRAY"
+horizontal_alignment = 1
 
-[node name="Label4" type="Label" parent="PainelCodigo" unique_id=1807515438]
-layout_mode = 0
-offset_left = 372.0
-offset_top = 56.0
-offset_right = 412.0
-offset_bottom = 84.0
-text = ","
-label_settings = SubResource("LabelSettings_j3lt5")
+[node name="OpcoesFrutas" type="HFlowContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes" unique_id=983765917]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
 
-[node name="PainelOpcoes" type="Panel" parent="." unique_id=1105715881]
-layout_mode = 0
-offset_left = 67.0
-offset_top = 275.0
-offset_right = 634.0
-offset_bottom = 488.0
+[node name="Maca" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesFrutas" unique_id=78155990]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Maçã"
 
-[node name="Maca" type="Button" parent="PainelOpcoes" unique_id=41523952]
-layout_mode = 0
-offset_left = 398.0
-offset_top = 17.0
-offset_right = 538.0
-offset_bottom = 57.0
-text = "MAÇÃ"
+[node name="Banana" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesFrutas" unique_id=1215326385]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Banana"
 
-[node name="Banana" type="Button" parent="PainelOpcoes" unique_id=2058866632]
-layout_mode = 0
-offset_left = 211.0
-offset_top = 20.0
-offset_right = 351.0
-offset_bottom = 60.0
-text = "BANANA"
+[node name="Uva" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesFrutas" unique_id=23976503]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Uva"
 
-[node name="Uva" type="Button" parent="PainelOpcoes" unique_id=422899065]
-layout_mode = 0
-offset_left = 27.0
-offset_top = 20.0
-offset_right = 167.0
-offset_bottom = 60.0
-text = "UVA"
+[node name="Carro" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesFrutas" unique_id=853686168]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Carro"
 
-[node name="Carro" type="Button" parent="PainelOpcoes" unique_id=1045548081]
-layout_mode = 0
-offset_left = 27.0
-offset_top = 77.0
-offset_right = 167.0
-offset_bottom = 117.0
-text = "CARRO"
+[node name="Pedra" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesFrutas" unique_id=369333658]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Pedra"
 
-[node name="Pedra" type="Button" parent="PainelOpcoes" unique_id=1718719285]
-layout_mode = 0
-offset_left = 212.0
-offset_top = 76.0
-offset_right = 352.0
-offset_bottom = 116.0
-text = "PEDRA"
+[node name="Casa" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesFrutas" unique_id=1343336272]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Casa"
 
-[node name="Casa" type="Button" parent="PainelOpcoes" unique_id=1173352995]
-layout_mode = 0
-offset_left = 399.0
-offset_top = 79.0
-offset_right = 539.0
-offset_bottom = 119.0
-text = "CASA"
+[node name="TituloIndices" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes" unique_id=552074032]
+unique_name_in_owner = true
+layout_mode = 2
+text = "ÍNDICES"
+horizontal_alignment = 1
 
-[node name="Zero" type="Button" parent="PainelOpcoes" unique_id=2116836918]
-layout_mode = 0
-offset_left = 27.0
-offset_top = 137.0
-offset_right = 167.0
-offset_bottom = 177.0
+[node name="OpcoesIndices" type="HFlowContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes" unique_id=2132073565]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+
+[node name="Zero" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesIndices" unique_id=616994420]
+custom_minimum_size = Vector2(60, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "0"
 
-[node name="Um" type="Button" parent="PainelOpcoes" unique_id=1010277520]
-layout_mode = 0
-offset_left = 212.0
-offset_top = 137.0
-offset_right = 352.0
-offset_bottom = 177.0
+[node name="Um" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesIndices" unique_id=336459793]
+custom_minimum_size = Vector2(60, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "1"
 
-[node name="Dois" type="Button" parent="PainelOpcoes" unique_id=405295085]
-layout_mode = 0
-offset_left = 402.0
-offset_top = 139.0
-offset_right = 542.0
-offset_bottom = 179.0
+[node name="Dois" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaCodigo/PainelOpcoes/ConteudoOpcoes/OpcoesIndices" unique_id=668671265]
+custom_minimum_size = Vector2(60, 38)
+layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "2"
 
-[node name="PainelFeedback" type="Panel" parent="." unique_id=1640111366]
-layout_mode = 0
-offset_left = 67.0
-offset_top = 497.0
-offset_right = 632.0
-offset_bottom = 580.0
+[node name="ColunaInfo" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo" unique_id=156313114]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
 
-[node name="TextoFeedback" type="Label" parent="PainelFeedback" unique_id=965416058]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 11.0
-offset_right = 553.0
-offset_bottom = 71.0
+[node name="PainelDica" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaInfo" unique_id=343819024]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Estilo_Painel")
 
-[node name="Testar" type="Button" parent="." unique_id=357030919]
-layout_mode = 0
-offset_left = 948.0
-offset_top = 499.0
-offset_right = 1218.0
-offset_bottom = 579.0
-text = "TESTAR"
+[node name="ConteudoDica" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaInfo/PainelDica" unique_id=49278596]
+layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="Executar" type="Button" parent="." unique_id=340160132]
-layout_mode = 0
-offset_left = 657.0
-offset_top = 498.0
-offset_right = 940.0
-offset_bottom = 579.0
-text = "EXECUTAR"
-
-[node name="PainelDica" type="Panel" parent="." unique_id=293635494]
-layout_mode = 0
-offset_left = 660.0
-offset_top = 277.0
-offset_right = 1220.0
-offset_bottom = 488.0
-
-[node name="Dica" type="RichTextLabel" parent="PainelDica" unique_id=791174767]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 45.0
-offset_right = 537.0
-offset_bottom = 196.0
-
-[node name="TituloDica" type="Label" parent="PainelDica" unique_id=1974008395]
-layout_mode = 0
-offset_right = 559.0
-offset_bottom = 23.0
-text = "Dicas"
+[node name="TituloDica" type="Label" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaInfo/PainelDica/ConteudoDica" unique_id=747762507]
+unique_name_in_owner = true
+layout_mode = 2
+text = "DICA"
 horizontal_alignment = 1
+
+[node name="Dica" type="RichTextLabel" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaInfo/PainelDica/ConteudoDica" unique_id=1262137301]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColunaAcoes" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo" unique_id=448632032]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="PainelBotoes" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes" unique_id=1978047629]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("Estilo_Painel")
+
+[node name="ConteudoBotoes" type="VBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes" unique_id=553030616]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LinhaAuxiliar" type="HBoxContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes/ConteudoBotoes" unique_id=1902465044]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Testar" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes/ConteudoBotoes/LinhaAuxiliar" unique_id=1064815670]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Testar"
+
+[node name="Limpar" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes/ConteudoBotoes/LinhaAuxiliar" unique_id=596309156]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Limpar"
+
+[node name="Executar" type="Button" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelBotoes/ConteudoBotoes" unique_id=1781260641]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "Executar"
+
+[node name="PainelFeedback" type="PanelContainer" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes" unique_id=1169124910]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Estilo_Terminal")
+
+[node name="TextoFeedback" type="RichTextLabel" parent="JanelaPuzzle/Margem/Raiz/Corpo/ColunaAcoes/PainelFeedback" unique_id=1627410176]
+unique_name_in_owner = true
+layout_mode = 2

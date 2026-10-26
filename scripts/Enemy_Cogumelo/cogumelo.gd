@@ -7,14 +7,23 @@ class_name Cogumelo
 ## Compatível com Godot 4.6 | Sem NavigationAgent | Sem AnimationPlayer
 ## =============================================================
 ##
-## SONS: seguindo o mesmo molde usado no Esqueleto. O Cogumelo tem 4
-## AudioStreamPlayer2D na cena: Attack, Run, Take_hit e Death.
-## - Attack e Take_hit e Death tocam direto no momento da ação
-##   (mesmo padrão do Esqueleto: sem AnimationPlayer, então quem
-##   dispara o som é o próprio código de estado).
-## - Run usa um Timer criado em código (igual ao "Timer_Passo" do
-##   Esqueleto) que toca o som em intervalo fixo enquanto o Cogumelo
-##   está perseguindo o Player (estado CHASE).
+## SONS: o Cogumelo tem 4 AudioStreamPlayer2D na cena: Attack, Run,
+## Take_hit e Death.
+## - Attack, Take_hit e Death tocam direto no momento da ação.
+## - Run usa um Timer criado em código que toca o som em intervalo
+##   fixo enquanto o Cogumelo persegue o Player (estado CHASE).
+##
+## MUDANÇAS DESTA VERSÃO:
+## - O dano ao Player só é aplicado DURANTE a animação "Attack", dentro
+##   da janela de frames frame_inicio_dano..frame_fim_dano, no máximo
+##   uma vez por ataque e só se o Player estiver na Area_Attack naquele
+##   momento.
+## - Depois do Take_Hit, se o Player ainda estiver na Area_Attack, o
+##   Cogumelo volta direto a atacar (antes ficava em CHASE colado no
+##   Player e nunca atacava de novo).
+## - tomar_dano aceita um segundo parâmetro opcional (posição), igual
+##   aos outros inimigos.
+## - Na morte, o corpo deixa de colidir com qualquer coisa.
 
 
 # -------------------------------------------------------------
@@ -39,6 +48,10 @@ enum Estado { IDLE, CHASE, ATTACK, HIT, DEAD }
 @export var cooldown_ataque: float = 1.5          # Intervalo entre ataques
 @export var alcance_ataque: float = 40.0          # Usado para autoconfigurar a Area_Attack (raio/tamanho)
 @export var velocidade_animacao_ataque: float = 1.5  # Multiplicador de velocidade só da animação Attack (1.0 = normal, 2.0 = 2x mais rápida)
+## O dano só é aplicado enquanto a animação "Attack" estiver nesses
+## frames (contando a partir de 0). -1 em frame_fim_dano = até o último.
+@export var frame_inicio_dano: int = 2
+@export var frame_fim_dano: int = -1
 
 @export_group("Detecção")
 @export var tamanho_deteccao: float = 220.0 # Usado para autoconfigurar a Area_Detecçao (raio/tamanho)
@@ -72,6 +85,7 @@ var esta_no_alcance_attack: bool = false
 
 var direcao: int = 1          # 1 = direita | -1 = esquerda
 var pode_atacar: bool = true
+var dano_ja_aplicado: bool = false  # garante 1 dano por ataque
 
 
 # -------------------------------------------------------------
@@ -91,9 +105,8 @@ var pode_atacar: bool = true
 @onready var som_take_hit: AudioStreamPlayer2D = $Take_hit
 @onready var som_death: AudioStreamPlayer2D = $Death
 
-## Timer criado por código (não precisa existir na cena) para tocar o
-## som de "Run" em intervalo fixo enquanto persegue o Player, no
-## mesmo molde do "timer_passo" do Esqueleto.
+## Timer criado por código para tocar o som de "Run" em intervalo fixo
+## enquanto persegue o Player.
 var timer_passo: Timer
 
 
@@ -111,8 +124,7 @@ func _ready() -> void:
 	attack_timer.wait_time = cooldown_ataque
 	attack_timer.one_shot = true
 
-	# Timer de passo (som "Run"), criado em código para não precisar
-	# adicionar nenhum nó novo na cena.
+	# Timer de passo (som "Run"), criado em código
 	timer_passo = Timer.new()
 	timer_passo.one_shot = false
 	timer_passo.wait_time = passo_intervalo
@@ -125,19 +137,17 @@ func _ready() -> void:
 	area_attack.body_entered.connect(_on_area_attack_body_entered)
 	area_attack.body_exited.connect(_on_area_attack_body_exited)
 	sprite.animation_finished.connect(_on_animation_finished)
+	sprite.frame_changed.connect(_on_sprite_frame_changed)
 	attack_timer.timeout.connect(_on_attack_cooldown_timeout)
 
 	# Ajusta automaticamente o tamanho das áreas de detecção/ataque
-	# conforme as variáveis exportadas (evita depender só do editor).
 	_configurar_forma_area(area_deteccao, tamanho_deteccao)
 	_configurar_forma_area(area_attack, alcance_ataque)
 
-	# Garante que animações de ação não fiquem em loop (evita bugs
-	# de state machine caso alguém esqueça de desmarcar no editor).
+	# Garante que animações de ação não fiquem em loop
 	_configurar_animacoes_nao_looping()
 
-	# Aumenta o volume de todos os sons do Cogumelo de uma vez, sem
-	# precisar clicar em cada AudioStreamPlayer2D no editor.
+	# Aumenta o volume de todos os sons do Cogumelo de uma vez
 	_aplicar_volume_extra()
 
 	if floor_ray:
@@ -223,20 +233,40 @@ func _processar_attack(_delta: float) -> void:
 
 func _executar_ataque() -> void:
 	pode_atacar = false
+	dano_ja_aplicado = false
 	_tocar_animacao("Attack")
-	_aplicar_dano_area_attack()
 	som_attack.play()
 	attack_timer.start()
+	# O dano NÃO é aplicado aqui: acontece em _on_sprite_frame_changed(),
+	# somente durante os frames de dano da animação "Attack".
+	_tentar_aplicar_dano() # cobre o caso de frame_inicio_dano = 0
 
 
-func _aplicar_dano_area_attack() -> void:
-	# Causa dano apenas uma vez por ataque: esta função só é chamada
-	# a partir de _executar_ataque(), que por sua vez só roda quando
-	# pode_atacar é true (e é imediatamente travada logo em seguida).
+## Se a animação estiver dentro da janela de dano e o Player estiver na
+## Area_Attack, aplica o dano uma única vez.
+func _tentar_aplicar_dano() -> void:
+	if dano_ja_aplicado or esta_morto:
+		return
+	if estado_atual != Estado.ATTACK or sprite.animation != "Attack":
+		return
+
+	var ultimo_frame: int = sprite.sprite_frames.get_frame_count("Attack") - 1
+	var inicio: int = mini(frame_inicio_dano, ultimo_frame)
+	var fim: int = ultimo_frame if frame_fim_dano < 0 else mini(frame_fim_dano, ultimo_frame)
+
+	if sprite.frame < inicio or sprite.frame > fim:
+		return
+
 	for corpo in area_attack.get_overlapping_bodies():
 		if corpo.is_in_group("player") and corpo.has_method("tomar_dano"):
 			print("🍄 Cogumelo (", name, ") atacou o player! Dano: ", dano)
 			corpo.tomar_dano(dano)
+			dano_ja_aplicado = true
+			return
+
+
+func _on_sprite_frame_changed() -> void:
+	_tentar_aplicar_dano()
 
 
 # -------------------------------------------------------------
@@ -253,8 +283,7 @@ func _receber_hit(quem_atacou: Node2D) -> void:
 	_tocar_animacao("Take_Hit")
 	som_take_hit.play()
 
-	# Knockback afastando o inimigo do player (ou da direção oposta
-	# ao que ele estava olhando, caso não haja referência válida).
+	# Knockback afastando o inimigo do player
 	var direcao_knockback: int = -direcao
 	if is_instance_valid(quem_atacou):
 		var diff: float = global_position.x - quem_atacou.global_position.x
@@ -271,6 +300,22 @@ func _iniciar_invulnerabilidade() -> void:
 	invulneravel = true
 	await get_tree().create_timer(tempo_invulnerabilidade).timeout
 	invulneravel = false
+
+
+## Decide para qual estado voltar depois do HIT.
+## Se o Player ainda está na Area_Attack, volta direto para ATTACK (o
+## sinal body_entered não dispara de novo, então sem isso o Cogumelo
+## ficava em CHASE colado no Player e nunca atacava).
+func _voltar_do_hit() -> void:
+	if esta_morto:
+		return
+
+	if esta_no_alcance_attack and is_instance_valid(player):
+		_mudar_estado(Estado.ATTACK)
+	elif esta_jogador_detectado and is_instance_valid(player):
+		_mudar_estado(Estado.CHASE)
+	else:
+		_mudar_estado(Estado.IDLE)
 
 
 # -------------------------------------------------------------
@@ -293,6 +338,9 @@ func _morrer() -> void:
 	# Desativa colisões e áreas (set_deferred evita erros de
 	# "modificação durante callback de física").
 	colisao.set_deferred("disabled", true)
+	# Garante que nada mais colida com o cadáver (nem o Player)
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
 	area_deteccao.set_deferred("monitoring", false)
 	area_deteccao.set_deferred("monitorable", false)
 	area_attack.set_deferred("monitoring", false)
@@ -313,8 +361,7 @@ func _mudar_estado(novo_estado: Estado) -> void:
 	if estado_atual == novo_estado or esta_morto:
 		return
 
-	# Para o som de passo sempre que sair do estado CHASE (evita o som
-	# de "Run" continuar tocando depois que o Cogumelo já parou).
+	# Para o som de passo sempre que sair do estado CHASE
 	if estado_atual == Estado.CHASE and novo_estado != Estado.CHASE:
 		timer_passo.stop()
 
@@ -357,8 +404,7 @@ func _virar_para(nova_direcao: int) -> void:
 	direcao = nova_direcao
 	sprite.flip_h = direcao < 0
 
-	# Espelha a posição do raycast de chão e do marker para que
-	# continuem apontando/ficando "na frente" do inimigo.
+	# Espelha a posição do raycast de chão e do marker
 	if floor_ray:
 		var pos_ray: Vector2 = floor_ray.position
 		pos_ray.x = abs(pos_ray.x) * direcao
@@ -372,15 +418,11 @@ func _virar_para(nova_direcao: int) -> void:
 
 func _tocar_animacao(nome_animacao: String) -> void:
 	# A animação de ataque usa um multiplicador de velocidade próprio
-	# (velocidade_animacao_ataque) para não depender só do FPS
-	# configurado no SpriteFrames. As demais tocam na velocidade normal.
+	# (velocidade_animacao_ataque). As demais tocam na velocidade normal.
 	sprite.speed_scale = velocidade_animacao_ataque if nome_animacao == "Attack" else 1.0
 
-	# CORREÇÃO: além de checar se o nome da animação mudou, checa se
-	# ela já está tocando de fato. Sem isso, se o AnimatedSprite2D já
-	# vier com "Idle" selecionada por padrão no editor (mas parada),
-	# o play() nunca era chamado no _ready() e a animação Idle ficava
-	# travada no primeiro frame.
+	# Além de checar se o nome mudou, checa se ela já está tocando de
+	# fato (evita Idle travada no primeiro frame no _ready()).
 	if sprite.animation != nome_animacao or not sprite.is_playing():
 		sprite.play(nome_animacao)
 
@@ -396,8 +438,7 @@ func _configurar_animacoes_nao_looping() -> void:
 
 
 func _configurar_forma_area(area: Area2D, tamanho: float) -> void:
-	# Ajusta o CollisionShape2D filho da área conforme a variável
-	# exportada, suportando os formatos mais comuns.
+	# Ajusta o CollisionShape2D filho da área conforme a variável exportada
 	if area == null or tamanho <= 0.0:
 		return
 
@@ -411,7 +452,7 @@ func _configurar_forma_area(area: Area2D, tamanho: float) -> void:
 
 
 # -------------------------------------------------------------
-# SOM DE PASSO / "RUN" (mesmo molde do Esqueleto)
+# SOM DE PASSO / "RUN"
 # -------------------------------------------------------------
 
 func _on_timer_passo_timeout() -> void:
@@ -420,11 +461,9 @@ func _on_timer_passo_timeout() -> void:
 
 
 # -------------------------------------------------------------
-# VOLUME DOS SONS (mesmo molde do Esqueleto)
+# VOLUME DOS SONS
 # -------------------------------------------------------------
-## Soma "volume_extra_db" ao volume atual de cada AudioStreamPlayer2D,
-## em vez de sobrescrever — então se você já tiver ajustado algum no
-## Inspector, esse ajuste continua valendo, só fica mais alto.
+## Soma "volume_extra_db" ao volume atual de cada AudioStreamPlayer2D.
 
 func _aplicar_volume_extra() -> void:
 	for som in [som_attack, som_run, som_take_hit, som_death]:
@@ -443,7 +482,8 @@ func _on_area_deteccao_body_entered(body: Node2D) -> void:
 	esta_jogador_detectado = true
 	print("Cogumelo detectou o Player")
 
-	if estado_atual != Estado.HIT and estado_atual != Estado.DEAD:
+	# Só começa a perseguir se estiver parado; não interrompe HIT nem ATTACK.
+	if estado_atual == Estado.IDLE:
 		_mudar_estado(Estado.CHASE)
 
 
@@ -470,6 +510,8 @@ func _on_area_attack_body_entered(body: Node2D) -> void:
 	player = body
 	esta_no_alcance_attack = true
 
+	# Durante o HIT apenas registra que o Player está no alcance;
+	# _voltar_do_hit() cuida de ir para ATTACK quando a animação acabar.
 	if estado_atual != Estado.HIT and estado_atual != Estado.DEAD:
 		_mudar_estado(Estado.ATTACK)
 
@@ -496,8 +538,7 @@ func _on_animation_finished() -> void:
 				# O próximo ataque é disparado por _on_attack_cooldown_timeout().
 				_tocar_animacao("Idle")
 		"Take_Hit":
-			if not esta_morto:
-				_mudar_estado(Estado.CHASE if esta_jogador_detectado else Estado.IDLE)
+			_voltar_do_hit()
 		"Death":
 			_fade_out_e_remover()
 
@@ -519,7 +560,7 @@ func _on_attack_cooldown_timeout() -> void:
 # API PÚBLICA (usada pelo Player)
 # -------------------------------------------------------------
 
-func tomar_dano(quantidade: int) -> void:
+func tomar_dano(quantidade: int, _posicao: Vector2 = Vector2.ZERO) -> void:
 	if esta_morto or invulneravel:
 		return
 

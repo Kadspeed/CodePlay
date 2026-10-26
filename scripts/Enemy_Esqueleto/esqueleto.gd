@@ -5,21 +5,26 @@ extends CharacterBody2D
 ## Godot 4.6 / GDScript
 ## ============================================================
 ##
-## MUDANÇA NESTA VERSÃO: o AnimationPlayer foi REMOVIDO por completo.
-## O som de passo usa um Timer simples (Timer_Passo) tocando em
-## intervalo fixo enquanto ele anda, em vez de precisar de uma
-## keyframe por passo.
+## Sem AnimationPlayer: o som de passo usa um Timer simples tocando
+## em intervalo fixo enquanto ele anda.
 ##
-## MUDANÇA NO ATAQUE: agora é a própria Area_Ataque que decide quando
-## atacar, em vez de calcular distância dentro do CHASE. A Area_Ataque
-## fica sempre ligada (monitoring = true); assim que o Player entra
-## nela, o Esqueleto já reage na hora: toca a animação, o som, e
-## aplica o dano — tudo junto, sem espera. Mesmo padrão do Cogumelo.
+## ATAQUE: a Area_Ataque fica sempre ligada; assim que o Player entra
+## nela, o Esqueleto começa a animação e o som de ataque.
 ##
-## ESTADO EXTRA "CHASE":
-## Continua existindo pelo mesmo motivo de antes: patrulha (WALK) e
-## perseguição (CHASE) têm lógicas de direção muito diferentes, e
-## juntar as duas no mesmo estado exigiria ifs extras dentro do WALK.
+## MUDANÇAS DESTA VERSÃO:
+## - O dano ao Player só é aplicado DURANTE a animação "Attack", dentro
+##   da janela de frames frame_inicio_dano..frame_fim_dano, no máximo
+##   uma vez por ataque e só se o Player estiver na Area_Ataque naquele
+##   momento. Se ele levar dano/defender no meio do golpe, o dano é
+##   cancelado.
+## - Depois de Attack/Take_hit/Shield, se o Player ainda estiver na
+##   Area_Ataque (e a recarga acabou), ele volta direto a atacar.
+## - Corrigido: se o Player saía da detecção, o Esqueleto podia ficar
+##   parado em IDLE para sempre (memória do Player ativa).
+## - Na morte, o corpo deixa de colidir com qualquer coisa.
+##
+## ESTADO EXTRA "CHASE": patrulha (WALK) e perseguição (CHASE) têm
+## lógicas de direção muito diferentes, por isso ficam separados.
 
 ## ------------------------------------------------------------
 ## ENUM DE ESTADOS
@@ -53,6 +58,10 @@ enum Estado {
 @export_group("Detecção e Ataque")
 @export var attack_cooldown_tempo: float = 1.5
 @export var tempo_memoria_player: float = 3.0 # quanto tempo ele "lembra" do Player
+## O dano só é aplicado enquanto a animação "Attack" estiver nesses
+## frames (contando a partir de 0). -1 em frame_fim_dano = até o último.
+@export var frame_inicio_dano: int = 2
+@export var frame_fim_dano: int = -1
 
 @export_group("Shield (Defesa)")
 @export_range(0.0, 1.0, 0.01) var chance_de_bloqueio: float = 0.6
@@ -84,9 +93,8 @@ enum Estado {
 ## ------------------------------------------------------------
 ## SINAIS
 ## ------------------------------------------------------------
-## Emitido quando o Esqueleto morre. Futuramente, conecte este sinal
-## a uma função do GameManager (ex: GameManager.adicionar_pontos)
-## ou use a função _comunicar_morte_ao_game_manager() abaixo.
+## Emitido quando o Esqueleto morre. Exemplo de conexão:
+##   esqueleto.inimigo_morto.connect(GameManager.adicionar_pontos)
 signal inimigo_morto(pontos: int)
 
 
@@ -113,8 +121,7 @@ signal inimigo_morto(pontos: int)
 @onready var som_shield: AudioStreamPlayer2D = $Shield
 
 ## Timer criado por código (não precisa existir na cena) para tocar o
-## som de passo em intervalo fixo enquanto anda/persegue, substituindo
-## o antigo "Walk_Passos" do AnimationPlayer.
+## som de passo em intervalo fixo enquanto anda/persegue.
 var timer_passo: Timer
 
 
@@ -132,14 +139,13 @@ var player_alvo: Node2D = null
 var jogador_detectado: bool = false
 
 var pode_atacar: bool = true
+var dano_ja_aplicado: bool = false  # garante 1 dano por ataque
 
 var pode_bloquear: bool = true
 var tempo_para_proximo_bloqueio: float = 0.0
 
 # Invulnerabilidade temporária ao ativar o Shield. Decrementa a cada
-# frame em _atualizar_cooldown_bloqueio(), igual ao padrão já usado
-# para "tempo_para_proximo_bloqueio" — não depende de ids nem de
-# await, então não corre risco de travar em "true".
+# frame em _atualizar_cooldown_bloqueio(), sem await.
 var esta_invulneravel: bool = false
 var tempo_invulneravel_restante: float = 0.0
 
@@ -167,34 +173,28 @@ func _ready() -> void:
 	vida_atual = vida_maxima
 
 	# Guarda o deslocamento horizontal original do RayCast_Chao e da
-	# Area_Ataque para que possamos espelhá-los quando o Esqueleto virar.
+	# Area_Ataque para espelhá-los quando o Esqueleto virar.
 	raycast_offset_x = absf(raycast_chao.position.x) if raycast_chao.position.x != 0.0 else 12.0
 	area_ataque_offset_x = area_ataque.position.x
 
-	# A Area_Ataque agora fica SEMPRE ligada (não é mais aberta/fechada
-	# durante o golpe). Assim que o Player entra nela, o Esqueleto
-	# ataca na hora — ver _on_area_ataque_body_entered().
+	# A Area_Ataque fica SEMPRE ligada. Assim que o Player entra nela,
+	# o Esqueleto ataca — ver _on_area_ataque_body_entered().
 	area_ataque.monitoring = true
 
-	# Impede que Attack / Take_hit / Shield / Death fiquem "presas"
-	# tocando em loop infinito (isso é o que fazia parecer que o
-	# Esqueleto travava nessas animações).
+	# Impede que Attack / Take_hit / Shield / Death fiquem em loop.
 	_configurar_animacoes_nao_looping()
 
-	# Aumenta o volume de todos os sons do Esqueleto de uma vez, sem
-	# precisar clicar em cada AudioStreamPlayer2D no editor.
+	# Aumenta o volume de todos os sons do Esqueleto de uma vez.
 	_aplicar_volume_extra()
 
-	# Timer de passo, criado em código para não precisar adicionar
-	# nenhum nó novo na cena.
+	# Timer de passo, criado em código.
 	timer_passo = Timer.new()
 	timer_passo.one_shot = false
 	timer_passo.wait_time = passo_intervalo
 	add_child(timer_passo)
 	timer_passo.timeout.connect(_on_timer_passo_timeout)
 
-	# Conexão dos sinais (feita 100% por código, não é necessário
-	# conectar nada manualmente na aba "Node" do editor).
+	# Conexão dos sinais (100% por código).
 	area_deteccao.body_entered.connect(_on_area_deteccao_body_entered)
 	area_deteccao.body_exited.connect(_on_area_deteccao_body_exited)
 	area_ataque.body_entered.connect(_on_area_ataque_body_entered)
@@ -210,6 +210,7 @@ func _ready() -> void:
 	timer_som_idle.timeout.connect(_on_timer_som_idle_timeout)
 
 	sprite.animation_finished.connect(_on_animated_sprite_animation_finished)
+	sprite.frame_changed.connect(_on_sprite_frame_changed)
 
 	_mudar_estado(Estado.IDLE)
 
@@ -267,13 +268,10 @@ func _mudar_estado(novo_estado: Estado) -> void:
 	if esta_morto and novo_estado != Estado.DEATH:
 		return
 
-	# Invalida qualquer "await" pendente de um ataque anterior (ex: se
-	# o Esqueleto levar dano e mudar pra TAKE_HIT no meio do golpe).
+	# Invalida qualquer "await" pendente (ex: janela do Shield).
 	_id_acao_atual += 1
 
-	# Para os timers relacionados ao estado anterior antes de entrar
-	# no novo, evitando timers "fantasmas" disparando depois que o
-	# estado já mudou.
+	# Para os timers relacionados ao estado anterior.
 	timer_parado.stop()
 	timer_patrulha.stop()
 	timer_som_idle.stop()
@@ -337,8 +335,8 @@ func _entrar_walk() -> void:
 	timer_passo.start()
 
 func _processar_walk(_delta: float) -> void:
-	# RayCast_Chao evita que o Esqueleto ande para fora da plataforma
-	# durante a patrulha: se não houver chão à frente, ele vira e para.
+	# RayCast_Chao evita que o Esqueleto ande para fora da plataforma:
+	# se não houver chão à frente, ele vira e para.
 	if raycast_chao.enabled and not raycast_chao.is_colliding():
 		direcao *= -1
 		_atualizar_orientacao()
@@ -356,7 +354,7 @@ func _on_timer_patrulha_timeout() -> void:
 
 
 ## ==============================================================
-## ESTADO: CHASE (perseguição - ver explicação no topo do arquivo)
+## ESTADO: CHASE (perseguição)
 ## ==============================================================
 
 func _entrar_chase() -> void:
@@ -366,8 +364,7 @@ func _entrar_chase() -> void:
 func _processar_chase(delta: float) -> void:
 	if jogador_detectado and player_alvo != null:
 		_perseguir_posicao(player_alvo.global_position)
-		# O ataque não é mais decidido por distância aqui — é a própria
-		# Area_Ataque que dispara o ataque quando o Player entra nela
+		# O ataque é disparado pela Area_Ataque
 		# (ver _on_area_ataque_body_entered).
 
 	elif perseguindo_memoria:
@@ -396,8 +393,7 @@ func _perseguir_posicao(alvo_pos: Vector2) -> void:
 ## ==============================================================
 ## DETECÇÃO DO PLAYER (Area_Detecao)
 ## ==============================================================
-## IMPORTANTE: o Player precisa estar no grupo "player"
-## (Node > Groups > adicionar "player") para ser reconhecido aqui.
+## IMPORTANTE: o Player precisa estar no grupo "player".
 
 func _on_area_deteccao_body_entered(body: Node2D) -> void:
 	if esta_morto:
@@ -415,16 +411,12 @@ func _on_area_deteccao_body_exited(body: Node2D) -> void:
 		ultima_posicao_conhecida = player_alvo.global_position
 		tempo_memoria_restante = tempo_memoria_player
 		perseguindo_memoria = true
-		# O Esqueleto continua em CHASE, mas agora andando até a
-		# última posição conhecida (ver _processar_chase).
+		# Continua em CHASE, agora indo até a última posição conhecida.
 
 
 ## ==============================================================
 ## DETECÇÃO DE ATAQUE (Area_Ataque) — sem cálculo de distância
 ## ==============================================================
-## Assim que o Player entra fisicamente na Area_Ataque, o Esqueleto
-## ataca imediatamente: toca a animação, o som, E aplica o dano no
-## mesmo instante. Não há mais espera nem sincronização por tempo.
 
 func _on_area_ataque_body_entered(body: Node2D) -> void:
 	if esta_morto or not pode_atacar:
@@ -434,17 +426,15 @@ func _on_area_ataque_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_mudar_estado(Estado.ATTACK)
 
-## Enquanto o Esqueleto está em cooldown, o Player pode continuar
-## dentro da Area_Ataque sem que um novo "body_entered" seja disparado
-## (o sinal só dispara na entrada, não continuamente). Por isso, ao
-## terminar o cooldown, checamos se o Player ainda está lá dentro e
-## atacamos de novo automaticamente.
+## Durante o cooldown o Player pode continuar dentro da Area_Ataque sem
+## novo "body_entered". Ao terminar o cooldown, checamos se ele ainda
+## está lá e atacamos de novo.
 func _on_attack_cooldown_timeout() -> void:
 	pode_atacar = true
 	if esta_morto:
 		return
 	if estado_atual == Estado.ATTACK or estado_atual == Estado.TAKE_HIT or estado_atual == Estado.SHIELD:
-		return
+		return # ao terminar a animação/estado, a checagem é refeita
 	if _jogador_esta_na_area_ataque():
 		_mudar_estado(Estado.ATTACK)
 
@@ -462,30 +452,52 @@ func _jogador_esta_na_area_ataque() -> bool:
 func _entrar_attack() -> void:
 	velocity.x = 0.0
 	pode_atacar = false
+	dano_ja_aplicado = false
 
 	sprite.play("Attack")
 
 	attack_cooldown.wait_time = attack_cooldown_tempo
 	attack_cooldown.start()
 
-	_aplicar_dano_area_ataque()
 	_tocar_som_com_atraso(som_attack, atraso_som_ataque)
 
-func _processar_attack(_delta: float) -> void:
-	pass # o dano já foi aplicado ao entrar no estado; só espera a animação terminar
+	# O dano NÃO é aplicado aqui: acontece em _on_sprite_frame_changed(),
+	# somente durante os frames de dano da animação "Attack".
+	_tentar_aplicar_dano() # cobre o caso de frame_inicio_dano = 0
 
-func _aplicar_dano_area_ataque() -> void:
+func _processar_attack(_delta: float) -> void:
+	pass # o dano é aplicado pelos frames da animação; só espera ela terminar
+
+## Se a animação estiver dentro da janela de dano e o Player estiver na
+## Area_Ataque, aplica o dano uma única vez.
+func _tentar_aplicar_dano() -> void:
+	if dano_ja_aplicado or esta_morto:
+		return
+	if estado_atual != Estado.ATTACK or sprite.animation != "Attack":
+		return
+
+	var ultimo_frame: int = sprite.sprite_frames.get_frame_count("Attack") - 1
+	var inicio: int = mini(frame_inicio_dano, ultimo_frame)
+	var fim: int = ultimo_frame if frame_fim_dano < 0 else mini(frame_fim_dano, ultimo_frame)
+
+	if sprite.frame < inicio or sprite.frame > fim:
+		return
+
 	for corpo in area_ataque.get_overlapping_bodies():
 		if corpo.is_in_group("player") and corpo.has_method("tomar_dano"):
 			corpo.tomar_dano(dano_ataque)
+			dano_ja_aplicado = true
+			return
+
+func _on_sprite_frame_changed() -> void:
+	_tentar_aplicar_dano()
 
 
 ## ==============================================================
 ## RECEBER DANO / SHIELD / TAKE_HIT (chamado pelo player.gd)
 ## ==============================================================
-## O player.gd já chama automaticamente "enemy.tomar_dano(dano_ataque)"
-## quando o AttackArea dele encosta em um corpo do grupo "enemies".
-## Por isso a função aqui precisa se chamar exatamente "tomar_dano".
+## O player.gd chama "enemy.tomar_dano(dano_ataque)" quando o
+## AttackArea dele encosta em um corpo do grupo "enemies".
 
 func tomar_dano(quantidade: int, _posicao_jogador: Vector2 = Vector2.ZERO) -> void:
 	if esta_morto or esta_invulneravel:
@@ -530,22 +542,16 @@ func _entrar_shield() -> void:
 	pode_bloquear = false
 	tempo_para_proximo_bloqueio = shield_intervalo
 
-	# Invulnerabilidade começa junto com o Shield e tem duração própria
-	# (shield_invulneravel_duracao), independente de quando o estado
-	# SHIELD termina.
+	# Invulnerabilidade começa junto com o Shield e tem duração própria.
 	esta_invulneravel = true
 	tempo_invulneravel_restante = shield_invulneravel_duracao
 
-	# Janela de defesa com duração própria (shield_duracao), independente
-	# da duração exata da animação.
+	# Janela de defesa com duração própria (shield_duracao).
 	var id_acao := _id_acao_atual
 	await get_tree().create_timer(shield_duracao).timeout
 
 	if id_acao == _id_acao_atual and estado_atual == Estado.SHIELD and not esta_morto:
-		if jogador_detectado:
-			_mudar_estado(Estado.CHASE)
-		else:
-			_mudar_estado(Estado.IDLE)
+		_voltar_para_chase_ou_idle()
 
 func _processar_shield(_delta: float) -> void:
 	pass
@@ -562,9 +568,12 @@ func _entrar_death() -> void:
 	perseguindo_memoria = false
 	velocity = Vector2.ZERO
 
-	area_deteccao.monitoring = false
-	area_ataque.monitoring = false
+	area_deteccao.set_deferred("monitoring", false)
+	area_ataque.set_deferred("monitoring", false)
 	colisao.set_deferred("disabled", true)
+	# Garante que nada mais colida com o cadáver (nem o Player)
+	set_deferred("collision_layer", 0)
+	set_deferred("collision_mask", 0)
 
 	sprite.play("Death") # não-loop, garantido por _configurar_animacoes_nao_looping
 	som_death.play()
@@ -572,28 +581,22 @@ func _entrar_death() -> void:
 	_emitir_morte()
 	_preparar_drop()
 
-## Chamado pelo sinal animation_finished quando "Death" termina de
-## tocar (uma vez só, já que não é loop). A partir daqui o corpo some
-## aos poucos em vez de desaparecer de repente.
+## Chamado quando "Death" termina de tocar: o corpo some aos poucos.
 func _iniciar_fade_e_remover() -> void:
 	var tween := create_tween()
 	tween.tween_property(sprite, "modulate:a", 0.0, death_fade_duracao)
 	tween.tween_callback(queue_free)
 
-## Sinal + ponto de integração com o GameManager (pontuação).
-## Basta conectar este sinal a uma função do GameManager, por exemplo:
+## Ponto de integração com o GameManager (pontuação):
 ##   esqueleto.inimigo_morto.connect(GameManager.adicionar_pontos)
-## Não é necessário mudar nada aqui quando o GameManager existir.
 func _emitir_morte() -> void:
 	inimigo_morto.emit(pontos_ao_morrer)
 
-## Função preparada para o futuro sistema de drops de itens.
-## Quando o sistema existir, gere os itens aqui.
+## Preparada para o futuro sistema de drops de itens.
 func _preparar_drop() -> void:
 	pass
 
-## Função preparada para um futuro efeito visual de dano
-## (ex: piscar de vermelho por alguns frames).
+## Preparada para um futuro efeito visual de dano (piscar vermelho).
 func _efeito_dano() -> void:
 	pass
 
@@ -606,19 +609,23 @@ func _on_animated_sprite_animation_finished() -> void:
 	match sprite.animation:
 		"Attack":
 			if estado_atual == Estado.ATTACK:
-				if jogador_detectado:
-					_mudar_estado(Estado.CHASE)
-				else:
-					_mudar_estado(Estado.IDLE)
+				_voltar_para_chase_ou_idle()
 		"Take_hit":
 			if estado_atual == Estado.TAKE_HIT:
-				if jogador_detectado:
-					_mudar_estado(Estado.CHASE)
-				else:
-					_mudar_estado(Estado.IDLE)
+				_voltar_para_chase_ou_idle()
 		"Death":
 			if estado_atual == Estado.DEATH:
 				_iniciar_fade_e_remover()
+
+## Se o Player ainda está na Area_Ataque e a recarga acabou, ataca de
+## novo (o sinal body_entered não dispara outra vez sozinho).
+func _voltar_para_chase_ou_idle() -> void:
+	if pode_atacar and _jogador_esta_na_area_ataque():
+		_mudar_estado(Estado.ATTACK)
+	elif jogador_detectado or perseguindo_memoria:
+		_mudar_estado(Estado.CHASE)
+	else:
+		_mudar_estado(Estado.IDLE)
 
 
 ## ==============================================================
@@ -632,7 +639,7 @@ func _atualizar_orientacao() -> void:
 
 
 ## ==============================================================
-## SOM DE PASSO (substitui o antigo "Walk_Passos" do AnimationPlayer)
+## SOM DE PASSO
 ## ==============================================================
 
 func _on_timer_passo_timeout() -> void:
@@ -641,10 +648,8 @@ func _on_timer_passo_timeout() -> void:
 
 
 ## ==============================================================
-## ANIMAÇÕES SEM LOOP (evita ficar "preso" em Attack/Take_hit/Shield/Death)
+## ANIMAÇÕES SEM LOOP (Attack/Take_hit/Shield/Death)
 ## ==============================================================
-## Força por código que essas 4 animações não repitam sozinhas, sem
-## depender de você lembrar de desmarcar "Loop" pra cada uma no editor.
 ## Idle e Walk continuam em loop normalmente.
 
 func _configurar_animacoes_nao_looping() -> void:
@@ -659,19 +664,15 @@ func _configurar_animacoes_nao_looping() -> void:
 ## ==============================================================
 ## VOLUME DOS SONS
 ## ==============================================================
-## Soma "volume_extra_db" ao volume atual de cada AudioStreamPlayer2D,
-## em vez de sobrescrever — então se você já tiver ajustado algum no
-## Inspector, esse ajuste continua valendo, só fica mais alto.
+## Soma "volume_extra_db" ao volume atual de cada AudioStreamPlayer2D.
 
 func _aplicar_volume_extra() -> void:
 	for som in [som_idle, som_walk, som_attack, som_take_hit, som_death, som_shield]:
 		som.volume_db += volume_extra_db
 
 ## Toca um som depois de "atraso" segundos, sem travar o resto do
-## script (usa await, então a animação/dano/movimento continuam
-## acontecendo normalmente enquanto isso). Não cancela o som mesmo
-## que o estado já tenha mudado nesse meio-tempo — só não toca se o
-## Esqueleto já estiver morto (pra evitar tocar som depois do fade).
+## script. Não toca se o Esqueleto já estiver morto quando o atraso
+## terminar.
 func _tocar_som_com_atraso(som: AudioStreamPlayer2D, atraso: float) -> void:
 	await get_tree().create_timer(atraso).timeout
 	if esta_morto:
@@ -680,9 +681,7 @@ func _tocar_som_com_atraso(som: AudioStreamPlayer2D, atraso: float) -> void:
 
 
 ## ==============================================================
-## API PÚBLICA (mesmo padrão usado no Cogumelo, para manter os
-## inimigos consistentes entre si e prontos para sistemas genéricos,
-## como HUD de vida de boss ou IA que itere sobre o grupo "enemies")
+## API PÚBLICA (mesmo padrão usado nos outros inimigos)
 ## ==============================================================
 
 func get_dano() -> int:
