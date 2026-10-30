@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cq3jm8pyh52ay"
+path="res://.godot/imported/Narração_mp3.mp3-73691405f95151ca5151ebf9c3bbf9fc.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Introdução/Narração_mp3.mp3"
+dest_files=["res://.godot/imported/Narração_mp3.mp3-73691405f95151ca5151ebf9c3bbf9fc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

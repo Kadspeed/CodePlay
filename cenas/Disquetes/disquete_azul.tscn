@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b3xxgj84kbvnx"]
 
 [ext_resource type="Script" uid="uid://7uy02vqjvuje" path="res://scripts/Disquetes/disquete_azul.gd" id="1_1u3tj"]
-[ext_resource type="Texture2D" uid="uid://utf3ncyrajix" path="res://Creativos/disquetes/azul.png" id="1_sqsej"]
+[ext_resource type="Texture2D" uid="uid://utf3ncyrajix" path="res://Creativos/disquetes/disc/azul.png" id="1_sqsej"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1u3tj"]
 atlas = ExtResource("1_sqsej")
@@ -20,7 +20,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_6x2bq")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Azul",
 "speed": 2.0
 }]
@@ -41,5 +41,7 @@ animation = &"Azul"
 shape = SubResource("CircleShape2D_vuqe7")
 
 [node name="Resposta" type="Label" parent="." unique_id=1454459731]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -20.0
+offset_top = -28.0
+offset_right = 20.0
+offset_bottom = -5.0

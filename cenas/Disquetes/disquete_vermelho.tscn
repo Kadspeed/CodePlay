@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b7itp0om8gvoj"]
 
 [ext_resource type="Script" uid="uid://ow64bbkchqiw" path="res://scripts/Disquetes/disquete_vermelho.gd" id="1_44c3j"]
-[ext_resource type="Texture2D" uid="uid://df36o0kgl0bs2" path="res://Creativos/disquetes/vermelho.png" id="2_d2oor"]
+[ext_resource type="Texture2D" uid="uid://df36o0kgl0bs2" path="res://Creativos/disquetes/disc/vermelho.png" id="2_d2oor"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_uv0gk"]
 atlas = ExtResource("2_d2oor")
@@ -20,7 +20,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_u10ni")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Vermelho",
 "speed": 2.0
 }]
@@ -43,7 +43,7 @@ scale = Vector2(0.1, 0.1)
 shape = SubResource("CircleShape2D_dolt6")
 
 [node name="Resposta" type="Label" parent="." unique_id=250066893]
-offset_left = -18.0
-offset_top = -34.0
-offset_right = 22.0
-offset_bottom = -11.0
+offset_left = -20.0
+offset_top = -29.0
+offset_right = 20.0
+offset_bottom = -6.0

@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://d0aufxrqypkfa"]
+
+[ext_resource type="Script" uid="uid://bkqbvcdxxipvr" path="res://scripts/introducao.gd" id="1_w5xwt"]
+[ext_resource type="AudioStream" uid="uid://bpo0sk8tsjjy5" path="res://assets/sprites e terreno/Sons/Musicas_Fases/Sons_Fortaleza_Arcana/Whispers of Ancient Spirits.mp3" id="2_iel0a"]
+[ext_resource type="AudioStream" uid="uid://cq3jm8pyh52ay" path="res://assets/sprites e terreno/Sons/Introdução/Narração_mp3.mp3" id="3_iel0a"]
+
+[node name="Introducao" type="Control" unique_id=2033735280]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w5xwt")
+
+[node name="Fundo" type="ColorRect" parent="." unique_id=791849937]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.04, 0.05, 0.1, 1)
+
+[node name="ImagemFundo" type="TextureRect" parent="." unique_id=826238083]
+modulate = Color(1, 1, 1, 0.55)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BarraSuperior" type="ColorRect" parent="." unique_id=2035436586]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 80.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BarraInferior" type="ColorRect" parent="." unique_id=353249562]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AreaTexto" type="MarginContainer" parent="." unique_id=974853488]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 180
+theme_override_constants/margin_top = 120
+theme_override_constants/margin_right = 180
+theme_override_constants/margin_bottom = 120
+
+[node name="Texto" type="Label" parent="AreaTexto" unique_id=997886444]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BotaoPular" type="Button" parent="." unique_id=1253598838]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -64.0
+offset_right = -30.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "Pular introdução"
+flat = true
+
+[node name="Cortina" type="ColorRect" parent="." unique_id=728468177]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Musica" type="AudioStreamPlayer" parent="." unique_id=633120194]
+stream = ExtResource("2_iel0a")
+autoplay = true
+
+[node name="Narracao" type="AudioStreamPlayer" parent="." unique_id=475508395]
+stream = ExtResource("3_iel0a")
+autoplay = true

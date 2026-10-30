@@ -1,13 +1,17 @@
 extends Control
 
 ## ============================================================
-## Puzzle_Objetos.gd
+## Puzzle_Ruinas.gd
 ## Fase "Objetos" — ensina a sintaxe de objetos em JavaScript.
 ## Desafio único: montar a criação do objeto "jogador".
 ## Mantém a mesma mecânica de clique dos demais puzzles do CodePlay:
 ## clicar numa opção preenche a próxima lacuna vazia; clicar numa
 ## lacuna preenchida devolve a opção ao botão de origem.
 ## O botão Limpar restaura o desafio ao estado inicial, sem concluir.
+##
+## ATUALIZAÇÃO: o campo de digitação (EntradaCodigo) foi removido.
+## O código "let jogador = {" agora é texto fixo na cena, e a validação
+## considera somente as 4 lacunas.
 ##
 ## ATUALIZAÇÃO VISUAL: estilização totalmente refeita (seção 8),
 ## usando como referência a linguagem visual do Puzzle_IfElse (Caverna
@@ -26,14 +30,15 @@ signal desafio_concluido
 
 const MSG_TODAS_LACUNAS_PREENCHIDAS := "Todas as lacunas já estão preenchidas!"
 const MSG_LACUNAS_INCOMPLETAS := "Preencha todas as lacunas antes de executar."
-const MSG_ENTRADA_INCORRETA := "O código digitado não está correto. Revise \"let jogador\" e tente novamente."
 const MSG_RESPOSTA_INCORRETA := "Algumas respostas estão incorretas. Revise as lacunas e tente novamente."
 const MSG_PUZZLE_CONCLUIDO := "Parabéns! Você montou o objeto \"jogador\" corretamente."
 
-const TEXTO_ENTRADA_ESPERADO := "let jogador"
-
-# Ordem das lacunas: Lacuna1=nome, Lacuna2="Pedro", Lacuna3=17, Lacuna4=true
-# "idade" e "ativo" são propriedades fixas (texto fixo), não são lacunas.
+# Ordem das lacunas (conforme a cena):
+#   Lacuna1 = nome da propriedade  -> "nome"
+#   Lacuna2 = valor de "nome"      -> "Pedro"
+#   Lacuna3 = valor de "nivel"     -> 17
+#   Lacuna4 = valor de "Ativo"     -> true
+# "nivel" e "Ativo" são textos fixos na cena, não são lacunas.
 const RESPOSTAS_CORRETAS: Array[String] = [
 	"nome",
 	"\"Pedro\"",
@@ -76,7 +81,6 @@ const ESPESSURA_BORDA_PAINEL: int = 2
 # 2. Referências de nós (@onready)
 # ------------------------------------------------------------
 
-@onready var entrada_codigo: LineEdit = $PainelCodigo/EntradaCodigo
 @onready var lacuna_1: Button = $PainelCodigo/Lacuna1
 @onready var lacuna_2: Button = $PainelCodigo/Lacuna2
 @onready var lacuna_3: Button = $PainelCodigo/Lacuna3
@@ -155,10 +159,6 @@ func _configurar_desafio() -> void:
 	texto_objetivo.text = "Monte a criação do objeto \"jogador\" preenchendo as lacunas com os valores corretos."
 	texto_dica.text = "Uma propriedade vem antes dos dois pontos. Texto usa aspas duplas, números não usam aspas e valores booleanos usam true ou false."
 
-	entrada_codigo.text = ""
-	entrada_codigo.editable = true
-	entrada_codigo.visible = true
-
 	for lacuna in _lacunas:
 		lacuna.text = ""
 		lacuna.visible = true
@@ -234,10 +234,6 @@ func _on_executar_pressionado() -> void:
 	if _concluido:
 		return
 
-	if not _validar_entrada_codigo(entrada_codigo.text):
-		feedback.text = MSG_ENTRADA_INCORRETA
-		return
-
 	if not _todas_lacunas_preenchidas():
 		feedback.text = MSG_LACUNAS_INCOMPLETAS
 		return
@@ -249,22 +245,13 @@ func _on_executar_pressionado() -> void:
 	_concluir_desafio()
 
 
-## Restaura o desafio ao estado inicial (campo de entrada, lacunas e opções),
-## sem avançar nem concluir o puzzle — mesmo padrão do botão Limpar usado
-## em outros puzzles do projeto (ex.: Puzzle_Loops).
+## Restaura o desafio ao estado inicial (lacunas e opções), sem avançar
+## nem concluir o puzzle — mesmo padrão do botão Limpar usado em outros
+## puzzles do projeto (ex.: Puzzle_Loops).
 func _on_limpar_pressionado() -> void:
 	if _concluido:
 		return
 	_configurar_desafio()
-
-
-func _validar_entrada_codigo(texto: String) -> bool:
-	return _normalizar_texto(texto) == TEXTO_ENTRADA_ESPERADO
-
-
-func _normalizar_texto(texto: String) -> String:
-	var partes := texto.strip_edges().split(" ", false)
-	return " ".join(partes)
 
 
 func _validar_lacunas() -> bool:
@@ -279,7 +266,6 @@ func _concluir_desafio() -> void:
 	_concluido = true
 	feedback.text = MSG_PUZZLE_CONCLUIDO
 
-	entrada_codigo.editable = false
 	for lacuna in _lacunas:
 		lacuna.disabled = true
 	for opcao in _opcoes:
@@ -380,7 +366,6 @@ func _definir_estilos_botao(
 
 func _aplicar_estilo_visual() -> void:
 	_aplicar_borda_paineis()
-	_aplicar_estilo_entrada_codigo()
 	_aplicar_estilo_botoes_opcoes()
 	_aplicar_estilo_lacunas()
 	_aplicar_estilo_botoes_acao()
@@ -396,22 +381,6 @@ func _aplicar_borda_paineis() -> void:
 		if painel == null:
 			continue
 		painel.add_theme_stylebox_override("panel", _caixa(COR_PAINEL, COR_BRONZE, ESPESSURA_BORDA_PAINEL, 6))
-
-
-## EntradaCodigo continua sendo o único campo digitado pelo jogador.
-## Recebe o mesmo tratamento visual de um botão normal (fundo escuro,
-## borda bronze), com destaque de foco (fundo levemente marrom-escuro,
-## borda brilhante) enquanto o jogador digita.
-func _aplicar_estilo_entrada_codigo() -> void:
-	if entrada_codigo == null:
-		return
-	var normal := _caixa(COR_BOTAO, COR_BRONZE, 2, 0, -1, -1, 10, 6)
-	var foco := _caixa(COR_MARROM_ESCURO, COR_BRONZE_BRILHO, 2, 6, -1, -1, 10, 6)
-	entrada_codigo.add_theme_stylebox_override("normal", normal)
-	entrada_codigo.add_theme_stylebox_override("focus", foco)
-	entrada_codigo.add_theme_color_override("font_color", COR_TEXTO)
-	entrada_codigo.add_theme_color_override("font_placeholder_color", COR_MARROM_APAGADO)
-	entrada_codigo.add_theme_color_override("caret_color", COR_BRONZE_BRILHO)
 
 
 ## Botões de opção do PainelOpcoes (idade/true/nome/17/"Pedro"/ativo):

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dvfypgcet0o6v"
+path="res://.godot/imported/Halloween Background Music - Royalty Free Instrumental Music For Videos - AndrewG I Background Music for Videos.mp3-83ce8d17a6bd4a9d43ca5f021d44b490.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Musicas_Fases/Jardins_Mecanicos/Halloween Background Music - Royalty Free Instrumental Music For Videos - AndrewG I Background Music for Videos.mp3"
+dest_files=["res://.godot/imported/Halloween Background Music - Royalty Free Instrumental Music For Videos - AndrewG I Background Music for Videos.mp3-83ce8d17a6bd4a9d43ca5f021d44b490.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

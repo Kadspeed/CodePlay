@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://r7k4m6mlxcip" path="res://cenas/vida.tscn" id="8_bjafk"]
 [ext_resource type="PackedScene" uid="uid://cevgbskncxn3l" path="res://cenas/Disquetes/disquete_branco.tscn" id="9_p2ejc"]
 [ext_resource type="PackedScene" uid="uid://bs8cxbapw1jra" path="res://cenas/Enemy/necromante.tscn" id="11_wcc0x"]
+[ext_resource type="AudioStream" uid="uid://gjvgeaxxmwnf" path="res://assets/sprites e terreno/Sons/Musicas_Fases/Nucleo_do_Sistema/Diablo III Reaper of Souls - Malthael Theme - R1se.mp3" id="14_p2ejc"]
+[ext_resource type="Script" uid="uid://b77eje7mk2vhh" path="res://scripts/Camera/camera_limits.gd" id="15_offfg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqrrw"]
 texture = ExtResource("1_wm5jl")
@@ -475,7 +477,7 @@ texture = ExtResource("1_nqh2x")
 [node name="Ysort" type="Node2D" parent="." unique_id=1789846396]
 
 [node name="PC" parent="Ysort" unique_id=797175659 instance=ExtResource("2_2vhbw")]
-position = Vector2(194, 225)
+position = Vector2(256, 227)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=309686537]
 z_index = -10
@@ -494,3 +496,13 @@ position = Vector2(58, 415)
 position = Vector2(1177, 328)
 
 [node name="Disquete_Branco" type="Node2D" parent="." unique_id=1985336630]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1167323801]
+stream = ExtResource("14_p2ejc")
+autoplay = true
+
+[node name="CameraLimits" type="Node2D" parent="." unique_id=1891945742]
+script = ExtResource("15_offfg")
+limite_esquerdo = 0
+limite_direito = 2600
+limite_inferior = 1474

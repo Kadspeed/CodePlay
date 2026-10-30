@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bc8ue1o0nnlsc"]
 
 [ext_resource type="Script" uid="uid://ci4ls7fxlqg2b" path="res://scripts/Disquetes/disquete_roxo.gd" id="1_ele3h"]
-[ext_resource type="Texture2D" uid="uid://dbijqri82gfh1" path="res://Creativos/disquetes/roxo.png" id="1_n7hi2"]
+[ext_resource type="Texture2D" uid="uid://dbijqri82gfh1" path="res://Creativos/disquetes/disc/roxo.png" id="1_n7hi2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ele3h"]
 atlas = ExtResource("1_n7hi2")
@@ -41,8 +41,8 @@ frame_progress = 0.09495742
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1243847369]
 shape = SubResource("CircleShape2D_7quve")
 
-[node name="Resposta" type="Label" parent="." unique_id=891917852]
-offset_left = -77.0
-offset_top = -297.0
-offset_right = 593.0
-offset_bottom = -139.0
+[node name="Resposta" type="Label" parent="." unique_id=1825603651]
+offset_left = -21.0
+offset_top = -28.0
+offset_right = 19.0
+offset_bottom = -5.0

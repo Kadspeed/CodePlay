@@ -1,0 +1,145 @@
+[gd_scene format=3 uid="uid://0ngikvwa85xm"]
+
+[ext_resource type="Texture2D" uid="uid://bhsx4mel2k74f" path="res://Creativos/Sequência de Círculo Mágico em Pixel Art.png" id="1_odqhp"]
+[ext_resource type="Script" uid="uid://ce8hgg42cavtj" path="res://scripts/circulo_magico.gd" id="1_prw0v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_prw0v"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(0, 0, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgkml"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(313, 0, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8sli0"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(626, 0, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2404"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(939, 0, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ni8vu"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(0, 313, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wnkd"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(313, 313, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_csubh"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(626, 313, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fyeo4"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(939, 313, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xkymt"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(0, 626, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8vly0"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(313, 626, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mfp7h"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(626, 626, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwmea"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(939, 626, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sih4o"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(0, 939, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_728al"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(313, 939, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sxuk8"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(626, 939, 313, 313)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_orf7p"]
+atlas = ExtResource("1_odqhp")
+region = Rect2(939, 939, 313, 313)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kxr1f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_prw0v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgkml")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8sli0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y2404")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ni8vu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wnkd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_csubh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fyeo4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xkymt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8vly0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mfp7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwmea")
+}],
+"loop": 1,
+"name": &"Ativando",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sih4o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_728al")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sxuk8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_orf7p")
+}],
+"loop": 1,
+"name": &"Desativando",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7quve"]
+radius = 9.055386
+
+[node name="Circulo_Magico" type="Area2D" unique_id=912152793]
+script = ExtResource("1_prw0v")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=427199129]
+texture_filter = 1
+scale = Vector2(0.1301917, 0.13019168)
+sprite_frames = SubResource("SpriteFrames_kxr1f")
+animation = &"Desativando"
+frame_progress = 0.9115317
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=358813555]
+shape = SubResource("CircleShape2D_7quve")

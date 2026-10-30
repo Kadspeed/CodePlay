@@ -5,6 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://by102obch7e1g" path="res://assets/sprites e terreno/sprite/enemy/Monsters Creatures Fantasy 2/Monsters Creatures Fantasy 2/Rat/run.png" id="2_0qmtg"]
 [ext_resource type="Texture2D" uid="uid://c2tywdrbyqjco" path="res://assets/sprites e terreno/sprite/enemy/Monsters Creatures Fantasy 2/Monsters Creatures Fantasy 2/Rat/rat-death.png" id="2_fcxun"]
 [ext_resource type="Texture2D" uid="uid://btm7nam4imub3" path="res://assets/sprites e terreno/sprite/enemy/Monsters Creatures Fantasy 2/Monsters Creatures Fantasy 2/Rat/hurt.png" id="3_gyuke"]
+[ext_resource type="AudioStream" uid="uid://bfc77r8lwxry5" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_rato/rato atacando_.mp3" id="6_xn472"]
+[ext_resource type="AudioStream" uid="uid://dgtscey26feay" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_rato/rato tomando dano.mp3" id="7_q5ben"]
+[ext_resource type="AudioStream" uid="uid://b2hvwlng3o3p4" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_rato/rato correndo_.mp3" id="8_d1ggd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fcxun"]
 atlas = ExtResource("1_1idaa")
@@ -273,4 +276,11 @@ shape = SubResource("RectangleShape2D_uiv75")
 
 [node name="Timer" type="Timer" parent="." unique_id=81957872]
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1683893732]
+[node name="Attack" type="AudioStreamPlayer2D" parent="." unique_id=1683893732]
+stream = ExtResource("6_xn472")
+
+[node name="Hurt" type="AudioStreamPlayer2D" parent="." unique_id=1012356254]
+stream = ExtResource("7_q5ben")
+
+[node name="Walk" type="AudioStreamPlayer2D" parent="." unique_id=182160982]
+stream = ExtResource("8_d1ggd")

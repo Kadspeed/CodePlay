@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bmfaau7x2wwiv"]
 
-[ext_resource type="Script" uid="uid://dm7n2auetubfo" path="res://scripts/disquete_verde.gd" id="1_fifjn"]
-[ext_resource type="Texture2D" uid="uid://crpvs5yxp5lep" path="res://Creativos/disquetes/verde.png" id="2_xmoqn"]
+[ext_resource type="Script" uid="uid://dm7n2auetubfo" path="res://scripts/Disquetes/disquete_verde.gd" id="1_fifjn"]
+[ext_resource type="Texture2D" uid="uid://crpvs5yxp5lep" path="res://Creativos/disquetes/disc/verde.png" id="2_xmoqn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d1hcp"]
 atlas = ExtResource("2_xmoqn")
@@ -43,6 +43,6 @@ shape = SubResource("CircleShape2D_f8f6y")
 
 [node name="Resposta" type="Label" parent="." unique_id=1589920292]
 offset_left = -21.0
-offset_top = -33.0
+offset_top = -28.0
 offset_right = 19.0
-offset_bottom = -10.0
+offset_bottom = -5.0

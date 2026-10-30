@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cevgbskncxn3l"]
 
-[ext_resource type="Script" uid="uid://dd0pyye0u5fwl" path="res://scripts/disquete_branco.gd" id="1_5yxen"]
-[ext_resource type="Texture2D" uid="uid://viyir1hq8ta8" path="res://Creativos/disquetes/branco.png" id="1_xxa3f"]
+[ext_resource type="Script" uid="uid://dd0pyye0u5fwl" path="res://scripts/Disquetes/disquete_branco.gd" id="1_5yxen"]
+[ext_resource type="Texture2D" uid="uid://viyir1hq8ta8" path="res://Creativos/disquetes/disc/branco.png" id="1_xxa3f"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f2ycp"]
 radius = 18.110771
@@ -42,5 +42,7 @@ animation = &"Branco"
 frame_progress = 0.4879332
 
 [node name="Resposta" type="Label" parent="." unique_id=330690363]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -20.0
+offset_top = -28.0
+offset_right = 20.0
+offset_bottom = -5.0

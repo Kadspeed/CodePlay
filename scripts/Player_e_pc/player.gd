@@ -90,8 +90,32 @@ const JUMP_VELOCITY = -500.0
 
 const SPEED = 200.0
 
+# ============ CORRIDA AUTOMÁTICA ============
+enum ModoCorrida { NENHUM, SAIDA, ENTRADA }
+
+@export_group("Corrida Automática")
+## Folga (px) somada ao limite da câmera para considerar que o Player saiu
+## (ou entrou) COMPLETAMENTE do enquadramento. Use aprox. metade da largura do Player.
+@export var margem_corrida: float = 64.0
+## Segurança: tempo máximo (s) de uma corrida antes de ser cancelada.
+## Precisa ser maior que o tempo para atravessar a fase inteira a SPEED
+## (ex.: 2600 px / 200 px/s = 13 s).
+@export var tempo_maximo_corrida: float = 30.0
+## Segurança: se o Player ficar esse tempo (s) sem avançar em x, a corrida é cancelada.
+@export var tempo_maximo_sem_progresso: float = 1.0
+@export_group("")
+
+var corrida_automatica: bool = false
+var _modo_corrida: ModoCorrida = ModoCorrida.NENHUM
+var _tempo_corrida: float = 0.0
+var _tempo_sem_progresso: float = 0.0
+var _ultimo_x_corrida: float = 0.0
+var _saida_sinalizada: bool = false
+
 # ============ ESTADO DE MORTE ============
 var esta_morto: bool = false
+## Bloqueia o respawn automático quando o GameManager abre o Game Over.
+var _game_over_ativo: bool = false
 
 # ============ SISTEMA DE RESPAWN ============
 ## Ponto para onde o Player retorna ao morrer ou cair. Antes era
@@ -120,6 +144,11 @@ const QUEDA_MINIMA: float = 250.0
 signal player_dano(quantidade: int, vida_restante: int)
 signal player_morreu()
 signal vida_atualizada(vida_atual: int, vida_maxima: int)
+
+## Emitido quando a corrida automática chega ao fim.
+## concluida = true: a saída cruzou o limite direito (a corrida CONTINUA) ou a entrada terminou.
+## concluida = false: foi cancelada (timeout, personagem preso, morte ou encerrada pelo GameManager).
+signal corrida_automatica_finalizada(concluida: bool)
 
 # ============================================================
 # 4. INICIALIZAÇÃO
@@ -223,6 +252,12 @@ func _physics_process(delta: float) -> void:
 		_parar_som_corrida()  # 🔊
 		velocity = Vector2.ZERO
 		move_and_slide()
+		return
+	
+	# CORRIDA AUTOMÁTICA (transição entre fases): ignora o input do jogador
+	# e corre para a direita. Ver seção 17.
+	if corrida_automatica:
+		_processar_corrida_automatica(delta)
 		return
 	
 	# SE O TERMINAL/PUZZLE ESTIVER ABERTO, TRAVA O PLAYER NO LUGAR.
@@ -329,7 +364,7 @@ func _physics_process(delta: float) -> void:
 ## como camada extra de proteção, independente de terminal_aberto estar
 ## corretamente sincronizado por cada sistema de UI.
 func _unhandled_input(event: InputEvent) -> void:
-	if terminal_aberto or esta_morto:
+	if terminal_aberto or esta_morto or corrida_automatica:
 		return
 	if event.is_action_pressed("atack1"):
 		_realizar_ataque()
@@ -537,7 +572,7 @@ func _on_attack_area_body_entered(body: Node2D):
 # ============================================================
 
 func tomar_dano(quantidade: int, posicao_inimigo: Vector2 = Vector2.ZERO):
-	if invencivel or terminal_aberto or esta_morto:
+	if invencivel or terminal_aberto or esta_morto or corrida_automatica:
 		return false
 	
 	if vida_atual <= 0:
@@ -580,6 +615,9 @@ func _morrer():
 	terminal_aberto = true
 	ataque_em_progresso = false
 	
+	# Cancela a corrida automática (se houver) sem destravar o Player morto
+	_finalizar_corrida(false)
+	
 	# 🔊 Para o som de corrida ao morrer (sons curtos terminam sozinhos)
 	_parar_som_corrida()
 	
@@ -611,6 +649,10 @@ func _morrer():
 	
 	# DELAY ANTES DE RENASCER
 	await get_tree().create_timer(1.5).timeout
+
+	# O GameManager assume a morte e bloqueia o respawn enquanto a tela Game Over abre.
+	if not is_inside_tree() or _game_over_ativo:
+		return
 	
 	# 🔥 ALTERADO: antes disso chamava get_tree().reload_current_scene(),
 	# recarregando a Cena_Principal inteira — o que resetaria também o
@@ -620,7 +662,13 @@ func _morrer():
 	_respawnar_apos_morte()
 
 
+func bloquear_respawn_game_over() -> void:
+	_game_over_ativo = true
+
+
 func _respawnar_apos_morte() -> void:
+	if _game_over_ativo:
+		return
 	"""
 	Reposiciona o Player no SpawnPoint da fase atual (guardado em
 	'ultima_posicao_segura', mantido atualizado pelo GameManager via
@@ -646,6 +694,9 @@ func _respawnar_apos_morte() -> void:
 		hitbox_area.set_deferred("monitoring", true)
 	
 	modulate = Color.WHITE
+	
+	# Ao renascer, corre para dentro da fase como no início dela.
+	_iniciar_corrida_apos_respawn()
 	
 	print("🔄 Player renasceu no SpawnPoint da fase atual: ", ultima_posicao_segura)
 
@@ -730,6 +781,7 @@ func curar(quantidade: int):
 	vida_atualizada.emit(vida_atual, vida_maxima)
 
 func resetar_vida():
+	_game_over_ativo = false
 	vida_atual = vida_maxima
 	invencivel = false
 	esta_morto = false
@@ -839,6 +891,9 @@ func respawn():
 	# Forçar atualização da física para este frame
 	move_and_slide()
 	
+	# Ao renascer, corre para dentro da fase como no início dela.
+	_iniciar_corrida_apos_respawn()
+	
 	print("🔄 Respawn: jogador perdeu 1 vida (25 HP) e retornou ao SpawnPoint em ", ultima_posicao_segura)
 	print("❤️ Vida atual: ", vida_atual, "/", vida_maxima)
 	
@@ -879,6 +934,132 @@ func definir_limites_camera(esquerdo: int, superior: int, direito: int, inferior
 	camera.limit_top = superior
 	camera.limit_right = direito
 	camera.limit_bottom = inferior
+
+# ============================================================
+# 17. CORRIDA AUTOMÁTICA (TRANSIÇÃO ENTRE FASES)
+# ============================================================
+# Os limites usados aqui vêm da Camera2D do Player, que o GameManager já
+# preenche com o CameraLimits de cada fase (ver definir_limites_camera).
+
+## Consulta usada por outros scripts (ex.: PC) para não interagir durante a corrida.
+func esta_em_corrida_automatica() -> bool:
+	return corrida_automatica
+
+
+## Inicia a corrida de SAÍDA: corre para a direita até passar do limite direito
+## da câmera. Ao cruzar, emite corrida_automatica_finalizada(true), mas CONTINUA
+## correndo (para a corrida ser contínua durante o fade e a troca de fase).
+## Retorna false se não foi possível iniciar (ex.: Player morto).
+func iniciar_corrida_saida() -> bool:
+	if esta_morto or _game_over_ativo:
+		return false
+	_iniciar_corrida(ModoCorrida.SAIDA)
+	return true
+
+
+## Inicia (ou continua) a corrida de ENTRADA: corre para a direita até ficar
+## completamente dentro do limite esquerdo da câmera da nova fase.
+func iniciar_corrida_entrada() -> bool:
+	if esta_morto or _game_over_ativo:
+		return false
+	_iniciar_corrida(ModoCorrida.ENTRADA)
+	return true
+
+
+## Encerra qualquer corrida em andamento e devolve o controle ao jogador.
+func encerrar_corrida_automatica() -> void:
+	_finalizar_corrida(false)
+
+
+## Chamada ao renascer no SpawnPoint (queda no vazio ou morte). Pede ao
+## GameManager a MESMA regra de entrada usada ao carregar a fase, então só
+## corre se a fase atual tiver "corrida_entrada" no dicionário `fases`.
+func _iniciar_corrida_apos_respawn() -> void:
+	if esta_morto or _game_over_ativo:
+		return
+	var gm: Node = get_tree().get_first_node_in_group("game_manager")
+	if gm != null and gm.has_method("reaplicar_corrida_entrada"):
+		gm.reaplicar_corrida_entrada()
+
+
+func _iniciar_corrida(modo: ModoCorrida) -> void:
+	corrida_automatica = true
+	_modo_corrida = modo
+	_tempo_corrida = 0.0
+	_tempo_sem_progresso = 0.0
+	_ultimo_x_corrida = global_position.x
+	_saida_sinalizada = false
+	knockback_ativo = false
+	# Garante que um terminal/puzzle residual não silencie a animação e o som de corrida
+	terminal_aberto = false
+
+
+func _processar_corrida_automatica(delta: float) -> void:
+	_tempo_corrida += delta
+
+	# Gravidade igual à do movimento normal
+	if is_on_floor():
+		pulos_restantes = PULOS_MAXIMOS
+	else:
+		velocity += get_gravity() * 2.1 * delta
+
+	velocity.x = SPEED
+
+	# Reaproveita a animação "run" e o som de corrida
+	_atualizar_animacao()
+	move_and_slide()
+
+	_verificar_progresso_corrida(delta)
+
+
+func _verificar_progresso_corrida(delta: float) -> void:
+	# Segurança 1: tempo máximo
+	if _tempo_corrida >= tempo_maximo_corrida:
+		push_warning("Player: corrida automática cancelada por tempo máximo.")
+		_finalizar_corrida(false)
+		return
+
+	# Segurança 2: personagem preso (sem avançar em x)
+	if absf(global_position.x - _ultimo_x_corrida) < 1.0:
+		_tempo_sem_progresso += delta
+		if _tempo_sem_progresso >= tempo_maximo_sem_progresso:
+			push_warning("Player: corrida automática cancelada (personagem preso).")
+			_finalizar_corrida(false)
+			return
+	else:
+		_tempo_sem_progresso = 0.0
+		_ultimo_x_corrida = global_position.x
+
+	if camera == null:
+		_finalizar_corrida(false)
+		return
+
+	match _modo_corrida:
+		ModoCorrida.SAIDA:
+			if not _saida_sinalizada and global_position.x > camera.limit_right + margem_corrida:
+				_saida_sinalizada = true
+				corrida_automatica_finalizada.emit(true)  # NÃO para: segue correndo
+		ModoCorrida.ENTRADA:
+			if global_position.x > camera.limit_left + margem_corrida:
+				_finalizar_corrida(true)
+
+
+func _finalizar_corrida(concluida: bool) -> void:
+	if not corrida_automatica:
+		return
+
+	corrida_automatica = false
+	_modo_corrida = ModoCorrida.NENHUM
+	_saida_sinalizada = false
+	velocity.x = 0.0
+	_parar_som_corrida()
+
+	# Garante que o Player não fique travado depois da corrida
+	# (se morreu, _morrer() mantém terminal_aberto = true de propósito).
+	if not esta_morto:
+		terminal_aberto = false
+
+	corrida_automatica_finalizada.emit(concluida)
 
 # ============================================================
 # 15. FUNÇÕES DE DEBUG - REMOVIDAS COMPLETAMENTE

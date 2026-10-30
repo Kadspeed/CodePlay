@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://oj60hfol1j3e"
+path="res://.godot/imported/Mystic Isles.mp3-394cb4610ecbe3aebcc5b808767c0cbc.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Musicas_Fases/Sons_Fortaleza_Arcana/Mystic Isles.mp3"
+dest_files=["res://.godot/imported/Mystic Isles.mp3-394cb4610ecbe3aebcc5b808767c0cbc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

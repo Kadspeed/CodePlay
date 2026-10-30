@@ -1,62 +1,96 @@
 # scripts/game_manager.gd
 extends Node2D
 
-# --- DESENVOLVEDOR: só define em qual fase o jogo COMEÇA. Não altera a progressão. ---
-# O Menu Principal também lê `modo_desenvolvedor` para pular o menu.
-@export_category("Desenvolvedor")
-@export var modo_desenvolvedor: bool = false
-@export_range(1, 7, 1) var fase_inicial_desenvolvedor: int = 1
-
-# Sobrevive ao reload_current_scene() (variável estática). Usada só por reiniciar_jogo()
-# para garantir que o reinício volte à Fase 1 mesmo com o modo desenvolvedor ligado.
-static var _reinicio_normal_solicitado: bool = false
-
 @onready var fase_atual_container: Node = $FaseAtual
 
 var player: Node = null
 var pc: Node = null
 var spawn_point_atual: Marker2D = null
 var _trocando_fase: bool = false
+## true quando o Player foi travado para a troca de fase (Círculo Mágico);
+## destravado em _conectar_fase se nenhuma corrida de entrada o liberar antes.
+var _destravar_player_apos_troca: bool = false
+## Círculo de ENTRADA da fase recém-carregada (Jardins Mecânicos). Preenchido em
+## _conectar_fase e consumido em _carregar_fase, depois do fade de revelar.
+var _circulo_entrada_pendente: Node = null
 
 var fase_atual: int = 1
 
 # --- ALTERAÇÃO: referência para a cena final (créditos), usada em _vitoria() ---
-const CENA_FINAL: PackedScene = preload("res://cenas/Tela_Final.tscn")
+# Caminho (e não preload): um preload com caminho inexistente é erro de PARSE e derruba
+# o script inteiro (nenhuma fase carregava no export). Carregado sob demanda em _vitoria().
+# AJUSTE este caminho para a capitalização/pasta EXATA de Tela_Final.tscn no projeto.
+const CENA_FINAL_CAMINHO: String = "res://cenas/Tela_Final.tscn"
+const CENA_GAME_OVER: String = "uid://biekyj47ggbqp"
 
+var _game_over_em_andamento: bool = false
+
+# "corrida_saida" / "corrida_entrada": se true, o Player corre automaticamente
+# ao sair desta fase (após concluir o puzzle) / ao entrar nela.
+# "saida_circulo": a fase termina revelando o Círculo Mágico.
+# "entrada_circulo": a fase começa com o Círculo Mágico (Player surge dele).
 var fases := {
-	1: {"titulo": "Floresta_Biotech", "cena": preload("res://cenas/Niveis/Floresta_Biotech.tscn"), "disquete": "disquete_azul", "puzzle": preload("res://cenas/Puzzles/puzzle_variaveis.tscn")},
-	2: {"titulo": "Caverna_de_Cristal", "cena": preload("res://cenas/Niveis/caverna_de_cristal.tscn"), "disquete": "disquete_vermelho", "puzzle": preload("res://cenas/Puzzles/puzzle_caverna.tscn")},
-	3: {"titulo": "Fortaleza_arcana", "cena": preload("res://cenas/Niveis/fortaleza_arcana.tscn"), "disquete": "disquete_verde", "puzzle": preload("res://cenas/Puzzles/puzzle_fortaleza.tscn")},
-	4: {"titulo": "Cidade_Celestial", "cena": preload("res://cenas/Niveis/cidade_celestial.tscn"), "disquete": "disquete_roxo", "puzzle": preload("res://cenas/Puzzles/puzzle_cidade.tscn")},
-	5: {"titulo": "Jardins_Mecanicos", "cena": preload("res://cenas/Niveis/jardins_mecanicos.tscn"), "disquete": "disquete_amarelo", "puzzle": preload("res://cenas/Puzzles/puzzle_jardins.tscn")},
-	6: {"titulo": "Ruinas_Subterraneas", "cena": preload("res://cenas/Niveis/ruinas_subterraneas.tscn"), "disquete": "disquete_laranja", "puzzle": preload("res://cenas/Puzzles/puzzle_ruinas.tscn")},
-	7: {"titulo": "Nucleo_do_Sistema", "cena": preload("res://cenas/Niveis/nucleo_do_sistema.tscn"), "disquete": "disquete_branco", "puzzle": preload("res://cenas/Puzzles/puzzle_nucleo.tscn")},
+	1: {"titulo": "Floresta_Biotech", "cena": preload("res://cenas/Niveis/Floresta_Biotech.tscn"), "disquete": "disquete_azul", "puzzle": preload("res://cenas/Puzzles/puzzle_variaveis.tscn"), "corrida_saida": true, "corrida_entrada": true},
+	2: {"titulo": "Caverna_de_Cristal", "cena": preload("res://cenas/Niveis/caverna_de_cristal.tscn"), "disquete": "disquete_vermelho", "puzzle": preload("res://cenas/Puzzles/puzzle_caverna.tscn"), "corrida_saida": true, "corrida_entrada": true},
+	3: {"titulo": "Fortaleza_arcana", "cena": preload("res://cenas/Niveis/fortaleza_arcana.tscn"), "disquete": "disquete_verde", "puzzle": preload("res://cenas/Puzzles/puzzle_fortaleza.tscn"), "corrida_saida": true, "corrida_entrada": true},
+	4: {"titulo": "Cidade_Celestial", "cena": preload("res://cenas/Niveis/cidade_celestial.tscn"), "disquete": "disquete_roxo", "puzzle": preload("res://cenas/Puzzles/puzzle_cidade.tscn"), "corrida_saida": false, "corrida_entrada": true, "saida_circulo": true},
+	5: {"titulo": "Jardins_Mecanicos", "cena": preload("res://cenas/Niveis/jardins_mecanicos.tscn"), "disquete": "disquete_amarelo", "puzzle": preload("res://cenas/Puzzles/puzzle_jardins.tscn"), "corrida_saida": true, "corrida_entrada": true, "entrada_circulo": true},
+	6: {"titulo": "Ruinas_Subterraneas", "cena": preload("res://cenas/Niveis/ruinas_subterraneas.tscn"), "disquete": "disquete_laranja", "puzzle": preload("res://cenas/Puzzles/puzzle_ruinas.tscn"), "corrida_saida": true, "corrida_entrada": true},
+	7: {"titulo": "Nucleo_do_Sistema", "cena": preload("res://cenas/Niveis/nucleo_do_sistema.tscn"), "disquete": "disquete_branco", "puzzle": preload("res://cenas/Puzzles/puzzle_nucleo.tscn"), "corrida_saida": false, "corrida_entrada": false},
 }
 
 
 func _ready() -> void:
 	add_to_group("game_manager")
 	_resolver_player()
+	if player != null and player.has_signal("player_morreu"):
+		var callback: Callable = Callable(self, "_on_player_morreu")
+		if not player.is_connected("player_morreu", callback):
+			player.connect("player_morreu", callback)
 
 	if fase_atual_container == null:
 		push_error("GameManager: nó 'FaseAtual' não encontrado na Cena_Principal.")
 		return
 
-	# O modo desenvolvedor vale só para o primeiro carregamento. Um reinício pedido
-	# por reiniciar_jogo() ignora o modo uma única vez e volta à Fase 1.
-	var usar_fase_desenvolvedor: bool = modo_desenvolvedor and not _reinicio_normal_solicitado
-	_reinicio_normal_solicitado = false
+	# Um reinício após Game Over retoma a fase em que o Player morreu.
+	var fase_pendente: int = EstadoJogo.consumir_fase_reinicio()
 
-	if usar_fase_desenvolvedor:
-		fase_atual = clampi(fase_inicial_desenvolvedor, 1, fases.size())
-		print("🛠️ MODO DESENVOLVEDOR ATIVO")
-		print("🛠️ Fase inicial selecionada: ", fase_inicial_desenvolvedor)
-		print("🛠️ Carregando diretamente a fase: ", fases[fase_atual]["titulo"])
+	if fase_pendente > 0:
+		fase_atual = clampi(fase_pendente, 1, fases.size())
+		print("🔄 Reiniciando a fase em que o Player morreu: ", fase_atual)
 	else:
 		fase_atual = 1
 
 	print("🚀 Carregando fase inicial: ", fases[fase_atual]["titulo"])
 	_carregar_fase(fase_atual)
+
+
+func _on_player_morreu() -> void:
+	if _game_over_em_andamento:
+		return
+
+	_game_over_em_andamento = true
+	EstadoJogo.preparar_reinicio(fase_atual)
+
+	if is_instance_valid(player) and player.has_method("bloquear_respawn_game_over"):
+		player.bloquear_respawn_game_over()
+
+	print("💀 GameManager: Game Over na fase ", fase_atual)
+
+	# A SceneTree e o estado da fase são preservados antes da troca de cena.
+	var arvore: SceneTree = get_tree()
+	await TransicaoTela.escurecer()
+
+	if not is_inside_tree():
+		return
+
+	var erro: Error = arvore.change_scene_to_file(CENA_GAME_OVER)
+	if erro != OK:
+		push_error("GameManager: falha ao abrir a tela Game Over (erro %d)." % erro)
+		arvore.process_frame.connect(Callable(TransicaoTela, "revelar"), CONNECT_ONE_SHOT)
+		return
+
+	arvore.process_frame.connect(Callable(TransicaoTela, "revelar"), CONNECT_ONE_SHOT)
 
 
 func _resolver_player() -> void:
@@ -136,6 +170,16 @@ func _conectar_fase(raiz_fase: Node) -> void:
 		else:
 			push_warning("GameManager: 'CameraLimits' encontrado, mas sem as variáveis limite_esquerdo/superior/direito/inferior.")
 
+	# Entrada por Círculo Mágico (Jardins Mecânicos) tem prioridade sobre a corrida
+	# de entrada: o Player fica escondido e travado, e a sequência só começa em
+	# _carregar_fase, depois que a tela clareia. Caso contrário, segue o fluxo normal.
+	if not _preparar_entrada_circulo(raiz_fase):
+		# Corrida de entrada (ou encerramento da corrida, se a fase não tiver).
+		# Fica aqui, depois do spawn e dos limites e antes do "return" do PC ausente,
+		# para ser sempre avaliada.
+		_aplicar_corrida_entrada()
+		_destravar_player_se_necessario()
+
 	if pc == null:
 		push_warning("GameManager: PC não encontrado na fase atual.")
 		return
@@ -146,6 +190,140 @@ func _conectar_fase(raiz_fase: Node) -> void:
 			print("✅ GameManager: conectado ao PC da fase ", fase_atual)
 	else:
 		push_warning("GameManager: o PC desta fase não possui o sinal 'puzzle_concluido'.")
+
+
+# ============================================================
+# CORRIDA AUTOMÁTICA (a lógica em si fica no Player)
+# ============================================================
+
+## Consulta se a fase `id` tem a corrida configurada ("corrida_saida" / "corrida_entrada").
+func _fase_tem_corrida(id: int, chave: String) -> bool:
+	return bool(fases.get(id, {}).get(chave, false))
+
+
+func _encerrar_corrida_player() -> void:
+	if is_instance_valid(player) and player.has_method("encerrar_corrida_automatica"):
+		player.encerrar_corrida_automatica()
+
+
+## Chamada por _conectar_fase: inicia a corrida de entrada se a fase tiver essa
+## configuração; caso contrário, garante que o Player não continue em corrida.
+func _aplicar_corrida_entrada() -> void:
+	if not is_instance_valid(player):
+		return
+	if _fase_tem_corrida(fase_atual, "corrida_entrada") and player.has_method("iniciar_corrida_entrada"):
+		player.iniciar_corrida_entrada()
+	else:
+		_encerrar_corrida_player()
+
+
+## Chamada pelo Player ao renascer no SpawnPoint (queda ou morte): repete a
+## corrida de entrada da fase atual, se ela estiver habilitada.
+## (O círculo de entrada NÃO se repete: ele só aparece ao entrar na fase.)
+func reaplicar_corrida_entrada() -> void:
+	_aplicar_corrida_entrada()
+
+
+# ============================================================
+# CÍRCULO MÁGICO — ENTRADA (início dos Jardins Mecânicos)
+# ============================================================
+
+## Se a fase atual usa entrada por círculo e o círculo existe na cena, esconde e
+## trava o Player (ele fica no SpawnPoint, em cima do círculo) e guarda o círculo
+## para ser acionado depois do fade de revelar. Retorna false se não se aplica.
+func _preparar_entrada_circulo(raiz_fase: Node) -> bool:
+	_circulo_entrada_pendente = null
+
+	if not bool(fases.get(fase_atual, {}).get("entrada_circulo", false)):
+		return false
+	if not is_instance_valid(player):
+		return false
+
+	var circulo: Node = _buscar_no_grupo_dentro(raiz_fase, "circulo_magico")
+	if circulo == null or not circulo.has_method("executar_entrada"):
+		push_warning("GameManager: fase %d usa entrada por Círculo Mágico, mas ele não foi encontrado; seguindo com a entrada normal." % fase_atual)
+		return false
+
+	_circulo_entrada_pendente = circulo
+
+	# Garante que nenhuma corrida anterior continue ativa.
+	_encerrar_corrida_player()
+
+	# Player escondido e travado até o círculo aparecer.
+	player.visible = false
+	if player.has_method("abrir_puzzle"):
+		player.abrir_puzzle()  # mesmo mecanismo de trava usado na saída
+	_destravar_player_apos_troca = false
+	return true
+
+
+## Roda depois do fade de revelar: o círculo aparece e conduz a sequência.
+func _iniciar_entrada_circulo() -> void:
+	var circulo: Node = _circulo_entrada_pendente
+	_circulo_entrada_pendente = null
+
+	if circulo == null or not is_instance_valid(circulo):
+		_on_player_surgir_do_circulo()
+		return
+
+	circulo.executar_entrada(Callable(self, "_on_player_surgir_do_circulo"))
+
+
+## Chamada pelo círculo no momento em que o Player deve surgir.
+func _on_player_surgir_do_circulo() -> void:
+	if not is_instance_valid(player):
+		return
+
+	player.visible = true
+	if player.has_method("desbloquear"):
+		player.desbloquear()
+
+	# Agora sim a corrida de entrada normal da fase (se configurada).
+	_aplicar_corrida_entrada()
+
+
+# ============================================================
+# CÍRCULO MÁGICO — SAÍDA (Cidade Celestial)
+# ============================================================
+
+## Procura o Círculo Mágico na fase atual (grupo "circulo_magico"), conecta o
+## sinal dele e o revela. Retorna false se não encontrar (aí o fluxo normal segue).
+func _revelar_circulo_magico() -> bool:
+	var circulo: Node = _buscar_no_grupo_dentro(fase_atual_container, "circulo_magico")
+	if circulo == null or not circulo.has_method("revelar") or not circulo.has_signal("jogador_alcancou"):
+		return false
+
+	if not circulo.jogador_alcancou.is_connected(_on_circulo_alcancado):
+		circulo.jogador_alcancou.connect(_on_circulo_alcancado, CONNECT_ONE_SHOT)
+
+	circulo.revelar()
+	return true
+
+
+## O Player chegou perto do círculo: trava o personagem durante o fade e
+## avança para a próxima fase (mesmo fluxo e mesmo fade de sempre).
+func _on_circulo_alcancado() -> void:
+	if is_instance_valid(player) and player.has_method("abrir_puzzle"):
+		player.abrir_puzzle()
+		_destravar_player_apos_troca = true
+
+	avancar_para_proxima_fase()
+	_trocando_fase = false
+
+
+## Devolve o controle ao Player depois da troca, a menos que a corrida de
+## entrada da nova fase já esteja no comando (ela mesma devolve no fim).
+func _destravar_player_se_necessario() -> void:
+	if not _destravar_player_apos_troca:
+		return
+	_destravar_player_apos_troca = false
+
+	if not is_instance_valid(player):
+		return
+
+	var em_corrida: bool = player.has_method("esta_em_corrida_automatica") and player.esta_em_corrida_automatica()
+	if not em_corrida and player.has_method("desbloquear"):
+		player.desbloquear()
 
 
 func _on_puzzle_concluido(fase_id: int) -> void:
@@ -162,9 +340,29 @@ func _on_puzzle_concluido(fase_id: int) -> void:
 		pc.puzzle_concluido.disconnect(_on_puzzle_concluido)
 
 	_trocando_fase = true
-	await get_tree().create_timer(1.5).timeout
+
+	# Fases com saída por Círculo Mágico (Cidade Celestial): em vez de avançar
+	# sozinho, revela o círculo e espera o Player chegar perto dele. A flag
+	# _trocando_fase continua true até lá (evita conclusões duplicadas).
+	if bool(fases.get(fase_atual, {}).get("saida_circulo", false)):
+		if _revelar_circulo_magico():
+			return
+		push_warning("GameManager: fase %d usa saída por Círculo Mágico, mas ele não foi encontrado; avançando normalmente." % fase_atual)
+
+	# Fases com corrida de saída: o Player corre até passar do limite direito da
+	# câmera. O sinal também é emitido em caso de cancelamento (timeout, preso,
+	# morte), então esta espera nunca trava. As demais fases mantêm a espera de 1,5 s.
+	var corrida_iniciada: bool = false
+	if _fase_tem_corrida(fase_atual, "corrida_saida") and is_instance_valid(player) and player.has_method("iniciar_corrida_saida"):
+		corrida_iniciada = player.iniciar_corrida_saida()
+
+	if corrida_iniciada:
+		await player.corrida_automatica_finalizada
+	else:
+		await get_tree().create_timer(1.5).timeout
 
 	if fase_atual >= fases.size():
+		_encerrar_corrida_player()
 		_vitoria()
 	else:
 		avancar_para_proxima_fase()
@@ -191,6 +389,8 @@ func _carregar_fase(id: int) -> void:
 
 	if cena == null:
 		push_warning("GameManager: a cena da fase %d ainda não foi configurada." % id)
+		_destravar_player_se_necessario()
+		_encerrar_corrida_player()
 		return
 
 	await TransicaoTela.escurecer()
@@ -210,20 +410,40 @@ func _carregar_fase(id: int) -> void:
 	# evita ficar preso na tela preta.
 	await TransicaoTela.revelar()
 
+	# Entrada por Círculo Mágico: só começa depois que a tela já clareou.
+	if _circulo_entrada_pendente != null:
+		_iniciar_entrada_circulo()
 
-# --- ALTERAÇÃO PRINCIPAL: _vitoria() agora carrega a cena final (TelaFinal.tscn) ---
-# O fluxo de espera de 1.5s já ocorre em _on_puzzle_concluido() antes desta função
-# ser chamada, então aqui não há nenhuma outra espera redundante: apenas o fade
-# escurecer -> troca de cena -> um frame de garantia -> fade revelar.
+
+# --- ALTERAÇÃO PRINCIPAL: _vitoria() carrega a cena final (Tela_Final.tscn) ---
+# IMPORTANTE: change_scene_to_packed() remove a cena corrente (Mundo, onde este
+# GameManager vive) da árvore IMEDIATAMENTE e a libera no fim do frame. Por isso,
+# depois dessa chamada este nó NÃO está mais na árvore (get_tree() == null) e logo
+# será destruído: nenhum código deste script pode continuar rodando depois dela.
+# - A SceneTree é guardada ANTES da troca;
+# - o "revelar" é entregue ao autoload TransicaoTela (que persiste entre cenas),
+#   disparado no próximo frame, quando a Tela_Final já está na árvore.
 func _vitoria() -> void:
 	print("🏆 JOGO COMPLETO!")
 
+	var arvore: SceneTree = get_tree()
+
 	await TransicaoTela.escurecer()
 
-	get_tree().change_scene_to_packed(CENA_FINAL)
-	await get_tree().process_frame
+	var cena_final: PackedScene = load(CENA_FINAL_CAMINHO) as PackedScene
+	if cena_final == null:
+		push_error("GameManager: cena final não encontrada em '%s'." % CENA_FINAL_CAMINHO)
+		await TransicaoTela.revelar()
+		return
 
-	await TransicaoTela.revelar()
+	var erro: Error = arvore.change_scene_to_packed(cena_final)
+	if erro != OK:
+		push_error("GameManager: falha ao carregar a cena final (erro %d)." % erro)
+		await TransicaoTela.revelar()
+		return
+
+	# Um frame de garantia (nova cena montada) e depois revela, sem depender deste nó.
+	arvore.process_frame.connect(Callable(TransicaoTela, "revelar"), CONNECT_ONE_SHOT)
 # --- FIM DA ALTERAÇÃO ---
 
 
@@ -271,9 +491,9 @@ func obter_posicao_spawn_atual() -> Vector2:
 
 func reiniciar_jogo() -> void:
 	print("🔄 Reiniciando jogo...")
-	_reinicio_normal_solicitado = true
 	fase_atual = 1
 	player = null
 	pc = null
 	spawn_point_atual = null
+	_circulo_entrada_pendente = null
 	get_tree().reload_current_scene()

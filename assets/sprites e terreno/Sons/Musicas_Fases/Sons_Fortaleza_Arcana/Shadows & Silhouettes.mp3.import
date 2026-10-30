@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dy4kevb7itlg4"
+path="res://.godot/imported/Shadows & Silhouettes.mp3-7b31cfcfb1f3191eab46cabc325cd69d.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Musicas_Fases/Sons_Fortaleza_Arcana/Shadows & Silhouettes.mp3"
+dest_files=["res://.godot/imported/Shadows & Silhouettes.mp3-7b31cfcfb1f3191eab46cabc325cd69d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

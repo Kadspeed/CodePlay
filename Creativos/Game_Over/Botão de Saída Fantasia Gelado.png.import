@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xhvc3j8uajxb"
-path="res://.godot/imported/ChatGPT Image 26 de ago. de 2026, 17_07_55.png-005804afe53c67abb797e75d7135d981.ctex"
+uid="uid://b7bk285slpx4x"
+path="res://.godot/imported/Botão de Saída Fantasia Gelado.png-05b6b5fb0273284622afb517eff4a76d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Creativos/MenuPrincipal/ChatGPT Image 26 de ago. de 2026, 17_07_55.png"
-dest_files=["res://.godot/imported/ChatGPT Image 26 de ago. de 2026, 17_07_55.png-005804afe53c67abb797e75d7135d981.ctex"]
+source_file="res://Creativos/Game_Over/Botão de Saída Fantasia Gelado.png"
+dest_files=["res://.godot/imported/Botão de Saída Fantasia Gelado.png-05b6b5fb0273284622afb517eff4a76d.ctex"]
 
 [params]
 

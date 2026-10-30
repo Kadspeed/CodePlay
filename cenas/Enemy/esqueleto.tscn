@@ -7,12 +7,12 @@
 [ext_resource type="Texture2D" uid="uid://bn7ms7ee2fjsw" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Skeleton/Death.png" id="4_i8qh3"]
 [ext_resource type="Texture2D" uid="uid://7eff7mn65w1w" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Skeleton/Idle.png" id="5_b7d4t"]
 [ext_resource type="Texture2D" uid="uid://daxtfpcdgi52r" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Skeleton/Shield.png" id="6_4blyx"]
-[ext_resource type="AudioStream" uid="uid://di8pehrui4t27" path="res://assets/sprites e terreno/Sons/Sons_esqueleto/voice-esqueleto imóvel .mp3" id="7_re4gi"]
-[ext_resource type="AudioStream" uid="uid://cjb58v1ch2jxc" path="res://assets/sprites e terreno/Sons/Sons_esqueleto/voice-ataque de espada.mp3" id="9_gmuqv"]
-[ext_resource type="AudioStream" uid="uid://dh8urlolk72pf" path="res://assets/sprites e terreno/Sons/Sons_esqueleto/voice-esqueleto_Shield.mp3" id="10_gmuqv"]
-[ext_resource type="AudioStream" uid="uid://bl6jr7nsjsbur" path="res://assets/sprites e terreno/Sons/Sons_esqueleto/voice-esqueleto andando .mp3" id="10_y1uxu"]
-[ext_resource type="AudioStream" uid="uid://crp2trsao1p0i" path="res://assets/sprites e terreno/Sons/Sons_esqueleto/voice-esqueleto tomando dano (1).mp3" id="11_xdpv7"]
-[ext_resource type="AudioStream" uid="uid://276ckby51hpv" path="res://assets/sprites e terreno/Sons/Sons_esqueleto/voice-esqueleto derrotado .mp3" id="12_wa5hy"]
+[ext_resource type="AudioStream" uid="uid://di8pehrui4t27" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-esqueleto imóvel .mp3" id="7_re4gi"]
+[ext_resource type="AudioStream" uid="uid://cjb58v1ch2jxc" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-ataque de espada.mp3" id="9_gmuqv"]
+[ext_resource type="AudioStream" uid="uid://dh8urlolk72pf" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-esqueleto_Shield.mp3" id="10_gmuqv"]
+[ext_resource type="AudioStream" uid="uid://bl6jr7nsjsbur" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-esqueleto andando .mp3" id="10_y1uxu"]
+[ext_resource type="AudioStream" uid="uid://crp2trsao1p0i" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-esqueleto tomando dano (1).mp3" id="11_xdpv7"]
+[ext_resource type="AudioStream" uid="uid://276ckby51hpv" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_esqueleto/voice-esqueleto derrotado .mp3" id="12_wa5hy"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4cdhi"]
 radius = 11.0
@@ -150,7 +150,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_nhxg5")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Attack",
 "speed": 11.0
 }, {
@@ -167,7 +167,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_317bt")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Death",
 "speed": 7.0
 }, {
@@ -184,7 +184,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_87d0l")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Idle",
 "speed": 8.0
 }, {
@@ -201,7 +201,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2hs6a")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Shield",
 "speed": 6.0
 }, {
@@ -218,7 +218,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xdpv7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Take_hit",
 "speed": 8.0
 }, {
@@ -235,7 +235,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lhjse")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Walk",
 "speed": 6.0
 }]
@@ -251,7 +251,7 @@ z_index = 10
 scale = Vector2(1.5, 1.5)
 script = ExtResource("1_w2xle")
 vida_maxima = 100
-volume_extra_db = 100.0
+volume_extra_db = 85.0
 atraso_som_ataque = 0.2
 atraso_som_shield = 0.2
 

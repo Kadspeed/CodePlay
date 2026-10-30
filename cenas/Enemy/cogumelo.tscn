@@ -6,10 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://cl2jw4ywg10vq" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Mushroom/Run.png" id="2_p0e2b"]
 [ext_resource type="Texture2D" uid="uid://d1sai1ay6qr8" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Mushroom/Take Hit.png" id="3_gspde"]
 [ext_resource type="Texture2D" uid="uid://jgwsr8bprxx8" path="res://assets/sprites e terreno/sprite/enemy/Monsters_Creatures_Fantasy/Mushroom/Idle.png" id="4_hj4qv"]
-[ext_resource type="AudioStream" uid="uid://datahxon7q1ff" path="res://assets/sprites e terreno/Sons/Sons_cogumelo/cogumelo atacando_.mp3" id="7_6dthn"]
-[ext_resource type="AudioStream" uid="uid://bx7arklvhqdrk" path="res://assets/sprites e terreno/Sons/Sons_cogumelo/cogumelo correndo_.mp3" id="8_kvgm5"]
-[ext_resource type="AudioStream" uid="uid://cv1brhw1la5cd" path="res://assets/sprites e terreno/Sons/Sons_cogumelo/cogumelo morrendo_.mp3" id="9_q6tap"]
-[ext_resource type="AudioStream" uid="uid://h7xxu1igocjp" path="res://assets/sprites e terreno/Sons/Sons_cogumelo/cogumelo-tomando-danos_87zxpi6y.mp3" id="10_6dthn"]
+[ext_resource type="AudioStream" uid="uid://datahxon7q1ff" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_cogumelo/cogumelo atacando_.mp3" id="7_6dthn"]
+[ext_resource type="AudioStream" uid="uid://bx7arklvhqdrk" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_cogumelo/cogumelo correndo_.mp3" id="8_kvgm5"]
+[ext_resource type="AudioStream" uid="uid://cv1brhw1la5cd" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_cogumelo/cogumelo morrendo_.mp3" id="9_q6tap"]
+[ext_resource type="AudioStream" uid="uid://h7xxu1igocjp" path="res://assets/sprites e terreno/Sons/Sons_Enemy/Sons_cogumelo/cogumelo-tomando-danos_87zxpi6y.mp3" id="10_6dthn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hj4qv"]
 atlas = ExtResource("2_gspde")
@@ -150,7 +150,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_adq5i")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Attack",
 "speed": 10.0
 }, {
@@ -167,7 +167,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kvgm5")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Death",
 "speed": 4.0
 }, {
@@ -184,7 +184,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_62uw8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Idle",
 "speed": 5.0
 }, {
@@ -213,7 +213,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_udrcm")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Run",
 "speed": 12.0
 }, {
@@ -230,7 +230,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xd8j8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Take_Hit",
 "speed": 7.0
 }]
@@ -247,7 +247,7 @@ height = 66.0
 
 [node name="Cogumelo" type="CharacterBody2D" unique_id=1308417805]
 script = ExtResource("1_p0e2b")
-volume_extra_db = 20.0
+volume_extra_db = 10.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1008214944]
 texture_filter = 1

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cwd8rceqk12f0"]
 
-[ext_resource type="Texture2D" uid="uid://baiahb8ackv5e" path="res://Creativos/disquetes/amarelo.png" id="1_gf172"]
-[ext_resource type="Script" uid="uid://qiq0pm8ju2hs" path="res://scripts/disquete_amarelo.gd" id="1_moprs"]
+[ext_resource type="Texture2D" uid="uid://baiahb8ackv5e" path="res://Creativos/disquetes/disc/amarelo.png" id="1_gf172"]
+[ext_resource type="Script" uid="uid://qiq0pm8ju2hs" path="res://scripts/Disquetes/disquete_amarelo.gd" id="1_moprs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c0nl8"]
 radius = 18.0
@@ -41,5 +41,7 @@ sprite_frames = SubResource("SpriteFrames_7quve")
 animation = &"Amarelo"
 
 [node name="Resposta" type="Label" parent="." unique_id=1050693689]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -20.0
+offset_top = -28.0
+offset_right = 20.0
+offset_bottom = -5.0

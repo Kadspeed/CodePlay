@@ -13,14 +13,19 @@ extends CharacterBody2D
 ##
 ## DIFERENÇAS EM RELAÇÃO AO GOBLIN:
 ## - Não há animação Idle: a patrulha usa apenas "Walk".
-## - Não há nós de áudio na cena, então nenhum som é usado.
 ## - O Timer da cena ($Timer) é usado como recarga do ataque.
 ## - O Marker2D não é usado por este script.
 ## - A morte remove o inimigo logo após a animação "Death" (sem fade).
 ##
 ## Animações usadas (as únicas existentes): Walk, Attack, Hurt, Death.
 ##
+## SONS (AudioStreamPlayer2D na cena): Attack, Hurt e Walk.
+## - Attack: toca no início de cada ataque.
+## - Hurt: toca a cada golpe recebido.
+## - Walk: toca enquanto o Rato anda (patrulha e perseguição).
+##
 ## MUDANÇAS DESTA VERSÃO:
+## - Adicionados os sons Attack, Hurt e Walk.
 ## - O dano ao Player só é aplicado DURANTE a animação "Attack", dentro
 ##   da janela de frames frame_inicio_dano..frame_fim_dano, no máximo
 ##   uma vez por ataque e só se o Player estiver na AreaAttack naquele
@@ -88,6 +93,11 @@ signal inimigo_morto(pontos: int)
 
 ## Timer existente na cena: usado como recarga do ataque
 @onready var attack_cooldown: Timer = $Timer
+
+## Sons
+@onready var som_ataque: AudioStreamPlayer2D = $Attack
+@onready var som_dano: AudioStreamPlayer2D = $Hurt
+@onready var som_passos: AudioStreamPlayer2D = $Walk
 
 
 ## ------------------------------------------------------------
@@ -198,6 +208,10 @@ func _mudar_estado(novo_estado: Estado) -> void:
 
 	estado_atual = novo_estado
 
+	# O som de passos só existe enquanto o Rato anda (patrulha/perseguição)
+	if novo_estado != Estado.PATRULHA and novo_estado != Estado.PERSEGUICAO:
+		som_passos.stop()
+
 	match novo_estado:
 		Estado.PATRULHA:
 			_entrar_patrulha()
@@ -227,6 +241,7 @@ func _processar_patrulha(_delta: float) -> void:
 		_atualizar_orientacao()
 
 	velocity.x = velocidade_patrulha * direcao
+	_atualizar_som_passos()
 
 
 ## ==============================================================
@@ -257,6 +272,10 @@ func _processar_perseguicao(delta: float) -> void:
 		jogador_detectado = false
 		_mudar_estado(Estado.PATRULHA)
 
+	# Se continua perseguindo, ajusta o som ao movimento real
+	if estado_atual == Estado.PERSEGUICAO:
+		_atualizar_som_passos()
+
 func _perseguir_posicao(alvo_pos: Vector2) -> void:
 	var dir_x: float = signf(alvo_pos.x - global_position.x)
 	if dir_x != 0.0:
@@ -270,6 +289,20 @@ func _perseguir_posicao(alvo_pos: Vector2) -> void:
 		velocity.x = 0.0
 	else:
 		velocity.x = velocidade_perseguicao * direcao
+
+
+## ==============================================================
+## SOM DE PASSOS ("Walk")
+## ==============================================================
+## Toca enquanto o Rato está se movendo; para quando ele fica parado.
+## Se o som for curto (um passo), ative Loop no arquivo de áudio.
+
+func _atualizar_som_passos() -> void:
+	if absf(velocity.x) > 0.0:
+		if not som_passos.playing:
+			som_passos.play()
+	else:
+		som_passos.stop()
 
 
 ## ==============================================================
@@ -348,6 +381,7 @@ func _entrar_ataque() -> void:
 			_atualizar_orientacao()
 
 	sprite.play("Attack")
+	som_ataque.play()
 
 	attack_cooldown.wait_time = attack_cooldown_tempo
 	attack_cooldown.start()
@@ -395,6 +429,7 @@ func tomar_dano(quantidade: int, _posicao_jogador: Vector2 = Vector2.ZERO) -> vo
 		return
 
 	vida_atual -= quantidade
+	som_dano.play()
 
 	if vida_atual <= 0:
 		vida_atual = 0
@@ -428,6 +463,8 @@ func _entrar_morte() -> void:
 	velocity = Vector2.ZERO
 
 	attack_cooldown.stop()
+	som_passos.stop()
+	som_ataque.stop()
 
 	# set_deferred evita erro de "flushing queries" ao mexer em
 	# colisões durante um callback de física/sinal.

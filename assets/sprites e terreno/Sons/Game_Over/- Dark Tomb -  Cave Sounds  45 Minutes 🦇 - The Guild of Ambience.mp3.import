@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b3jlvld8wnjcx"
+path="res://.godot/imported/- Dark Tomb -  Cave Sounds  45 Minutes 🦇 - The Guild of Ambience.mp3-5d2add658e96b1a62eda824746e378a2.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites e terreno/Sons/Game_Over/- Dark Tomb -  Cave Sounds  45 Minutes 🦇 - The Guild of Ambience.mp3"
+dest_files=["res://.godot/imported/- Dark Tomb -  Cave Sounds  45 Minutes 🦇 - The Guild of Ambience.mp3-5d2add658e96b1a62eda824746e378a2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://biekyj47ggbqp"]
+
+[ext_resource type="Texture2D" uid="uid://nc4240l1180s" path="res://Creativos/Game_Over/Catacumbas Góticas sob Luz de Cristais.png" id="1_45iba"]
+[ext_resource type="Script" uid="uid://8tv61do4in05" path="res://scripts/Tela/Tela_Game_Over.gd" id="1_bs73s"]
+[ext_resource type="Texture2D" uid="uid://c6gfciid23dku" path="res://Creativos/Game_Over/Necromante Vitorioso_ Game Over.png" id="2_bs73s"]
+[ext_resource type="AudioStream" uid="uid://b3jlvld8wnjcx" path="res://assets/sprites e terreno/Sons/Game_Over/- Dark Tomb -  Cave Sounds  45 Minutes 🦇 - The Guild of Ambience.mp3" id="4_l7nw3"]
+[ext_resource type="Texture2D" uid="uid://bbpa4qb0aqgjg" path="res://Creativos/Game_Over/Botão Medieval de Reinício em Metal.png" id="4_mamvj"]
+[ext_resource type="AudioStream" uid="uid://bhwyq6ghpkpgu" path="res://assets/sprites e terreno/Sons/Game_Over/Efeito sonoro Mortal Kombat (Risada) - Mortal Kombat sound effect (Laughter)  2 - All sound effects.mp3" id="5_mamvj"]
+[ext_resource type="Texture2D" uid="uid://ww43gjmnqv8c" path="res://Creativos/Game_Over/Botão Home Gótico com Cristais Azuis.png" id="7_mamvj"]
+
+[node name="Tela_Game_Over" type="Control" unique_id=1836182610]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bs73s")
+
+[node name="Fundo" type="TextureRect" parent="." unique_id=1136196324]
+layout_mode = 0
+offset_left = 1.0
+offset_right = 1278.0
+offset_bottom = 720.0
+texture = ExtResource("1_45iba")
+expand_mode = 1
+
+[node name="Logo" type="TextureRect" parent="." unique_id=1392317504]
+layout_mode = 0
+offset_left = 327.0
+offset_top = 67.0
+offset_right = 948.0
+offset_bottom = 464.0
+texture = ExtResource("2_bs73s")
+expand_mode = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=877746410]
+stream = ExtResource("4_l7nw3")
+autoplay = true
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=1215693418]
+stream = ExtResource("5_mamvj")
+autoplay = true
+
+[node name="Tentar novamente" type="TextureButton" parent="." unique_id=346771454]
+layout_mode = 0
+offset_left = 324.0
+offset_top = 500.0
+offset_right = 574.0
+offset_bottom = 609.0
+texture_normal = ExtResource("4_mamvj")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Desistir" type="TextureButton" parent="." unique_id=1594868224]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 500.0
+offset_right = 949.0
+offset_bottom = 614.0
+texture_normal = ExtResource("7_mamvj")
+ignore_texture_size = true
+stretch_mode = 0

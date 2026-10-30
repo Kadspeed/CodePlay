@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bfiqo5m83tnpm"]
 
-[ext_resource type="Script" uid="uid://c6jhdc32qbym7" path="res://scripts/Transicao_tela.gd" id="1_02x6j"]
+[ext_resource type="Script" uid="uid://c6jhdc32qbym7" path="res://scripts/Tela/Transicao_tela.gd" id="1_02x6j"]
 
 [node name="Transicao_tela" type="CanvasLayer" unique_id=1331396222]
 script = ExtResource("1_02x6j")

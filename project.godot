@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 ItemDatabase="*uid://d0omabyywc3n2"
 InventoryManager="*uid://3yvbtxamg7xp"
 TransicaoTela="*uid://bfiqo5m83tnpm"
+EstadoJogo="*uid://hdalte1pflvj"
 
 [display]
 

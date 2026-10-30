@@ -3,6 +3,8 @@ extends Control
 ## Script do Menu Principal do CodePlay.
 
 const CENA_JOGO: String = "res://cenas/Mundo.tscn"
+# ALTERAÇÃO: cena da introdução, aberta ao clicar em Play.
+const CENA_INTRODUCAO: String = "res://cenas/Introducao.tscn"
 
 const COR_NORMAL: Color = Color(1, 1, 1, 1)
 const COR_PRESSIONADO: Color = Color(0.6, 0.6, 0.6, 1)
@@ -53,6 +55,13 @@ func _process(delta: float) -> void:
 ## sem iniciar a cena. A cena é instanciada só na memória (nunca entra na árvore),
 ## então nenhum _ready() roda: sem Player, sem fase, sem fade, sem som.
 func _deve_pular_menu() -> bool:
+	# Um retorno solicitado pelo Game Over deve exibir o menu mesmo com modo
+	# desenvolvedor ativo. A exceção é consumida uma única vez.
+	var arvore: SceneTree = get_tree()
+	if arvore.has_meta("ignorar_modo_desenvolvedor_uma_vez"):
+		arvore.remove_meta("ignorar_modo_desenvolvedor_uma_vez")
+		return false
+
 	var cena_jogo: PackedScene = load(CENA_JOGO) as PackedScene
 	if cena_jogo == null:
 		push_warning("Menu: não foi possível carregar '%s' para checar o modo desenvolvedor." % CENA_JOGO)
@@ -117,8 +126,9 @@ func _tocar_musica_menu() -> void:
 		audio_stream_player.play()
 
 
+# ALTERAÇÃO: o Play agora abre a introdução (que depois abre Mundo.tscn).
 func _on_botao_play_pressed() -> void:
-	get_tree().change_scene_to_file(CENA_JOGO)
+	get_tree().change_scene_to_file(CENA_INTRODUCAO)
 
 
 func _on_botao_sair_pressed() -> void:
