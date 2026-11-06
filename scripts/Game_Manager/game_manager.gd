@@ -496,4 +496,4 @@ func reiniciar_jogo() -> void:
 	pc = null
 	spawn_point_atual = null
 	_circulo_entrada_pendente = null
-	get_tree().reload_current_scene()
+	get_tree().reload_current_scene() 
