@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://nc4240l1180s" path="res://Creativos/Game_Over/Catacumbas Góticas sob Luz de Cristais.png" id="1_45iba"]
 [ext_resource type="Script" uid="uid://8tv61do4in05" path="res://scripts/Tela/Tela_Game_Over.gd" id="1_bs73s"]
 [ext_resource type="Texture2D" uid="uid://c6gfciid23dku" path="res://Creativos/Game_Over/Necromante Vitorioso_ Game Over.png" id="2_bs73s"]
-[ext_resource type="AudioStream" uid="uid://bijo60bj2syhq" path="res://assets/sprites e terreno/Sons/Game_Over/- Dark Tomb -  Cave Sounds  45 Minutes 🦇 - The Guild of Ambience.mp3" id="4_l7nw3"]
 [ext_resource type="Texture2D" uid="uid://bbpa4qb0aqgjg" path="res://Creativos/Game_Over/Botão Medieval de Reinício em Metal.png" id="4_mamvj"]
+[ext_resource type="AudioStream" uid="uid://pf242psxe01g" path="res://assets/sprites e terreno/Sons/Game_Over/videoplayback.mp3" id="5_l7nw3"]
 [ext_resource type="AudioStream" uid="uid://bhwyq6ghpkpgu" path="res://assets/sprites e terreno/Sons/Game_Over/Efeito sonoro Mortal Kombat (Risada) - Mortal Kombat sound effect (Laughter)  2 - All sound effects.mp3" id="5_mamvj"]
 [ext_resource type="Texture2D" uid="uid://ww43gjmnqv8c" path="res://Creativos/Game_Over/Botão Home Gótico com Cristais Azuis.png" id="7_mamvj"]
 
@@ -39,7 +39,7 @@ stream = ExtResource("5_mamvj")
 autoplay = true
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="." unique_id=1215693418]
-stream = ExtResource("4_l7nw3")
+stream = ExtResource("5_l7nw3")
 autoplay = true
 
 [node name="Tentar novamente" type="TextureButton" parent="." unique_id=346771454]

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cwdrnduh3n436" path="res://assets/sprites e terreno/terreno/floresta biotechinologica/Free Pixel Art Forest/4.png" id="2_mrleh"]
 [ext_resource type="Texture2D" uid="uid://bgmjoqetv45js" path="res://Creativos/Textures-16.png" id="4_k8t0u"]
 [ext_resource type="Texture2D" uid="uid://dv77528yltl2t" path="res://Creativos/Instrucoes.png" id="9_k8t0u"]
-[ext_resource type="AudioStream" uid="uid://3gvh4gp7f5db" path="res://assets/sprites e terreno/Sons/Musicas_Fases/Sons_Floresta_Biotech/Royalty Free Fantasy Music - BRVINDXVD.mp3" id="10_hrhb5"]
+[ext_resource type="AudioStream" uid="uid://cmbjoa3uj0r0c" path="res://assets/sprites e terreno/Sons/Musicas_Fases/Sons_Floresta_Biotech/AudioCleaner_Download_Música Medieval - Medieval Instrumental Music.mp3" id="10_hrhb5"]
 [ext_resource type="PackedScene" uid="uid://bhygclduqj7s4" path="res://cenas/pc.tscn" id="157_sof7l"]
 [ext_resource type="PackedScene" uid="uid://b3xxgj84kbvnx" path="res://cenas/Disquetes/disquete_azul.tscn" id="158_20htb"]
 [ext_resource type="PackedScene" uid="uid://cr5jl8bqu1od" path="res://cenas/Enemy/cogumelo.tscn" id="159_sof7l"]
@@ -1536,4 +1536,5 @@ expand_mode = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=703343741]
 stream = ExtResource("10_hrhb5")
+volume_db = 9.5
 autoplay = true
